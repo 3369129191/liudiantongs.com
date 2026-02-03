@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поручение Принципала - Генератор документов</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        
+        body {
+            padding: 20px;
+            background-color: #f0f2f5;
+            color: #333;
+            font-size: 9pt; /* 小六号字体 */
+        }
+        
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .app-header {
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            color: white;
+            padding: 20px 30px;
+        }
+        
+        .app-header h1 {
+            font-size: 18px;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+        
+        .app-header p {
+            font-size: 11px;
+            opacity: 0.9;
+        }
+        
+        .app-content {
+            display: flex;
+            min-height: 600px;
+        }
+        
+        /* 左侧表单区域 */
+        .form-section {
+            flex: 0 0 35%;
+            padding: 20px;
+            background: #f8f9fa;
+            border-right: 1px solid #e0e0e0;
+            overflow-y: auto;
+            max-height: 600px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 9pt;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 9pt;
+            font-family: 'Times New Roman', Times, serif;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        .form-group textarea {
+            min-height: 60px;
+            resize: vertical;
+        }
+        
+        .form-section h2 {
+            font-size: 14px;
+            color: #1a237e;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+        
+        /* Logo上传区域 */
+        .logo-upload {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #fff;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .logo-upload label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .logo-preview {
+            width: 120px;
+            height: 60px;
+            margin: 10px auto;
+            background-color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1px solid #ccc;
+        }
+        
+        .logo-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .upload-btn {
+            background: #3498db;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        
+        .upload-btn:hover {
+            background: #2980b9;
+        }
+        
+        /* 右侧预览区域 */
+        .preview-section {
+            flex: 0 0 65%;
+            padding: 20px;
+            background: white;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .preview-header h2 {
+            font-size: 14px;
+            color: #1a237e;
+        }
+        
+        .preview-container {
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            min-height: 700px;
+            background-color: #f9f9f9;
+            overflow: auto;
+        }
+        
+        /* 横向文档预览样式 */
+        .document-preview {
+            font-size: 9pt; /* 小六号字体 */
+            line-height: 1.3;
+            width: 29.7cm; /* A4横向宽度 */
+            min-height: 21cm; /* A4高度 */
+            background: white;
+            padding: 2cm;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        /* Logo与公司信息左右平分排版 - 各50%宽度 */
+        .company-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #000;
+        }
+        
+        .company-logo {
+            width: 50%; /* 50%宽度 */
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            overflow: hidden;
+            border: none;
+        }
+        
+        .company-logo img {
+            max-width: 120px;
+            max-height: 60px;
+            object-fit: contain;
+        }
+        
+        .company-info {
+            width: 50%; /* 50%宽度 */
+            text-align: right;
+            font-size: 9pt;
+            line-height: 1.4;
+        }
+        
+        .doc-title {
+            text-align: center;
+            font-weight: bold;
+            margin: 12px 0;
+            font-size: 10pt;
+        }
+        
+        .preview-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: 8pt;
+            table-layout: fixed;
+        }
+        
+        .preview-table th,
+        .preview-table td {
+            border: 1px solid #000;
+            padding: 4px 5px;
+            text-align: left;
+            vertical-align: top;
+            word-wrap: break-word;
+            line-height: 1.2;
+        }
+        
+        .preview-table th {
+            background: #f5f5f5;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* 表格列宽调整以适应横向布局 */
+        .preview-table th:nth-child(1) { width: 3%; }
+        .preview-table th:nth-child(2) { width: 7%; }
+        .preview-table th:nth-child(3) { width: 8%; }
+        .preview-table th:nth-child(4) { width: 6%; }
+        .preview-table th:nth-child(5) { width: 10%; }
+        .preview-table th:nth-child(6) { width: 8%; }
+        .preview-table th:nth-child(7) { width: 14%; }
+        .preview-table th:nth-child(8) { width: 6%; }
+        .preview-table th:nth-child(9) { width: 7%; }
+        .preview-table th:nth-child(10) { width: 7%; }
+        .preview-table th:nth-child(11) { width: 5%; }
+        .preview-table th:nth-child(12) { width: 6%; }
+        
+        /* 优化的签署区域样式 - 真正的左右表格布局 */
+        .signatures-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 40px;
+        }
+        
+        .signatures-table td {
+            width: 50%;
+            vertical-align: top;
+            padding: 0 10px;
+        }
+        
+        .signature-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 10pt;
+        }
+        
+        .signature-line {
+            margin-top: 60px;
+            border-top: 1px solid #000;
+            padding-top: 5px;
+            position: relative;
+        }
+        
+        .signature-name {
+            position: absolute;
+            top: -25px;
+            left: 0;
+            font-weight: bold;
+            font-size: 9pt;
+        }
+        
+        .stamp-area {
+            margin-top: 20px;
+            min-height: 40px;
+            font-style: italic;
+            font-size: 9pt;
+        }
+        
+        /* 页脚样式 */
+        .doc-footer {
+            position: absolute;
+            bottom: 1cm;
+            left: 2cm;
+            right: 2cm;
+            color: #666;
+            border-top: 1px solid #ddd;
+            padding-top: 5px;
+            font-size: 8pt;
+        }
+        
+        /* 操作按钮区域 */
+        .actions-section {
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+        
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #219653;
+        }
+        
+        .btn-secondary {
+            background: #7f8c8d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #6c7b7d;
+        }
+        
+        .btn-icon {
+            font-size: 14px;
+        }
+        
+        .generation-status {
+            display: none;
+            padding: 12px;
+            margin-top: 12px;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+        
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .preview-controls {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            z-index: 10;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 1200px) {
+            .app-content {
+                flex-direction: column;
+            }
+            
+            .form-section,
+            .preview-section {
+                flex: none;
+                width: 100%;
+            }
+        }
+        
+        .form-actions {
+            position: sticky;
+            bottom: 0;
+            background: #f8f9fa;
+            padding: 12px 0;
+            margin-top: 15px;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        /* 下载链接隐藏 */
+        #downloadLink {
+            display: none;
+        }
+        
+        /* 文件输入隐藏 */
+        #logoInput {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- 头部 -->
+        <div class="app-header">
+            <h1>📄 Генератор поручений принципала (Горизонтальный формат)</h1>
+            <p>Автоматическое создание платежных поручений в формате Word - Горизонтальная ориентация</p>
+        </div>
+        
+        <!-- 主要内容区域 -->
+        <div class="app-content">
+            <!-- 左侧：输入表单 -->
+            <div class="form-section">
+                <h2>Логотип компании</h2>
+                <div class="logo-upload">
+                    <label>Загрузить логотип</label>
+                    <div class="logo-preview" id="logoPreview">
+                        <div style="color: #999; font-size: 10px;">Логотип</div>
+                    </div>
+                    <input type="file" id="logoInput" accept="image/*">
+                    <button class="upload-btn" onclick="document.getElementById('logoInput').click()">
+                        <span class="btn-icon">📷</span> Выбрать изображение
+                    </button>
+                    <p style="margin-top: 8px; font-size: 9px; color: #666;">Рекомендуется: 120×60px, PNG или JPG</p>
+                </div>
+                
+                <h2>Основные данные</h2>
+                <div class="form-group">
+                    <label for="orderNumber">Номер поручения *</label>
+                    <input type="text" id="orderNumber" value="6" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="orderDate">Дата поручения *</label>
+                    <input type="text" id="orderDate" value="21 января 2026 г." required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="principalName">Наименование принципала *</label>
+                    <input type="text" id="principalName" value="«ОЛИМЭДЖИК»" required>
+                </div>
+                
+                <h2 style="margin-top: 25px;">Данные получателя</h2>
+                <div class="form-group">
+                    <label for="recipientName">Наименование получателя *</label>
+                    <input type="text" id="recipientName" value="HONG KONG HUIMAO INTERNATIONAL TRADE CO., LIMITED" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="contractDetails">Реквизиты контракта *</label>
+                    <textarea id="contractDetails" required>Контракт №LDT6037-0121 от 21.01.2026 г.,</textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="invoiceDetails">Реквизиты инвойса *</label>
+                    <textarea id="invoiceDetails" required>Инвойс: №6037LDT-0121 от 21.01.2026 г.</textarea>
+                </div>
+                
+                <h2 style="margin-top: 25px;">Платежные данные</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="paymentAmount">Сумма платежа *</label>
+                        <input type="text" id="paymentAmount" value="230680.00" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="paymentCurrency">Валюта *</label>
+                        <input type="text" id="paymentCurrency" value="CNY" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bankDetails">Банковские реквизиты *</label>
+                    <textarea id="bankDetails" required>Банк: JPMorgan Chase Bank N.A., Hong Kong Branch, Account number: 200000001099857, S.W.I.F.T: CHASHKHH</textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="paymentPurpose">Назначение платежа *</label>
+                    <textarea id="paymentPurpose" required>Payment For Inv; 6037LDT-0121 dd 21.01.2026</textarea>
+                </div>
+                
+                <h2 style="margin-top: 25px;">Курс и расчеты</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="currencyFrom">Валюта из *</label>
+                        <input type="text" id="currencyFrom" value="CNY" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="exchangeRate">Курс *</label>
+                        <input type="text" id="exchangeRate" value="11.1691" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="currencyTo">Валюта в *</label>
+                        <input type="text" id="currencyTo" value="RUR" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="paymentAmountRUR">Сумма в рублях *</label>
+                        <input type="text" id="paymentAmountRUR" value="2 576 487,99" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="agentFeePercent">Вознаграждение % *</label>
+                        <input type="text" id="agentFeePercent" value="2.71688%" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="agentFeeRUR">Вознаграждение в рублях *</label>
+                        <input type="text" id="agentFeeRUR" value="70 000" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="deliveryDate">Срок поставки *</label>
+                        <input type="text" id="deliveryDate" value="Постоплата" required>
+                    </div>
+                </div>
+                
+                <h2 style="margin-top: 25px;">Подписи</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="principalSignatory">Принципал (подпись) *</label>
+                        <input type="text" id="principalSignatory" value="Махалиева Мадина Гасановна" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="agentSignatory">Агент (подпись) *</label>
+                        <input type="text" id="agentSignatory" value="Хуан Вэньли" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="contractCode">Уникальный номер контракта (УНК)</label>
+                    <input type="text" id="contractCode" value="">
+                </div>
+                
+                <h2 style="margin-top: 25px;">Текст в нижнем колонтитуле (подвал документа)</h2>
+                <div class="form-group">
+                    <label for="footerText">Текст нижнего колонтитула *</label>
+                    <textarea id="footerText" required>Документ сгенерирован: ${new Date().toLocaleDateString('ru-RU')} | ООО "Сифа", ИНН 1234567890, г. Москва</textarea>
+                    <p style="font-size: 8pt; color: #666; margin-top: 5px;">Подсказка: используйте ${new Date().toLocaleDateString('ru-RU')} для автоматической вставки даты</p>
+                </div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-secondary" onclick="resetForm()" style="width: 100%;">
+                        <span class="btn-icon">🗑️</span> Сбросить к значениям по умолчанию
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 右侧：文档预览 -->
+            <div class="preview-section">
+                <div class="preview-header">
+                    <h2>Предварительный просмотр (Горизонтальный формат)</h2>
+                </div>
+                
+                <div class="preview-container">
+                    <div class="document-preview" id="documentPreview">
+                        <!-- 预览内容将由JavaScript动态生成 -->
+                    </div>
+                </div>
+                
+                <div class="preview-controls">
+                    <button class="btn btn-primary" onclick="updatePreview()">
+                        <span class="btn-icon">🔄</span> Обновить просмотр
+                    </button>
+                </div>
+                
+                <div class="generation-status" id="generationStatus"></div>
+            </div>
+        </div>
+        
+        <!-- 底部操作按钮 -->
+        <div class="actions-section">
+            <div>
+                <button class="btn btn-secondary" onclick="showInstructions()">
+                    <span class="btn-icon">❓</span> Инструкция
+                </button>
+            </div>
+            
+            <div>
+                <button class="btn btn-primary" onclick="generateWordDocument()">
+                    <span class="btn-icon">📄</span> Сгенерировать Word (.docx)
+                </button>
+                <button class="btn btn-success" onclick="generateAndDownload()" style="margin-left: 10px;">
+                    <span class="btn-icon">⬇️</span> Скачать сейчас
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 隐藏的下载链接 -->
+    <a id="downloadLink" style="display: none;"></a>
+
+    <script>
+        // 存储logo图片的base64数据
+        let logoBase64 = '';
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 监听logo上传
+            document.getElementById('logoInput').addEventListener('change', handleLogoUpload);
+            
+            // 设置默认页脚文本
+            const today = new Date().toLocaleDateString('ru-RU');
+            document.getElementById('footerText').value = `Документ сгенерирован: ${today} | ООО "Сифа", ИНН 1234567890, г. Москва`;
+            
+            updatePreview();
+        });
+        
+        // 处理logo上传
+        function handleLogoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // 检查文件类型
+            if (!file.type.match('image.*')) {
+                showStatus('Пожалуйста, выберите файл изображения', 'error');
+                return;
+            }
+            
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                logoBase64 = e.target.result;
+                
+                // 更新预览
+                const logoPreview = document.getElementById('logoPreview');
+                logoPreview.innerHTML = `<img src="${logoBase64}" alt="Логотип">`;
+                
+                updatePreview();
+                showStatus('Логотип успешно загружен', 'success');
+            };
+            
+            reader.readAsDataURL(file);
+        }
+        
+        // 更新预览
+        function updatePreview() {
+            const preview = document.getElementById('documentPreview');
+            
+            // 收集表单数据
+            const formData = collectFormData();
+            
+            // 生成预览HTML
+            preview.innerHTML = generatePreviewHTML(formData);
+            
+            showStatus('Предварительный просмотр обновлен', 'success');
+        }
+        
+        // 收集表单数据
+        function collectFormData() {
+            const today = new Date().toLocaleDateString('ru-RU');
+            let footerText = document.getElementById('footerText').value;
+            
+            // 替换日期占位符
+            footerText = footerText.replace('${new Date().toLocaleDateString(\'ru-RU\')}', today);
+            footerText = footerText.replace('${today}', today);
+            
+            return {
+                orderNumber: document.getElementById('orderNumber').value,
+                orderDate: document.getElementById('orderDate').value,
+                principalName: document.getElementById('principalName').value,
+                recipientName: document.getElementById('recipientName').value,
+                contractDetails: document.getElementById('contractDetails').value,
+                invoiceDetails: document.getElementById('invoiceDetails').value,
+                paymentAmount: document.getElementById('paymentAmount').value,
+                paymentCurrency: document.getElementById('paymentCurrency').value,
+                bankDetails: document.getElementById('bankDetails').value,
+                paymentPurpose: document.getElementById('paymentPurpose').value,
+                currencyFrom: document.getElementById('currencyFrom').value,
+                exchangeRate: document.getElementById('exchangeRate').value,
+                currencyTo: document.getElementById('currencyTo').value,
+                paymentAmountRUR: document.getElementById('paymentAmountRUR').value,
+                agentFeePercent: document.getElementById('agentFeePercent').value,
+                agentFeeRUR: document.getElementById('agentFeeRUR').value,
+                deliveryDate: document.getElementById('deliveryDate').value,
+                principalSignatory: document.getElementById('principalSignatory').value,
+                agentSignatory: document.getElementById('agentSignatory').value,
+                contractCode: document.getElementById('contractCode').value,
+                footerText: footerText,
+                logoBase64: logoBase64
+            };
+        }
+        
+        // 生成预览HTML
+        function generatePreviewHTML(data) {
+            const logoHTML = data.logoBase64 
+                ? `<img src="${data.logoBase64}" alt="Логотип" style="max-width: 120px; max-height: 60px;">`
+                : `<div style="color: #999; font-size: 10px; text-align: center; padding: 20px 0;">Логотип</div>`;
+            
+            return `
+                <!-- Logo与公司信息左右平分排版 - 各50%宽度 -->
+                <div class="company-header">
+                    <div class="company-logo">
+                        ${logoHTML}
+                    </div>
+                    <div class="company-info">
+                        <p>ООО ${data.principalName}</p>
+                        <p>ИНН 7701234567 КПП 770101001</p>
+                        <p>123456, г. Москва, ул. Примерная, д. 1</p>
+                        <p>Тел.: +7 (495) 123-45-67</p>
+                    </div>
+                </div>
+                
+                <div class="doc-title">
+                    <p>Поручение Принципала ${data.orderNumber} от ${data.orderDate} по Договору присоединения</p>
+                </div>
+                
+                <p>В соответствии с Договором присоединения (далее -- «Договор») ООО ${data.principalName} (Принципал) поручает ООО "Сифа" (Агент) провести оплату Получателю платежа в соответствии с условиями Договора в соответствии со следующими инструкциями:</p>
+                
+                <table class="preview-table">
+                    <thead>
+                        <tr>
+                            <th>№ п/п</th>
+                            <th>Наименование Получателя платежа</th>
+                            <th>Реквизиты Контракта, инвойса (номер, дата)</th>
+                            <th>Сумма в валюте платежа и валюта Платежа, подлежащая перечислению Агентом (Третьим лицом)</th>
+                            <th>Полные платежные реквизиты Получателя платежа (Наименование Банка, IBAN, S.W.I.F.T.)</th>
+                            <th>Назначение платежа, подлежащее указанию Агентом при перечислении средств Получателю платежа</th>
+                            <th>Курс пересчета</th>
+                            <th>Сумма Платежа, подлежащая перечислению Принципалом Агенту в Российских рублях</th>
+                            <th>Агентское вознаграждение от суммы Платежа в процентах %), включая НДС</th>
+                            <th>Агентское вознаграждение от суммы Платежа в Российских рублях, в том числе НДС</th>
+                            <th>УНК (уникальный номер контракта)</th>
+                            <th>Ожидаемый срок поставки товара, дата</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>${data.recipientName}</td>
+                            <td>
+                                ${data.contractDetails}<br>
+                                ${data.invoiceDetails}
+                            </td>
+                            <td>
+                                ${data.paymentAmount}<br>
+                                ${data.paymentCurrency}
+                            </td>
+                            <td>${data.bankDetails}</td>
+                            <td>${data.paymentPurpose}</td>
+                            <td>
+                                1 ${data.currencyFrom} = ${data.exchangeRate} ${data.currencyTo}
+                            </td>
+                            <td>${data.paymentAmountRUR}</td>
+                            <td>${data.agentFeePercent}</td>
+                            <td>${data.agentFeeRUR}</td>
+                            <td>${data.contractCode || ''}</td>
+                            <td>${data.deliveryDate}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <p style="margin-top: 15px;">Срок исполнения Поручения -- 5 (пять) рабочих дней, следующих за днем получения Агентом Суммы платежа и Вознаграждения Агента. При этом в случае, если денежные средства (Сумма платежа и Вознаграждение) зачислены на счет Агента после 16:00 текущего рабочего дня по московскому времени, начало отсчета срока исполнения Поручения переносится на следующий рабочий день.</p>
+                
+                <p>Указанный срок может быть увеличен Агентом в одностороннем порядке в случае, если такая необходимость вызвана такими обстоятельствами как (включая, но не ограничиваясь): санкции, эмбарго, любые другие экономические, банковские, иные ограничения и (или) задержки со стороны иностранных государств, международных организаций, межгосударственных объединений, банков. В таком случае такое увеличение срока не будет считаться нарушением или ненадлежащим исполнением Агентом своих обязательств по настоящему Договору и Поручению.</p>
+                
+                <!-- 优化的签署区域 - 使用表格实现真正的左右布局 -->
+                <table class="signatures-table">
+                    <tr>
+                        <td>
+                            <div class="signature-title">Принципал:</div>
+                            <div class="signature-line">
+                                <div class="signature-name">${data.principalSignatory}</div>
+                                _______________________/Генеральный директор
+                            </div>
+                            <div class="stamp-area">М.П.</div>
+                        </td>
+                        <td>
+                            <div class="signature-title">Агент:</div>
+                            <div class="signature-line">
+                                <div class="signature-name">${data.agentSignatory}</div>
+                                _______________________генерального директора ООО "Сифа"
+                            </div>
+                            <div class="stamp-area">
+                                на основании доверенности №6 "Сифа"М от 21.01.2026
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                
+                <!-- 可编辑的页脚 -->
+                <div class="doc-footer">
+                    <p>${data.footerText}</p>
+                </div>
+            `;
+        }
+        
+        // 生成Word文档（横向）- 使用HTML转换方法
+        function generateWordDocument() {
+            try {
+                showStatus('Создание Word документа в горизонтальном формате...', 'success');
+                
+                const formData = collectFormData();
+                
+                // 验证必填字段
+                if (!validateForm()) {
+                    return;
+                }
+                
+                // 生成Word文档的HTML内容
+                const wordHTML = generateWordHTML(formData);
+                
+                // 创建Blob对象
+                const blob = new Blob([wordHTML], { type: 'application/msword' });
+                
+                // 创建下载链接
+                const downloadLink = document.getElementById('downloadLink');
+                const url = URL.createObjectURL(blob);
+                downloadLink.href = url;
+                downloadLink.download = `Поручение_Принципала_${formData.orderNumber}_${new Date().toISOString().slice(0,10)}.doc`;
+                
+                // 触发下载
+                downloadLink.click();
+                
+                // 清理URL
+                setTimeout(() => {
+                    URL.revokeObjectURL(url);
+                }, 100);
+                
+                showStatus('Word документ успешно создан и скачан!', 'success');
+                
+            } catch (error) {
+                console.error('Ошибка при создании документа:', error);
+                showStatus('Ошибка при создании документа: ' + error.message, 'error');
+            }
+        }
+        
+        // 生成Word文档的HTML内容
+        function generateWordHTML(data) {
+            const today = new Date().toLocaleDateString('ru-RU');
+            
+            // 生成logo HTML
+            let logoHTML = '<div style="color: #999; font-size: 10px; text-align: center; padding: 20px 0;">Логотип</div>';
+            if (data.logoBase64) {
+                logoHTML = `<img src="${data.logoBase64}" alt="Логотип" style="max-width: 120px; max-height: 60px;">`;
+            }
+            
+            return `<!DOCTYPE html>
+<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+<head>
+    <meta charset='UTF-8'>
+    <title>Поручение Принципала ${data.orderNumber}</title>
+    <style>
+        @page {
+            size: 29.7cm 21cm; /* A4横向 */
+            mso-page-orientation: landscape;
+            margin: 2cm;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 9pt; /* 小六号字体 */
+            line-height: 1.3;
+        }
+        .doc-container {
+            width: 100%;
+            max-width: 25.7cm; /* 29.7cm - 2*2cm */
+            margin: 0 auto;
+            position: relative;
+            min-height: 21cm;
+        }
+        .company-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #000000;
+        }
+        .company-logo {
+            width: 50%; /* 50%宽度 */
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            overflow: hidden;
+            border: none;
+        }
+        .company-info {
+            width: 50%; /* 50%宽度 */
+            text-align: right;
+            font-size: 9pt;
+            line-height: 1.4;
+        }
+        .doc-title {
+            text-align: center;
+            font-weight: bold;
+            margin: 12px 0;
+            font-size: 10pt;
+        }
+        .doc-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: 8pt;
+            table-layout: fixed;
+        }
+        .doc-table th, .doc-table td {
+            border: 1px solid #000000;
+            padding: 4px 5px;
+            text-align: left;
+            vertical-align: top;
+            word-wrap: break-word;
+            line-height: 1.2;
+        }
+        .doc-table th {
+            background: #f5f5f5;
+            font-weight: bold;
+            text-align: center;
+        }
+        .signatures-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 40px;
+        }
+        .signatures-table td {
+            width: 50%;
+            vertical-align: top;
+            padding: 0 20px;
+        }
+        .signature-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 10pt;
+        }
+        .signature-line {
+            margin-top: 60px;
+            border-top: 1px solid #000000;
+            padding-top: 5px;
+            position: relative;
+        }
+        .signature-name {
+            position: absolute;
+            top: -25px;
+            left: 0;
+            font-weight: bold;
+            font-size: 9pt;
+        }
+        .stamp-area {
+            margin-top: 20px;
+            min-height: 40px;
+            font-style: italic;
+            font-size: 9pt;
+        }
+        .doc-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin-top: 40px;
+            padding-top: 5px;
+            border-top: 1px solid #dddddd;
+            color: #666666;
+            font-size: 8pt;
+        }
+    </style>
+</head>
+<body>
+    <div class="doc-container">
+        <!-- Logo与公司信息左右平分排版 - 各50%宽度 -->
+        <div class="company-header">
+            <div class="company-logo">
+                ${logoHTML}
+            </div>
+            <div class="company-info">
+                <p>ООО ${data.principalName}</p>
+                <p>ИНН 7701234567 КПП 770101001</p>
+                <p>123456, г. Москва, ул. Примерная, д. 1</p>
+                <p>Тел.: +7 (495) 123-45-67</p>
+            </div>
+        </div>
+        
+        <!-- 标题 -->
+        <div class="doc-title">
+            <p>Поручение Принципала ${data.orderNumber} от ${data.orderDate} по Договору присоединения</p>
+        </div>
+        
+        <!-- 正文 -->
+        <p>В соответствии с Договором присоединения (далее -- «Договор») ООО ${data.principalName} (Принципал) поручает ООО "Сифа" (Агент) провести оплату Получателю платежа в соответствии с условиями Договора в соответствии со следующими инструкциями:</p>
+        
+        <!-- 表格 -->
+        <table class="doc-table">
+            <thead>
+                <tr>
+                    <th style="width: 3%">№ п/п</th>
+                    <th style="width: 7%">Наименование Получателя платежа</th>
+                    <th style="width: 8%">Реквизиты Контракта, инвойса (номер, дата)</th>
+                    <th style="width: 6%">Сумма в валюте платежа и валюта Платежа, подлежащая перечислению Агентом (Третьим лицом)</th>
+                    <th style="width: 10%">Полные платежные реквизиты Получателя платежа (Наименование Банка, IBAN, S.W.I.F.T.)</th>
+                    <th style="width: 8%">Назначение платежа, подлежащее указанию Агентом при перечислении средств Получателю платежа</th>
+                    <th style="width: 14%">Курс пересчета</th>
+                    <th style="width: 6%">Сумма Платежа, подлежащая перечислению Принципалом Агенту в Российских рублях</th>
+                    <th style="width: 7%">Агентское вознаграждение от суммы Платежа в процентах %), включая НДС</th>
+                    <th style="width: 7%">Агентское вознаграждение от суммы Платежа в Российских рублях, в том числе НДС</th>
+                    <th style="width: 5%">УНК (уникальный номер контракта)</th>
+                    <th style="width: 6%">Ожидаемый срок поставки товара, дата</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>${data.recipientName}</td>
+                    <td>${data.contractDetails}<br>${data.invoiceDetails}</td>
+                    <td>${data.paymentAmount}<br>${data.paymentCurrency}</td>
+                    <td>${data.bankDetails}</td>
+                    <td>${data.paymentPurpose}</td>
+                    <td>1 ${data.currencyFrom} = ${data.exchangeRate} ${data.currencyTo}</td>
+                    <td>${data.paymentAmountRUR}</td>
+                    <td>${data.agentFeePercent}</td>
+                    <td>${data.agentFeeRUR}</td>
+                    <td>${data.contractCode || ''}</td>
+                    <td>${data.deliveryDate}</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- 条款 -->
+        <p>Срок исполнения Поручения -- 5 (пять) рабочих дней, следующих за днем получения Агентом Суммы платежа и Вознаграждения Агента. При этом в случае, если денежные средства (Сумма платежа и Вознаграждение) зачислены на счет Агента после 16:00 текущего рабочего дня по московскому времени, начало отсчета срока исполнения Поручения переносится на следующий рабочий день.</p>
+        
+        <p>Указанный срок может быть увеличен Агентом в одностороннем порядке в случае, если такая необходимость вызвана такими обстоятельствами как (включая, но не ограничиваясь): санкции, эмбарго, любые другие экономические, банковские, иные ограничения и (или) задержки со стороны иностранных государств, международных организаций, межгосударственных объединений, банков. В таком случае такое увеличение срока не будет считаться нарушением или ненадлежащим исполнением Агентом своих обязательств по настоящему Договору и Поручению.</p>
+        
+        <!-- 优化的签署区域 - 使用表格实现真正的左右布局 -->
+        <table class="signatures-table">
+            <tr>
+                <td style="width: 50%;">
+                    <div class="signature-title">Принципал:</div>
+                    <div class="signature-line">
+                        <div class="signature-name">${data.principalSignatory}</div>
+                        _______________________/Генеральный директор
+                    </div>
+                    <div class="stamp-area">М.П.</div>
+                </td>
+                <td style="width: 50%;">
+                    <div class="signature-title">Агент:</div>
+                    <div class="signature-line">
+                        <div class="signature-name">${data.agentSignatory}</div>
+                        _______________________генерального директора ООО "Сифа"
+                    </div>
+                    <div class="stamp-area">
+                        на основании доверенности №6 "Сифа"М от 21.01.2026
+                    </div>
+                </td>
+            </tr>
+        </table>
+        
+        <!-- 可编辑的页脚 -->
+        <div class="doc-footer">
+            <p>${data.footerText}</p>
+        </div>
+    </div>
+</body>
+</html>`;
+        }
+        
+        // 验证表单
+        function validateForm() {
+            const requiredFields = [
+                'orderNumber', 'orderDate', 'principalName', 'recipientName',
+                'contractDetails', 'invoiceDetails', 'paymentAmount', 'paymentCurrency',
+                'bankDetails', 'paymentPurpose', 'currencyFrom', 'exchangeRate',
+                'currencyTo', 'paymentAmountRUR', 'agentFeePercent', 'agentFeeRUR',
+                'deliveryDate', 'principalSignatory', 'agentSignatory', 'footerText'
+            ];
+            
+            for (const fieldId of requiredFields) {
+                const field = document.getElementById(fieldId);
+                if (!field.value.trim()) {
+                    showStatus(`Пожалуйста, заполните поле: ${field.previousElementSibling.textContent}`, 'error');
+                    field.focus();
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+        
+        // 直接生成并下载
+        function generateAndDownload() {
+            if (validateForm()) {
+                updatePreview();
+                setTimeout(() => {
+                    generateWordDocument();
+                }, 500);
+            }
+        }
+        
+        // 重置表单
+        function resetForm() {
+            if (confirm('Вы уверены, что хотите сбросить все изменения к значениям по умолчанию?')) {
+                document.getElementById('orderNumber').value = '6';
+                document.getElementById('orderDate').value = '21 января 2026 г.';
+                document.getElementById('principalName').value = '«ОЛИМЭДЖИК»';
+                document.getElementById('recipientName').value = 'HONG KONG HUIMAO INTERNATIONAL TRADE CO., LIMITED';
+                document.getElementById('contractDetails').value = 'Контракт №LDT6037-0121 от 21.01.2026 г.,';
+                document.getElementById('invoiceDetails').value = 'Инвойс: №6037LDT-0121 от 21.01.2026 г.';
+                document.getElementById('paymentAmount').value = '230680.00';
+                document.getElementById('paymentCurrency').value = 'CNY';
+                document.getElementById('bankDetails').value = 'Банк: JPMorgan Chase Bank N.A., Hong Kong Branch, Account number: 200000001099857, S.W.I.F.T: CHASHKHH';
+                document.getElementById('paymentPurpose').value = 'Payment For Inv; 6037LDT-0121 dd 21.01.2026';
+                document.getElementById('currencyFrom').value = 'CNY';
+                document.getElementById('exchangeRate').value = '11.1691';
+                document.getElementById('currencyTo').value = 'RUR';
+                document.getElementById('paymentAmountRUR').value = '2 576 487,99';
+                document.getElementById('agentFeePercent').value = '2.71688%';
+                document.getElementById('agentFeeRUR').value = '70 000';
+                document.getElementById('deliveryDate').value = 'Постоплата';
+                document.getElementById('principalSignatory').value = 'Махалиева Мадина Гасановна';
+                document.getElementById('agentSignatory').value = 'Хуан Вэньли';
+                document.getElementById('contractCode').value = '';
+                
+                // 设置默认页脚文本
+                const today = new Date().toLocaleDateString('ru-RU');
+                document.getElementById('footerText').value = `Документ сгенерирован: ${today} | ООО "Сифа", ИНН 1234567890, г. Москва`;
+                
+                // 重置logo
+                logoBase64 = '';
+                const logoPreview = document.getElementById('logoPreview');
+                logoPreview.innerHTML = '<div style="color: #999; font-size: 10px;">Логотип</div>';
+                document.getElementById('logoInput').value = '';
+                
+                updatePreview();
+                showStatus('Форма сброшена к значениям по умолчанию', 'success');
+            }
+        }
+        
+        // 显示说明
+        function showInstructions() {
+            alert('ИНСТРУКЦИЯ:\n\n1. Заполните все поля формы (обязательные поля отмечены *)\n2. Нажмите "Обновить просмотр" для проверки\n3. Нажмите "Сгенерировать Word (.docx)" для создания документа\n4. Документ будет автоматически скачан в горизонтальном формате\n\nОсобенности:\n• Документ создается в формате A4 альбомной ориентации\n• Используется шрифт Times New Roman, размер 9pt (小六号)\n• Все поля обязательны для заполнения\n• Можно загрузить логотип компании\n• Logo和公司信息各占50%宽度，左右平分布局\n• 页脚文案可以自定义编辑\n• 可以使用 ${new Date().toLocaleDateString(\'ru-RU\')} 自动插入当前日期');
+        }
+        
+        // 显示状态信息
+        function showStatus(message, type) {
+            const statusEl = document.getElementById('generationStatus');
+            statusEl.textContent = message;
+            statusEl.className = 'generation-status';
+            statusEl.classList.add(`status-${type}`);
+            statusEl.style.display = 'block';
+            
+            setTimeout(() => {
+                statusEl.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
