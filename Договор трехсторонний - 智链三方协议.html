@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* 新增导航栏样式 - 从付款单复制 */
         * {
             margin: 0;
             padding: 0;
@@ -17,122 +16,139 @@
             font-family: "Times New Roman", Times, serif;
         }
         
-        .navbar {
-            background-color: #2c3e50;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-            width: 100%;
-            z-index: 1000;
-        }
-        
-        .navbar-left {
-            display: flex;
-            align-items: center;
-        }
-        
-        .navbar-logo {
-            display: flex;
-            align-items: center;
-            padding: 15px 0;
-            text-decoration: none;
-        }
-        
-        /* Logo图片样式 */
-        .logo-image {
-            height: 40px; /* 控制Logo高度 */
-            width: auto; /* 宽度自适应 */
-            max-width: 200px; /* 最大宽度限制 */
-            object-fit: contain; /* 保持图片比例 */
-            vertical-align: middle;
-        }
-        
-        .navbar-menu {
-            display: flex;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            margin-left: 30px;
-        }
-        
-        .navbar-menu li {
-            position: relative;
-        }
-        
-        .navbar-menu a {
-            color: white;
-            text-decoration: none;
-            padding: 20px 15px;
-            display: block;
-            transition: background-color 0.3s;
-        }
-        
-        .navbar-menu a:hover {
-            background-color: #34495e;
-        }
-        
-        .navbar-menu .active a {
-            background-color: #1a252f;
-            border-bottom: 3px solid #3498db;
-        }
-        
-        .navbar-right {
-            display: flex;
-            align-items: center;
-        }
-        
-        .user-info {
-            display: flex;
-            align-items: center;
-            padding: 10px 0;
-        }
-        
-        .user-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background-color: #3498db;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 10px;
-            font-weight: bold;
-        }
-        
-        .username {
-            font-size: 14px;
-        }
-        
-        .logout-btn {
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 2px;
-            cursor: pointer;
-            margin-left: 15px;
-            font-size: 12px;
-            transition: background-color 0.3s;
-        }
-        
-        .logout-btn:hover {
-            background-color: #c0392b;
-        }
-        
-        /* 原有样式 */
         body {
             background-color: #f5f5f5;
             color: #333;
             line-height: 1.5;
-            padding: 0; /* 修改为0，因为导航栏会占用空间 */
+            padding: 0;
             margin: 0;
         }
         
+        /* 顶部导航栏 - 从index.html复制 */
+        .header {
+            background-color: #1a365d;
+            color: white;
+            padding: 0 5%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            margin-left: 10px;
+            font-weight: 700;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .logo-icon {
+            font-size: 2.2rem;
+            color: #00b4d8;
+        }
+        
+        .contact-info {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+        
+        .contact-info i {
+            color: #00b4d8;
+            margin-right: 8px;
+        }
+        
+        .contact-info span {
+            margin-right: 20px;
+        }
+        
+        /* 主导航栏 - 从index.html复制 */
+        .navbar {
+            display: flex;
+            background-color: #2d4a7c;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-item {
+            position: relative;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 16px 24px;
+            display: block;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .nav-link:hover {
+            background-color: #00b4d8;
+        }
+        
+        /* 下拉菜单 - 从index.html复制 */
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: white;
+            min-width: 220px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 8px 8px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        
+        .nav-item:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .dropdown-item {
+            display: block;
+            padding: 14px 20px;
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.2s ease;
+        }
+        
+        .dropdown-item:hover {
+            background-color: #f0f8ff;
+            color: #1a365d;
+            padding-left: 28px;
+        }
+        
+        .dropdown-item i {
+            margin-right: 10px;
+            color: #00b4d8;
+            width: 18px;
+            text-align: center;
+        }
+        
+        /* 原有样式 */
         .container {
             max-width: 1600px;
-            margin: 0 auto;
+            margin: 20px auto;
             background: white;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             border-radius: 4px;
@@ -389,6 +405,65 @@
             display: block;
         }
         
+        /* 页脚样式 - 从index.html复制 */
+        .footer {
+            background-color: #1a365d;
+            color: white;
+            padding: 60px 5% 30px;
+            margin-top: 40px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            color: #00b4d8;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-column h3:after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 3px;
+            background-color: #00b4d8;
+            bottom: 0;
+            left: 0;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-column ul li a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        
+        .footer-column ul li a:hover {
+            color: #00b4d8;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
         /* 滚动条样式 */
         .protocol-preview::-webkit-scrollbar {
             width: 8px;
@@ -408,28 +483,29 @@
         }
         
         /* 响应式调整 */
-        @media (max-width: 768px) {
-            .navbar {
+        @media (max-width: 992px) {
+            .top-bar {
                 flex-direction: column;
-                padding: 10px;
+                text-align: center;
             }
             
-            .navbar-left {
-                width: 100%;
-                justify-content: space-between;
-            }
-            
-            .navbar-menu {
-                margin-left: 0;
-                width: 100%;
+            .contact-info {
+                margin-top: 15px;
+                flex-wrap: wrap;
                 justify-content: center;
-                margin-top: 10px;
             }
             
-            .navbar-right {
-                width: 100%;
-                justify-content: center;
-                margin-top: 10px;
+            .navbar {
+                flex-wrap: wrap;
+            }
+            
+            .nav-item {
+                flex: 1 0 50%;
+            }
+            
+            .nav-link {
+                text-align: center;
+                padding: 14px 10px;
             }
             
             .two-column-editor {
@@ -438,6 +514,36 @@
             
             .editor-column {
                 width: 100%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-item {
+                flex: 1 0 100%;
+            }
+            
+            .dropdown-menu {
+                position: static;
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+                display: none;
+                box-shadow: none;
+                border-radius: 0;
+                background-color: rgba(0, 0, 0, 0.1);
+            }
+            
+            .nav-item:hover .dropdown-menu {
+                display: block;
+            }
+            
+            .dropdown-item {
+                color: white;
+                border-bottom-color: rgba(255, 255, 255, 0.1);
+            }
+            
+            .dropdown-item:hover {
+                background-color: rgba(255, 255, 255, 0.1);
             }
             
             .button-group {
@@ -454,460 +560,550 @@
                 padding: 15px;
             }
         }
-        
-        /* 调整主容器以适应导航栏 */
-        .main-container {
-            padding: 20px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
     </style>
 </head>
 <body>
-    <!-- 新增导航栏 -->
-    <nav class="navbar">
-        <div class="navbar-left">
-            <a href="#" class="navbar-logo">
-                <!-- 修改为图片Logo，您可以根据需要修改src属性 -->
-                <img src="logo.png" alt="合同生成系统" class="logo-image">
-            </a>
-            <ul class="navbar-menu">
-                <li><a href="deepseek_html_20260128_417ffc.html">合同生成</a></li>
-                <li><a href="付款单-2.html">付款单生成</a></li>
-                <li class="active"><a href="#">三方协议</a></li>
-                <li><a href="#">发票管理</a></li>
-                <li><a href="#">客户管理</a></li>
-                <li><a href="#">设置</a></li>
-            </ul>
-        </div>
-        <div class="navbar-right">
-            <div class="user-info">
-                <div class="user-avatar">U</div>
-                <div class="username">管理员</div>
+    <!-- 顶部导航栏 - 从index.html复制 -->
+    <header class="header">
+        <div class="top-bar">
+            <div class="logo">
+                <i class="fas fa-shipping-fast logo-icon"></i>
+                <h1>六点通国际贸易服务</h1>
             </div>
-            <button class="logout-btn">退出</button>
+            <div class="contact-info">
+                <span><i class="fas fa-phone-alt"></i> 400-123-4567</span>
+                <span><i class="fas fa-envelope"></i> service@shunda-logistics.com</span>
+                <span><i class="fas fa-clock"></i> 周一至周五 9:00-18:00</span>
+            </div>
         </div>
-    </nav>
-    
-    <div class="main-container">
-        <div class="container">
-            <header>
-                <h1>中俄双语三方协议生成器</h1>
-                <p class="subtitle">上下布局 | 上面编辑区 | 下面预览区 | 导出Word文档</p>
-            </header>
+        
+        <!-- 主导航栏 - 从index.html复制 -->
+        <nav class="navbar">
+            <div class="nav-item">
+                <a href="index.html" class="nav-link"><i class="fas fa-home"></i> 首页</a>
+            </div>
             
-            <div class="content-wrapper">
-                <!-- 上面编辑区域 -->
-                <section class="editor-section">
-                    <div class="tab-navigation">
-                        <button class="tab-button active" data-tab="basic">基本信息</button>
-                        <button class="tab-button" data-tab="parties">各方信息</button>
-                        <button class="tab-button" data-tab="bank">银行信息</button>
-                        <button class="tab-button" data-tab="details">合同细节</button>
-                    </div>
-                    
-                    <!-- 基本信息标签 -->
-                    <div id="basic-tab" class="tab-content active">
-                        <h3 class="section-title">基本信息</h3>
-                        
-                        <div class="two-column-editor">
-                            <div class="editor-column">
-                                <h4>中文信息</h4>
-                                <div class="form-group">
-                                    <label for="protocol-number-cn">协议号</label>
-                                    <input type="text" id="protocol-number-cn" value="ZLJC 26 - 003">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="sign-date-cn">签订日期</label>
-                                    <input type="text" id="sign-date-cn" value="2026. 01 . 03">
-                                </div>
-                            </div>
-                            
-                            <div class="editor-column">
-                                <h4>俄文信息</h4>
-                                <div class="form-group">
-                                    <label for="protocol-number-ru">Номер договора</label>
-                                    <input type="text" id="protocol-number-ru" value="ZLJC 26 - 003">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="sign-date-ru">Дата подписания</label>
-                                    <input type="text" id="sign-date-ru" value="2026. 01 . 03">
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="product-name-cn">产品名称 (中文)</label>
-                            <input type="text" id="product-name-cn" value="空气炸锅">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="product-name-ru">产品名称 (俄文)</label>
-                            <input type="text" id="product-name-ru" value="Air Fryer">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="commission-rate">代理佣金比例 (%)</label>
-                            <input type="text" id="commission-rate" value="1">
-                        </div>
-                    </div>
-                    
-                    <!-- 各方信息标签 -->
-                    <div id="parties-tab" class="tab-content">
-                        <h3 class="section-title">甲方信息 (Сторона А)</h3>
-                        
-                        <div class="two-column-editor">
-                            <div class="editor-column">
-                                <h4>中文信息</h4>
-                                <div class="form-group">
-                                    <label for="party-a-name-cn">甲方名称</label>
-                                    <input type="text" id="party-a-name-cn" value="深圳市晶营光电科技有限公司">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="party-a-address-cn">法定地址</label>
-                                    <input type="text" id="party-a-address-cn" value="深圳市宝安区宝安大道4338号宝穗大厦8601晶荣公司">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="party-a-representative-cn">授权代表</label>
-                                    <input type="text" id="party-a-representative-cn" value="王庆会">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="party-a-phone-cn">联系电话</label>
-                                    <input type="tel" id="party-a-phone-cn" value="13714234679">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="party-a-email-cn">电子邮箱</label>
-                                    <input type="email" id="party-a-email-cn" value="admin@jingrongled.com">
-                                </div>
-                            </div>
-                            
-                            <div class="editor-column">
-                                <h4>俄文信息</h4>
-                                <div class="form-group">
-                                    <label for="party-a-name-ru">Сторона А 名称</label>
-                                    <input type="text" id="party-a-name-ru" value="Шэньчжэньская компания «Цзинъин Оптоэлектроника» CO., LTD">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="party-a-address-ru">Юридический адрес</label>
-                                    <input type="text" id="party-a-address-ru" value="Китай, г. Шэньчжэнь, р-н Баоань, ул. Баоаньдадао, д. 4338, бизнес-центр «Баосуй», оф. 8601">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="party-a-representative-ru">Уполномоченное лицо</label>
-                                    <input type="text" id="party-a-representative-ru" value="Ван Цинхуэй">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="party-a-phone-ru">Контактный телефон</label>
-                                    <input type="tel" id="party-a-phone-ru" value="13714234679">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="party-a-email-ru">Электронная почта</label>
-                                    <input type="email" id="party-a-email-ru" value="admin@jingrongled.com">
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <h3 class="section-title">乙方信息 (Сторона B)</h3>
-                        
-                        <div class="two-column-editor">
-                            <div class="editor-column">
-                                <h4>中文信息</h4>
-                                <div class="form-group">
-                                    <label for="party-b-name-cn">乙方名称</label>
-                                    <input type="text" id="party-b-name-cn" value="TЫCЯЧA BOЛH">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="party-b-address-cn">法定地址</label>
-                                    <input type="text" id="party-b-address-cn" value="117105, город Москва, Новоданиловская наб, д. 12, помещ. 81">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="party-b-representative-cn">授权代表</label>
-                                    <input type="text" id="party-b-representative-cn" value="Шель Ольга Александровна">
-                                </div>
-                            </div>
-                            
-                            <div class="editor-column">
-                                <h4>俄文信息</h4>
-                                <div class="form-group">
-                                    <label for="party-b-name-ru">Сторона В 名称</label>
-                                    <input type="text" id="party-b-name-ru" value="OOO «TЫCЯЧA BOЛH»">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="party-b-address-ru">Юридический адрес</label>
-                                    <input type="text" id="party-b-address-ru" value="117105, город Москва, Новоданиловская наб, д. 12, помещ. 81">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="party-b-representative-ru">Уполномоченное лицо</label>
-                                    <input type="text" id="party-b-representative-ru" value="Шель Ольга Александровна">
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <h3 class="section-title">丙方信息 (Сторона C)</h3>
-                        
-                        <div class="two-column-editor">
-                            <div class="editor-column">
-                                <h4>中文信息</h4>
-                                <div class="form-group">
-                                    <label for="party-c-name-cn">丙方名称</label>
-                                    <input type="text" id="party-c-name-cn" value="智链通达供应链有限公司">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="party-c-address-cn">法定地址</label>
-                                    <input type="text" id="party-c-address-cn" value="香港新蒲崗太子道東 706 號太子工業大廈海德匯24樓 A27 室">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="party-c-representative-cn">授权代表</label>
-                                    <input type="text" id="party-c-representative-cn" value="黎健文">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="party-c-phone-cn">联系电话</label>
-                                    <input type="tel" id="party-c-phone-cn" value="+852-21349717">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="party-c-email-cn">电子邮箱</label>
-                                    <input type="email" id="party-c-email-cn" value="106442819@qq.com">
-                                </div>
-                            </div>
-                            
-                            <div class="editor-column">
-                                <h4>俄文信息</h4>
-                                <div class="form-group">
-                                    <label for="party-c-name-ru">Сторона С 名称</label>
-                                    <input type="text" id="party-c-name-ru" value="СМАРТЧЭЙН НЕКСУС ЛИМИТЕД">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="party-c-address-ru">Юридический адрес</label>
-                                    <input type="text" id="party-c-address-ru" value="ПОМЕЩЕНИЕ/КОМНАТА А27, ЭТАЖ 24, РИДЖЕНТС ПАРК ПРИНС ИНДАСТРИАЛ БИЛДИНГ №706, ПРИНС ЭДВАРД РОАД, ВОСТОЧНЫЙ КОУЛУН, Гонконг, КНР">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="party-c-representative-ru">Уполномоченное лицо</label>
-                                    <input type="text" id="party-c-representative-ru" value="Ли Цзяньвэнь">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="party-c-phone-ru">Контактный телефон</label>
-                                    <input type="tel" id="party-c-phone-ru" value="+852-21349717">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="party-c-email-ru">Электронная почта</label>
-                                    <input type="email" id="party-c-email-ru" value="106442819@qq.com">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- 银行信息标签 -->
-                    <div id="bank-tab" class="tab-content">
-                        <h3 class="section-title">甲方银行信息</h3>
-                        
-                        <div class="two-column-editor">
-                            <div class="editor-column">
-                                <h4>中文信息</h4>
-                                <div class="form-group">
-                                    <label for="bank-a-name-cn">开户银行</label>
-                                    <input type="text" id="bank-a-name-cn" value="中国银行">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="bank-a-swift-cn">SWIFT代码</label>
-                                    <input type="text" id="bank-a-swift-cn" value="BKCHCNBJ">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="bank-a-address-cn">银行地址</label>
-                                    <input type="text" id="bank-a-address-cn" value="中国银行深圳留仙洞支行">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="bank-a-receiver-cn">收款人名称</label>
-                                    <input type="text" id="bank-a-receiver-cn" value="深圳市晶荣光电科技有限公司">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="bank-a-account-cn">账户号</label>
-                                    <input type="text" id="bank-a-account-cn" value="744562833942">
-                                </div>
-                            </div>
-                            
-                            <div class="editor-column">
-                                <h4>俄文信息</h4>
-                                <div class="form-group">
-                                    <label for="bank-a-name-ru">Название банка</label>
-                                    <input type="text" id="bank-a-name-ru" value="Банка Китая">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="bank-a-swift-ru">SWIFT Код</label>
-                                    <input type="text" id="bank-a-swift-ru" value="BKCHCNBJ">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="bank-a-address-ru">Адрес банка</label>
-                                    <input type="text" id="bank-a-address-ru" value="Акционерное общество «Банк Китая», Отделение «Люсяньдун» в г. Шэньчжэнь">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="bank-a-receiver-ru">Наименование получателя</label>
-                                    <input type="text" id="bank-a-receiver-ru" value="Шэньчжэньская компания с ограниченной ответственностью «Цзиньжун Оптоэлектроника»">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="bank-a-account-ru">Номер счета</label>
-                                    <input type="text" id="bank-a-account-ru" value="744562833942">
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <h3 class="section-title">丙方银行信息</h3>
-                        
-                        <div class="two-column-editor">
-                            <div class="editor-column">
-                                <h4>中文信息</h4>
-                                <div class="form-group">
-                                    <label for="bank-c-name-cn">开户银行</label>
-                                    <input type="text" id="bank-c-name-cn" value="VTB银行莫斯科中央分行">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="bank-c-swift-cn">SWIFT代码</label>
-                                    <input type="text" id="bank-c-swift-cn" value="VTBRRUMM">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="bank-c-address-cn">银行地址</label>
-                                    <input type="text" id="bank-c-address-cn" value="邮编109147，莫斯科，沃龙佐夫街43号，1栋">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="bank-c-receiver-cn">收款人名称</label>
-                                    <input type="text" id="bank-c-receiver-cn" value="智链通达供应链有限公司">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="bank-c-bic-cn">银行BIC码</label>
-                                    <input type="text" id="bank-c-bic-cn" value="044525187">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="bank-c-account-cn">账户号</label>
-                                    <input type="text" id="bank-c-account-cn" value="40807810826800000051(RUB)">
-                                </div>
-                            </div>
-                            
-                            <div class="editor-column">
-                                <h4>俄文信息</h4>
-                                <div class="form-group">
-                                    <label for="bank-c-name-ru">Название банка</label>
-                                    <input type="text" id="bank-c-name-ru" value="ФИЛИАЛ 'ЦЕНТРАЛЬНЫЙ' БАНКА ВТБ (ПАО)">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="bank-c-swift-ru">SWIFT Код</label>
-                                    <input type="text" id="bank-c-swift-ru" value="VTBRRUMM">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="bank-c-address-ru">Адрес банка</label>
-                                    <input type="text" id="bank-c-address-ru" value="109147, г. Москва, ул. Воронцовская, д. 43, стр. 1">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="bank-c-receiver-ru">Название получателя</label>
-                                    <input type="text" id="bank-c-receiver-ru" value="СМАРТЧЭЙН НЕКСУС ЛИМИТЕД">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="bank-c-bic-ru">БИК</label>
-                                    <input type="text" id="bank-c-bic-ru" value="044525187">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="bank-c-account-ru">Номер Счет</label>
-                                    <input type="text" id="bank-c-account-ru" value="40807810826800000051(RUB)">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- 合同细节标签 -->
-                    <div id="details-tab" class="tab-content">
-                        <h3 class="section-title">合同细节</h3>
-                        
-                        <div class="two-column-editor">
-                            <div class="editor-column">
-                                <h4>中文信息</h4>
-                                <div class="form-group">
-                                    <label for="contract-number-cn">原合同号 №</label>
-                                    <input type="text" id="contract-number-cn" value="SSSC20251203">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="contract-date-cn">原合同日期</label>
-                                    <input type="text" id="contract-date-cn" value="2025.12.03">
-                                </div>
-                            </div>
-                            
-                            <div class="editor-column">
-                                <h4>俄文信息</h4>
-                                <div class="form-group">
-                                    <label for="contract-number-ru">Номер контракта №</label>
-                                    <input type="text" id="contract-number-ru" value="SSSC20251203">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="contract-date-ru">Дата контракта</label>
-                                    <input type="text" id="contract-date-ru" value="2025.12.03">
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="note">
-                            <p><strong>使用说明：</strong></p>
-                            <p>1. 左侧填写中文信息，右侧填写对应的俄文信息</p>
-                            <p>2. 所有可编辑字段在预览中会以黄色背景高亮显示</p>
-                            <p>3. 填写完成后，点击"更新预览"查看效果</p>
-                            <p>4. 最后点击"导出Word文档"下载生成的文件</p>
-                        </div>
-                    </div>
-                    
-                    <div class="button-group">
-                        <button id="update-btn">更新预览</button>
-                        <button id="reset-btn" class="reset-btn">重置表单</button>
-                        <button id="export-btn" class="export-btn">导出Word文档</button>
-                    </div>
-                </section>
-                
-                <!-- 下面预览区域 -->
-                <section class="preview-section">
-                    <h2 class="section-title">协议预览</h2>
-                    <div class="protocol-preview" id="protocol-preview">
-                        <!-- 协议内容将通过JavaScript动态生成 -->
-                    </div>
-                </section>
+            <div class="nav-item">
+                <a href="#" class="nav-link"><i class="fas fa-globe-americas"></i> 离岸</a>
+                <div class="dropdown-menu">
+                    <a href="#offshore-contract" class="dropdown-item"><i class="fas fa-file-contract"></i> 货物采购合同</a>
+                    <a href="Договор трехсторонний - 智链三方协议.html" class="dropdown-item"><i class="fas fa-handshake"></i> Договор трехсторонний - 智链三方协议</a>
+                    <a href="#offshore-registration" class="dropdown-item"><i class="fas fa-registered"></i> Заявка_на_перевод_от_Образец</a>
+                    <a href="#offshore-banking" class="dropdown-item"><i class="fas fa-university"></i> 付款单</a>
+                </div>
             </div>
+            
+            <div class="nav-item">
+                <a href="#" class="nav-link"><i class="fas fa-money-check-alt"></i> 本票</a>
+                <div class="dropdown-menu">
+                    <a href="#promissory-application" class="dropdown-item"><i class="fas fa-edit"></i> 申请流程</a>
+                    <a href="#promissory-sample" class="dropdown-item"><i class="fas fa-file-invoice"></i> 样本下载</a>
+                    <a href="#promissory-verification" class="dropdown-item"><i class="fas fa-check-circle"></i> 验真服务</a>
+                    <a href="#promissory-tracking" class="dropdown-item"><i class="fas fa-search-dollar"></i> 状态查询</a>
+                </div>
+            </div>
+            
+            <div class="nav-item">
+                <a href="#" class="nav-link"><i class="fas fa-border-style"></i> 白关</a>
+                <div class="dropdown-menu">
+                    <a href="#clearance-process" class="dropdown-item"><i class="fas fa-tasks"></i> 流程说明</a>
+                    <a href="#clearance-documents" class="dropdown-item"><i class="fas fa-folder-open"></i> 所需文件</a>
+                    <a href="#clearance-faq" class="dropdown-item"><i class="fas fa-question-circle"></i> 常见问题</a>
+                    <a href="#clearance-calculator" class="dropdown-item"><i class="fas fa-calculator"></i> 费用估算</a>
+                </div>
+            </div>
+            
+            <div class="nav-item">
+                <a href="#" class="nav-link"><i class="fas fa-ad"></i> 广告</a>
+                <div class="dropdown-menu">
+                    <a href="#advertisement-cooperation" class="dropdown-item"><i class="fas fa-handshake"></i> 合作推广</a>
+                    <a href="#advertisement-media" class="dropdown-item"><i class="fas fa-photo-video"></i> 媒体资源</a>
+                    <a href="#advertisement-price" class="dropdown-item"><i class="fas fa-tags"></i> 价格方案</a>
+                    <a href="#advertisement-design" class="dropdown-item"><i class="fas fa-palette"></i> 设计服务</a>
+                </div>
+            </div>
+            
+            <div class="nav-item">
+                <a href="#" class="nav-link"><i class="fas fa-truck-loading"></i> 物流</a>
+                <div class="dropdown-menu">
+                    <a href="#logistics-sea" class="dropdown-item"><i class="fas fa-ship"></i> 海运服务</a>
+                    <a href="#logistics-air" class="dropdown-item"><i class="fas fa-plane"></i> 空运服务</a>
+                    <a href="#logistics-land" class="dropdown-item"><i class="fas fa-truck"></i> 陆运服务</a>
+                    <a href="#logistics-warehouse" class="dropdown-item"><i class="fas fa-warehouse"></i> 仓储服务</a>
+                    <a href="#logistics-tracking" class="dropdown-item"><i class="fas fa-map-marked-alt"></i> 货物追踪</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <header>
+            <h1>中俄双语三方协议生成器</h1>
+            <p class="subtitle">上下布局 | 上面编辑区 | 下面预览区 | 导出Word文档</p>
+        </header>
+        
+        <div class="content-wrapper">
+            <!-- 上面编辑区域 -->
+            <section class="editor-section">
+                <div class="tab-navigation">
+                    <button class="tab-button active" data-tab="basic">基本信息</button>
+                    <button class="tab-button" data-tab="parties">各方信息</button>
+                    <button class="tab-button" data-tab="bank">银行信息</button>
+                    <button class="tab-button" data-tab="details">合同细节</button>
+                </div>
+                
+                <!-- 基本信息标签 -->
+                <div id="basic-tab" class="tab-content active">
+                    <h3 class="section-title">基本信息</h3>
+                    
+                    <div class="two-column-editor">
+                        <div class="editor-column">
+                            <h4>中文信息</h4>
+                            <div class="form-group">
+                                <label for="protocol-number-cn">协议号</label>
+                                <input type="text" id="protocol-number-cn" value="ZLJC 26 - 003">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="sign-date-cn">签订日期</label>
+                                <input type="text" id="sign-date-cn" value="2026. 01 . 03">
+                            </div>
+                        </div>
+                        
+                        <div class="editor-column">
+                            <h4>俄文信息</h4>
+                            <div class="form-group">
+                                <label for="protocol-number-ru">Номер договора</label>
+                                <input type="text" id="protocol-number-ru" value="ZLJC 26 - 003">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="sign-date-ru">Дата подписания</label>
+                                <input type="text" id="sign-date-ru" value="2026. 01 . 03">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="product-name-cn">产品名称 (中文)</label>
+                        <input type="text" id="product-name-cn" value="空气炸锅">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="product-name-ru">产品名称 (俄文)</label>
+                        <input type="text" id="product-name-ru" value="Air Fryer">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="commission-rate">代理佣金比例 (%)</label>
+                        <input type="text" id="commission-rate" value="1">
+                    </div>
+                </div>
+                
+                <!-- 各方信息标签 -->
+                <div id="parties-tab" class="tab-content">
+                    <h3 class="section-title">甲方信息 (Сторона А)</h3>
+                    
+                    <div class="two-column-editor">
+                        <div class="editor-column">
+                            <h4>中文信息</h4>
+                            <div class="form-group">
+                                <label for="party-a-name-cn">甲方名称</label>
+                                <input type="text" id="party-a-name-cn" value="深圳市晶营光电科技有限公司">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="party-a-address-cn">法定地址</label>
+                                <input type="text" id="party-a-address-cn" value="深圳市宝安区宝安大道4338号宝穗大厦8601晶荣公司">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="party-a-representative-cn">授权代表</label>
+                                <input type="text" id="party-a-representative-cn" value="王庆会">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="party-a-phone-cn">联系电话</label>
+                                <input type="tel" id="party-a-phone-cn" value="13714234679">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="party-a-email-cn">电子邮箱</label>
+                                <input type="email" id="party-a-email-cn" value="admin@jingrongled.com">
+                            </div>
+                        </div>
+                        
+                        <div class="editor-column">
+                            <h4>俄文信息</h4>
+                            <div class="form-group">
+                                <label for="party-a-name-ru">Сторона А 名称</label>
+                                <input type="text" id="party-a-name-ru" value="Шэньчжэньская компания «Цзинъин Оптоэлектроника» CO., LTD">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="party-a-address-ru">Юридический адрес</label>
+                                <input type="text" id="party-a-address-ru" value="Китай, г. Шэньчжэнь, р-н Баоань, ул. Баоаньдадао, д. 4338, бизнес-центр «Баосуй», оф. 8601">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="party-a-representative-ru">Уполномоченное лицо</label>
+                                <input type="text" id="party-a-representative-ru" value="Ван Цинхуэй">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="party-a-phone-ru">Контактный телефон</label>
+                                <input type="tel" id="party-a-phone-ru" value="13714234679">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="party-a-email-ru">Электронная почта</label>
+                                <input type="email" id="party-a-email-ru" value="admin@jingrongled.com">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="section-title">乙方信息 (Сторона B)</h3>
+                    
+                    <div class="two-column-editor">
+                        <div class="editor-column">
+                            <h4>中文信息</h4>
+                            <div class="form-group">
+                                <label for="party-b-name-cn">乙方名称</label>
+                                <input type="text" id="party-b-name-cn" value="TЫCЯЧA BOЛH">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="party-b-address-cn">法定地址</label>
+                                <input type="text" id="party-b-address-cn" value="117105, город Москва, Новоданиловская наб, д. 12, помещ. 81">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="party-b-representative-cn">授权代表</label>
+                                <input type="text" id="party-b-representative-cn" value="Шель Ольга Александровна">
+                            </div>
+                        </div>
+                        
+                        <div class="editor-column">
+                            <h4>俄文信息</h4>
+                            <div class="form-group">
+                                <label for="party-b-name-ru">Сторона В 名称</label>
+                                <input type="text" id="party-b-name-ru" value="OOO «TЫCЯЧA BOЛH»">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="party-b-address-ru">Юридический адрес</label>
+                                <input type="text" id="party-b-address-ru" value="117105, город Москва, Новоданиловская наб, д. 12, помещ. 81">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="party-b-representative-ru">Уполномоченное лицо</label>
+                                <input type="text" id="party-b-representative-ru" value="Шель Ольга Александровна">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="section-title">丙方信息 (Сторона C)</h3>
+                    
+                    <div class="two-column-editor">
+                        <div class="editor-column">
+                            <h4>中文信息</h4>
+                            <div class="form-group">
+                                <label for="party-c-name-cn">丙方名称</label>
+                                <input type="text" id="party-c-name-cn" value="智链通达供应链有限公司">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="party-c-address-cn">法定地址</label>
+                                <input type="text" id="party-c-address-cn" value="香港新蒲崗太子道東 706 號太子工業大廈海德匯24樓 A27 室">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="party-c-representative-cn">授权代表</label>
+                                <input type="text" id="party-c-representative-cn" value="黎健文">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="party-c-phone-cn">联系电话</label>
+                                <input type="tel" id="party-c-phone-cn" value="+852-21349717">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="party-c-email-cn">电子邮箱</label>
+                                <input type="email" id="party-c-email-cn" value="106442819@qq.com">
+                            </div>
+                        </div>
+                        
+                        <div class="editor-column">
+                            <h4>俄文信息</h4>
+                            <div class="form-group">
+                                <label for="party-c-name-ru">Сторона С 名称</label>
+                                <input type="text" id="party-c-name-ru" value="СМАРТЧЭЙН НЕКСУС ЛИМИТЕД">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="party-c-address-ru">Юридический адрес</label>
+                                <input type="text" id="party-c-address-ru" value="ПОМЕЩЕНИЕ/КОМНАТА А27, ЭТАЖ 24, РИДЖЕНТС ПАРК ПРИНС ИНДАСТРИАЛ БИЛДИНГ №706, ПРИНС ЭДВАРД РОАД, ВОСТОЧНЫЙ КОУЛУН, Гонконг, КНР">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="party-c-representative-ru">Уполномоченное лицо</label>
+                                <input type="text" id="party-c-representative-ru" value="Ли Цзяньвэнь">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="party-c-phone-ru">Контактный телефон</label>
+                                <input type="tel" id="party-c-phone-ru" value="+852-21349717">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="party-c-email-ru">Электронная почта</label>
+                                <input type="email" id="party-c-email-ru" value="106442819@qq.com">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 银行信息标签 -->
+                <div id="bank-tab" class="tab-content">
+                    <h3 class="section-title">甲方银行信息</h3>
+                    
+                    <div class="two-column-editor">
+                        <div class="editor-column">
+                            <h4>中文信息</h4>
+                            <div class="form-group">
+                                <label for="bank-a-name-cn">开户银行</label>
+                                <input type="text" id="bank-a-name-cn" value="中国银行">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="bank-a-swift-cn">SWIFT代码</label>
+                                <input type="text" id="bank-a-swift-cn" value="BKCHCNBJ">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="bank-a-address-cn">银行地址</label>
+                                <input type="text" id="bank-a-address-cn" value="中国银行深圳留仙洞支行">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="bank-a-receiver-cn">收款人名称</label>
+                                <input type="text" id="bank-a-receiver-cn" value="深圳市晶荣光电科技有限公司">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="bank-a-account-cn">账户号</label>
+                                <input type="text" id="bank-a-account-cn" value="744562833942">
+                            </div>
+                        </div>
+                        
+                        <div class="editor-column">
+                            <h4>俄文信息</h4>
+                            <div class="form-group">
+                                <label for="bank-a-name-ru">Название банка</label>
+                                <input type="text" id="bank-a-name-ru" value="Банка Китая">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="bank-a-swift-ru">SWIFT Код</label>
+                                <input type="text" id="bank-a-swift-ru" value="BKCHCNBJ">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="bank-a-address-ru">Адрес банка</label>
+                                <input type="text" id="bank-a-address-ru" value="Акционерное общество «Банк Китая», Отделение «Люсяньдун» в г. Шэньчжэнь">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="bank-a-receiver-ru">Наименование получателя</label>
+                                <input type="text" id="bank-a-receiver-ru" value="Шэньчжэньская компания с ограниченной ответственностью «Цзиньжун Оптоэлектроника»">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="bank-a-account-ru">Номер счета</label>
+                                <input type="text" id="bank-a-account-ru" value="744562833942">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="section-title">丙方银行信息</h3>
+                    
+                    <div class="two-column-editor">
+                        <div class="editor-column">
+                            <h4>中文信息</h4>
+                            <div class="form-group">
+                                <label for="bank-c-name-cn">开户银行</label>
+                                <input type="text" id="bank-c-name-cn" value="VTB银行莫斯科中央分行">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="bank-c-swift-cn">SWIFT代码</label>
+                                <input type="text" id="bank-c-swift-cn" value="VTBRRUMM">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="bank-c-address-cn">银行地址</label>
+                                <input type="text" id="bank-c-address-cn" value="邮编109147，莫斯科，沃龙佐夫街43号，1栋">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="bank-c-receiver-cn">收款人名称</label>
+                                <input type="text" id="bank-c-receiver-cn" value="智链通达供应链有限公司">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="bank-c-bic-cn">银行BIC码</label>
+                                <input type="text" id="bank-c-bic-cn" value="044525187">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="bank-c-account-cn">账户号</label>
+                                <input type="text" id="bank-c-account-cn" value="40807810826800000051(RUB)">
+                            </div>
+                        </div>
+                        
+                        <div class="editor-column">
+                            <h4>俄文信息</h4>
+                            <div class="form-group">
+                                <label for="bank-c-name-ru">Название банка</label>
+                                <input type="text" id="bank-c-name-ru" value="ФИЛИАЛ 'ЦЕНТРАЛЬНЫЙ' БАНКА ВТБ (ПАО)">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="bank-c-swift-ru">SWIFT Код</label>
+                                <input type="text" id="bank-c-swift-ru" value="VTBRRUMM">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="bank-c-address-ru">Адрес банка</label>
+                                <input type="text" id="bank-c-address-ru" value="109147, г. Москва, ул. Воронцовская, д. 43, стр. 1">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="bank-c-receiver-ru">Название получателя</label>
+                                <input type="text" id="bank-c-receiver-ru" value="СМАРТЧЭЙН НЕКСУС ЛИМИТЕД">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="bank-c-bic-ru">БИК</label>
+                                <input type="text" id="bank-c-bic-ru" value="044525187">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="bank-c-account-ru">Номер Счет</label>
+                                <input type="text" id="bank-c-account-ru" value="40807810826800000051(RUB)">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 合同细节标签 -->
+                <div id="details-tab" class="tab-content">
+                    <h3 class="section-title">合同细节</h3>
+                    
+                    <div class="two-column-editor">
+                        <div class="editor-column">
+                            <h4>中文信息</h4>
+                            <div class="form-group">
+                                <label for="contract-number-cn">原合同号 №</label>
+                                <input type="text" id="contract-number-cn" value="SSSC20251203">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="contract-date-cn">原合同日期</label>
+                                <input type="text" id="contract-date-cn" value="2025.12.03">
+                            </div>
+                        </div>
+                        
+                        <div class="editor-column">
+                            <h4>俄文信息</h4>
+                            <div class="form-group">
+                                <label for="contract-number-ru">Номер контракта №</label>
+                                <input type="text" id="contract-number-ru" value="SSSC20251203">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="contract-date-ru">Дата контракта</label>
+                                <input type="text" id="contract-date-ru" value="2025.12.03">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="note">
+                        <p><strong>使用说明：</strong></p>
+                        <p>1. 左侧填写中文信息，右侧填写对应的俄文信息</p>
+                        <p>2. 所有可编辑字段在预览中会以黄色背景高亮显示</p>
+                        <p>3. 填写完成后，点击"更新预览"查看效果</p>
+                        <p>4. 最后点击"导出Word文档"下载生成的文件</p>
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button id="update-btn">更新预览</button>
+                    <button id="reset-btn" class="reset-btn">重置表单</button>
+                    <button id="export-btn" class="export-btn">导出Word文档</button>
+                </div>
+            </section>
+            
+            <!-- 下面预览区域 -->
+            <section class="preview-section">
+                <h2 class="section-title">协议预览</h2>
+                <div class="protocol-preview" id="protocol-preview">
+                    <!-- 协议内容将通过JavaScript动态生成 -->
+                </div>
+            </section>
         </div>
     </div>
+
+    <!-- 页脚 - 从index.html复制 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>六点通国际贸易服务</h3>
+                <p>我们致力于为全球客户提供专业、高效、安全的跨境物流与商务解决方案。20年行业经验，服务网络覆盖全球150多个国家和地区。</p>
+                <p style="margin-top: 15px;"><i class="fas fa-map-marker-alt"></i> 深圳市前海荣超滨海大厦B座211室</p>
+                <p style="margin-top: 10px;"><i class="fas fa-map-marker-alt"></i> 厦门市海沧区融信中心2001室</p>
+            </div>
+            
+            <div class="footer-column">
+                <h3>服务导航</h3>
+                <ul>
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="#offshore-contract">离岸合同</a></li>
+                    <li><a href="#promissory-application">本票申请</a></li>
+                    <li><a href="#clearance-process">白关流程</a></li>
+                    <li><a href="#advertisement-cooperation">广告合作</a></li>
+                    <li><a href="#logistics-sea">海运服务</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>联系我们</h3>
+                <ul>
+                    <li><i class="fas fa-phone"></i> 400-123-4567</li>
+                    <li><i class="fas fa-phone"></i> +86 21 1234 5678</li>
+                    <li><i class="fas fa-envelope"></i> service@shunda-logistics.com</li>
+                    <li><i class="fas fa-clock"></i> 周一至周五 9:00-18:00</li>
+                    <li><i class="fas fa-clock"></i> 紧急热线 24小时</li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>关注我们</h3>
+                <ul>
+                    <li><a href="#"><i class="fab fa-weixin"></i> 微信公众号</a></li>
+                    <li><a href="#"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
+                    <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
+                    <li><a href="#"><i class="fab fa-facebook"></i> Facebook</a></li>
+                    <li><a href="#"><i class="fas fa-newspaper"></i> 行业资讯订阅</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>© 2023 深圳六点通跨境企业服务有限公司 版权所有 | 沪ICP备12345678号</p>
+            <p style="margin-top: 10px;">国际物流服务专家 | 20年跨境物流经验</p>
+        </div>
+    </footer>
 
     <script>
         // 协议模板 - 使用表格进行左右对应排版
@@ -1216,34 +1412,6 @@
 
         // 初始化预览
         document.getElementById('protocol-preview').innerHTML = protocolTemplate;
-        
-        // 导航栏交互功能
-        document.addEventListener('DOMContentLoaded', function() {
-            // 添加导航菜单点击事件
-            const navLinks = document.querySelectorAll('.navbar-menu a');
-            navLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    // 如果是当前页面链接，阻止默认行为
-                    if (this.getAttribute('href') === '#') {
-                        e.preventDefault();
-                    }
-                    
-                    // 移除所有active类
-                    navLinks.forEach(l => l.parentElement.classList.remove('active'));
-                    // 为当前点击的菜单项添加active类
-                    this.parentElement.classList.add('active');
-                });
-            });
-            
-            // 退出按钮事件
-            const logoutBtn = document.querySelector('.logout-btn');
-            logoutBtn.addEventListener('click', function() {
-                if (confirm('确定要退出登录吗？')) {
-                    alert('已退出登录，正在跳转到登录页面...');
-                    // 实际应用中这里会跳转到登录页面
-                }
-            });
-        });
         
         // 更新所有预览字段
         function updatePreview() {
