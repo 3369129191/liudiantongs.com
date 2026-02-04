@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>货物采购合同自动化生成器</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 添加html-docx-js库 -->
+    <script src="https://unpkg.com/html-docx-js@0.3.1/dist/html-docx.js"></script>
+    <!-- 添加FileSaver.js库用于保存文件 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -13,121 +17,125 @@
             font-family: 'Times New Roman', Times, serif;
         }
         
-        /* 从付款单复制的导航栏样式 - 修改为全屏宽度 */
-        .navbar {
-            background-color: #2c3e50;
+        /* 从index.html复制的顶部导航栏样式 */
+        .header {
+            background-color: #1a365d;
             color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-            width: 100vw; /* 改为全屏宽度 */
+            padding: 0 5%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
             z-index: 1000;
-            position: relative;
-            left: 50%;
-            right: 50%;
-            margin-left: -50vw;
-            margin-right: -50vw;
         }
         
-        .navbar-container {
-            width: 100%;
+        .top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 12px 0;
         }
         
-        .navbar-left {
+        .logo {
             display: flex;
             align-items: center;
         }
         
-        .navbar-logo {
+        .logo h1 {
+            font-size: 1.8rem;
+            margin-left: 10px;
+            font-weight: 700;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .logo-icon {
+            font-size: 2.2rem;
+            color: #00b4d8;
+        }
+        
+        .contact-info {
             display: flex;
             align-items: center;
-            padding: 15px 0;
-            text-decoration: none;
+            font-size: 0.9rem;
         }
         
-        /* Logo图片样式 */
-        .logo-image {
-            height: 40px; /* 控制Logo高度 */
-            width: auto; /* 宽度自适应 */
-            max-width: 200px; /* 最大宽度限制 */
-            object-fit: contain; /* 保持图片比例 */
-            vertical-align: middle;
+        .contact-info i {
+            color: #00b4d8;
+            margin-right: 8px;
         }
         
-        .navbar-menu {
+        .contact-info span {
+            margin-right: 20px;
+        }
+        
+        /* 从index.html复制的主导航栏 */
+        .navbar {
             display: flex;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            margin-left: 30px;
+            background-color: #2d4a7c;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
         
-        .navbar-menu li {
+        .nav-item {
             position: relative;
         }
         
-        .navbar-menu a {
+        .nav-link {
             color: white;
             text-decoration: none;
-            padding: 20px 15px;
+            padding: 16px 24px;
             display: block;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease;
+            font-weight: 500;
         }
         
-        .navbar-menu a:hover {
-            background-color: #34495e;
+        .nav-link:hover {
+            background-color: #00b4d8;
         }
         
-        .navbar-menu .active a {
-            background-color: #1a252f;
-            border-bottom: 3px solid #3498db;
+        /* 下拉菜单 */
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: white;
+            min-width: 220px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 8px 8px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            z-index: 100;
         }
         
-        .navbar-right {
-            display: flex;
-            align-items: center;
+        .nav-item:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
         }
         
-        .user-info {
-            display: flex;
-            align-items: center;
-            padding: 10px 0;
+        .dropdown-item {
+            display: block;
+            padding: 14px 20px;
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.2s ease;
         }
         
-        .user-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background-color: #3498db;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .dropdown-item:hover {
+            background-color: #f0f8ff;
+            color: #1a365d;
+            padding-left: 28px;
+        }
+        
+        .dropdown-item i {
             margin-right: 10px;
-            font-weight: bold;
-        }
-        
-        .username {
-            font-size: 14px;
-        }
-        
-        .logout-btn {
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 2px;
-            cursor: pointer;
-            margin-left: 15px;
-            font-size: 12px;
-            transition: background-color 0.3s;
-        }
-        
-        .logout-btn:hover {
-            background-color: #c0392b;
+            color: #00b4d8;
+            width: 18px;
+            text-align: center;
         }
         
         body {
@@ -137,7 +145,7 @@
             margin: 0;
             padding: 0;
             font-size: 14px;
-            overflow-x: hidden; /* 防止水平滚动条 */
+            overflow-x: hidden;
         }
         
         .container {
@@ -147,7 +155,7 @@
             border-radius: 2px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-            margin-top: 0; /* 移除顶部边距 */
+            margin-top: 0;
         }
         
         header {
@@ -168,7 +176,6 @@
             margin-top: 5px;
         }
         
-        /* 修改为上下布局 */
         .content-wrapper {
             display: flex;
             flex-direction: column;
@@ -262,6 +269,7 @@
             vertical-align: top;
             width: 50%;
             font-size: 13px;
+            text-align: left;
         }
         
         .contract-header-table {
@@ -292,6 +300,7 @@
             width: 50%;
             font-size: 13px;
             font-weight: bold;
+            text-align: center;
         }
         
         .contract-subheader {
@@ -408,7 +417,7 @@
         }
         
         @media print {
-            .navbar, .input-section, .language-toggle, .btn {
+            .header, .input-section, .language-toggle, .btn {
                 display: none;
             }
             
@@ -433,33 +442,63 @@
             }
         }
         
-        /* 修改响应式设计 */
-        @media (max-width: 768px) {
-            .navbar {
+        @media (max-width: 992px) {
+            .top-bar {
                 flex-direction: column;
-                padding: 10px;
+                text-align: center;
             }
             
-            .navbar-left {
-                width: 100%;
-                justify-content: space-between;
-            }
-            
-            .navbar-menu {
-                margin-left: 0;
-                width: 100%;
+            .contact-info {
+                margin-top: 15px;
+                flex-wrap: wrap;
                 justify-content: center;
-                margin-top: 10px;
             }
             
-            .navbar-right {
-                width: 100%;
-                justify-content: center;
-                margin-top: 10px;
+            .navbar {
+                flex-wrap: wrap;
+            }
+            
+            .nav-item {
+                flex: 1 0 50%;
+            }
+            
+            .nav-link {
+                text-align: center;
+                padding: 14px 10px;
             }
             
             .input-section {
                 max-height: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-item {
+                flex: 1 0 100%;
+            }
+            
+            .dropdown-menu {
+                position: static;
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+                display: none;
+                box-shadow: none;
+                border-radius: 0;
+                background-color: rgba(0, 0, 0, 0.1);
+            }
+            
+            .nav-item:hover .dropdown-menu {
+                display: block;
+            }
+            
+            .dropdown-item {
+                color: white;
+                border-bottom-color: rgba(255, 255, 255, 0.1);
+            }
+            
+            .dropdown-item:hover {
+                background-color: rgba(255, 255, 255, 0.1);
             }
         }
         
@@ -471,11 +510,15 @@
         }
         
         .text-center {
-            text-align: center;
+            text-align: center !important;
         }
         
         .text-left {
-            text-align: left;
+            text-align: left !important;
+        }
+        
+        .text-right {
+            text-align: right !important;
         }
         
         .btn-group {
@@ -500,9 +543,8 @@
             margin-bottom: 0;
         }
         
-        /* 移除自动生成按钮相关样式 */
         .auto-generate-btn {
-            display: none; /* 隐藏自动生成按钮 */
+            display: none;
         }
         
         .language-section {
@@ -519,7 +561,6 @@
             color: #2c3e50;
         }
         
-        /* 添加新的样式用于上下布局 */
         .input-header {
             display: flex;
             justify-content: space-between;
@@ -545,34 +586,176 @@
             max-height: 60px;
             overflow: hidden;
         }
+        
+        /* 从index.html复制的页脚样式 */
+        .footer {
+            background-color: #1a365d;
+            color: white;
+            padding: 60px 5% 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            color: #00b4d8;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-column h3:after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 3px;
+            background-color: #00b4d8;
+            bottom: 0;
+            left: 0;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-column ul li a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        
+        .footer-column ul li a:hover {
+            color: #00b4d8;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        /* 加载提示样式 */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .loading-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
-    <!-- 从付款单复制的导航栏 - 全屏宽度 -->
-    <nav class="navbar">
-        <div class="navbar-container">
-            <div class="navbar-left">
-                <a href="#" class="navbar-logo">
-                    <!-- 图片Logo -->
-                    <img src="logo.png" alt="合同生成系统" class="logo-image">
-                </a>
-                <ul class="navbar-menu">
-                    <li class="active"><a href="#">合同生成</a></li>
-                    <li><a href="#">合同管理</a></li>
-                    <li><a href="#">模板库</a></li>
-                    <li><a href="#">客户管理</a></li>
-                    <li><a href="#">设置</a></li>
-                </ul>
+    <!-- 从index.html复制的顶部导航栏 -->
+    <header class="header">
+        <div class="top-bar">
+            <div class="logo">
+                <i class="fas fa-shipping-fast logo-icon"></i>
+                <h1>六点通国际贸易服务</h1>
             </div>
-            <div class="navbar-right">
-                <div class="user-info">
-                    <div class="user-avatar">U</div>
-                    <div class="username">管理员</div>
-                </div>
-                <button class="logout-btn">退出</button>
+            <div class="contact-info">
+                <span><i class="fas fa-phone-alt"></i> 400-123-4567</span>
+                <span><i class="fas fa-envelope"></i> service@shunda-logistics.com</span>
+                <span><i class="fas fa-clock"></i> 周一至周五 9:00-18:00</span>
             </div>
         </div>
-    </nav>
+        
+        <!-- 从index.html复制的主导航栏 -->
+        <nav class="navbar">
+            <div class="nav-item">
+                <a href="index.html" class="nav-link"><i class="fas fa-home"></i> 首页</a>
+            </div>
+            
+            <div class="nav-item">
+                <a href="#" class="nav-link"><i class="fas fa-globe-americas"></i> 离岸</a>
+                <div class="dropdown-menu">
+                    <a href="#offshore-contract" class="dropdown-item"><i class="fas fa-file-contract"></i> 货物采购合同</a>
+                    <a href="#offshore-agreement" class="dropdown-item"><i class="fas fa-handshake"></i> Договор трехсторонний - 智链三方协议</a>
+                    <a href="#offshore-registration" class="dropdown-item"><i class="fas fa-registered"></i> Заявка_на_перевод_от_Образец</a>
+                    <a href="#offshore-banking" class="dropdown-item"><i class="fas fa-university"></i> 付款单</a>
+                </div>
+            </div>
+            
+            <div class="nav-item">
+                <a href="#" class="nav-link"><i class="fas fa-money-check-alt"></i> 本票</a>
+                <div class="dropdown-menu">
+                    <a href="#promissory-application" class="dropdown-item"><i class="fas fa-edit"></i> 申请流程</a>
+                    <a href="#promissory-sample" class="dropdown-item"><i class="fas fa-file-invoice"></i> 样本下载</a>
+                    <a href="#promissory-verification" class="dropdown-item"><i class="fas fa-check-circle"></i> 验真服务</a>
+                    <a href="#promissory-tracking" class="dropdown-item"><i class="fas fa-search-dollar"></i> 状态查询</a>
+                </div>
+            </div>
+            
+            <div class="nav-item">
+                <a href="#" class="nav-link"><i class="fas fa-border-style"></i> 白关</a>
+                <div class="dropdown-menu">
+                    <a href="#clearance-process" class="dropdown-item"><i class="fas fa-tasks"></i> 流程说明</a>
+                    <a href="#clearance-documents" class="dropdown-item"><i class="fas fa-folder-open"></i> 所需文件</a>
+                    <a href="#clearance-faq" class="dropdown-item"><i class="fas fa-question-circle"></i> 常见问题</a>
+                    <a href="#clearance-calculator" class="dropdown-item"><i class="fas fa-calculator"></i> 费用估算</a>
+                </div>
+            </div>
+            
+            <div class="nav-item">
+                <a href="#" class="nav-link"><i class="fas fa-ad"></i> 广告</a>
+                <div class="dropdown-menu">
+                    <a href="#advertisement-cooperation" class="dropdown-item"><i class="fas fa-handshake"></i> 合作推广</a>
+                    <a href="#advertisement-media" class="dropdown-item"><i class="fas fa-photo-video"></i> 媒体资源</a>
+                    <a href="#advertisement-price" class="dropdown-item"><i class="fas fa-tags"></i> 价格方案</a>
+                    <a href="#advertisement-design" class="dropdown-item"><i class="fas fa-palette"></i> 设计服务</a>
+                </div>
+            </div>
+            
+            <div class="nav-item">
+                <a href="#" class="nav-link"><i class="fas fa-truck-loading"></i> 物流</a>
+                <div class="dropdown-menu">
+                    <a href="#logistics-sea" class="dropdown-item"><i class="fas fa-ship"></i> 海运服务</a>
+                    <a href="#logistics-air" class="dropdown-item"><i class="fas fa-plane"></i> 空运服务</a>
+                    <a href="#logistics-land" class="dropdown-item"><i class="fas fa-truck"></i> 陆运服务</a>
+                    <a href="#logistics-warehouse" class="dropdown-item"><i class="fas fa-warehouse"></i> 仓储服务</a>
+                    <a href="#logistics-tracking" class="dropdown-item"><i class="fas fa-map-marked-alt"></i> 货物追踪</a>
+                </div>
+            </div>
+        </nav>
+    </header>
     
     <div class="container">
         <header>
@@ -722,13 +905,10 @@
                     <input type="text" id="buyerBankEn" value="MОCKОBCKИЙ ФИЛИAЛ AO KБ 'MОДyЛЫБAHK'">
                 </div>
                 
-                <!-- 添加英文采购商地址字段 -->
                 <div class="form-group">
                     <label for="buyerAddressEn">采购商地址 (英文) Buyer Address (English):</label>
                     <input type="text" id="buyerAddressEn" value="117105, Moscow, Novodanilovskaya naberezhnaya, d. 12, pomeshch. 81">
                 </div>
-                
-                <!-- 移除了自动生成银行信息按钮 -->
                 
                 <h3>产品信息</h3>
 
@@ -798,6 +978,66 @@
             </div>
         </div>
     </div>
+    
+    <!-- 加载提示 -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <h3>正在生成Word文档...</h3>
+            <p>请稍候，这可能需要几秒钟时间</p>
+        </div>
+    </div>
+
+    <!-- 从index.html复制的页脚 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>六点通国际贸易服务</h3>
+                <p>我们致力于为全球客户提供专业、高效、安全的跨境物流与商务解决方案。20年行业经验，服务网络覆盖全球150多个国家和地区。</p>
+                <p style="margin-top: 15px;"><i class="fas fa-map-marker-alt"></i> 深圳市前海荣超滨海大厦B座211室</p>
+                <p style="margin-top: 10px;"><i class="fas fa-map-marker-alt"></i> 厦门市海沧区融信中心2001室</p>
+            </div>
+            
+            <div class="footer-column">
+                <h3>服务导航</h3>
+                <ul>
+                    <li><a href="index.html#home">首页</a></li>
+                    <li><a href="#offshore-contract">离岸合同</a></li>
+                    <li><a href="#promissory-application">本票申请</a></li>
+                    <li><a href="#clearance-process">白关流程</a></li>
+                    <li><a href="#advertisement-cooperation">广告合作</a></li>
+                    <li><a href="#logistics-sea">海运服务</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>联系我们</h3>
+                <ul>
+                    <li><i class="fas fa-phone"></i> 400-123-4567</li>
+                    <li><i class="fas fa-phone"></i> +86 21 1234 5678</li>
+                    <li><i class="fas fa-envelope"></i> service@shunda-logistics.com</li>
+                    <li><i class="fas fa-clock"></i> 周一至周五 9:00-18:00</li>
+                    <li><i class="fas fa-clock"></i> 紧急热线 24小时</li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>关注我们</h3>
+                <ul>
+                    <li><a href="#"><i class="fab fa-weixin"></i> 微信公众号</a></li>
+                    <li><a href="#"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
+                    <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
+                    <li><a href="#"><i class="fab fa-facebook"></i> Facebook</a></li>
+                    <li><a href="#"><i class="fas fa-newspaper"></i> 行业资讯订阅</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>© 2023 深圳六点通跨境企业服务有限公司 版权所有 | 沪ICP备12345678号</p>
+            <p style="margin-top: 10px;">国际物流服务专家 | 20年跨境物流经验</p>
+        </div>
+    </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -810,8 +1050,7 @@
             const languageBtns = document.querySelectorAll('.language-btn');
             const inputSection = document.getElementById('inputSection');
             const collapseBtn = document.getElementById('collapseBtn');
-            const logoutBtn = document.querySelector('.logout-btn');
-            const navLinks = document.querySelectorAll('.navbar-menu a');
+            const loadingOverlay = document.getElementById('loadingOverlay');
             
             // 语言切换
             let currentLanguage = 'both'; // 'both', 'russian', 'english'
@@ -835,45 +1074,6 @@
                 } else {
                     inputSection.classList.remove('collapsed');
                     collapseBtn.textContent = '折叠编辑区';
-                }
-            });
-            
-            // 从付款单复制的导航菜单点击事件
-            navLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    // 移除所有active类
-                    navLinks.forEach(l => l.parentElement.classList.remove('active'));
-                    // 为当前点击的菜单项添加active类
-                    this.parentElement.classList.add('active');
-                    
-                    // 根据点击的菜单项执行不同操作
-                    const menuText = this.textContent;
-                    switch(menuText) {
-                        case '合同生成':
-                            // 已经在合同生成页面，不做操作
-                            break;
-                        case '合同管理':
-                            alert('合同管理功能开发中...');
-                            break;
-                        case '模板库':
-                            alert('模板库功能开发中...');
-                            break;
-                        case '客户管理':
-                            alert('客户管理功能开发中...');
-                            break;
-                        case '设置':
-                            alert('设置功能开发中...');
-                            break;
-                    }
-                });
-            });
-            
-            // 从付款单复制的退出按钮事件
-            logoutBtn.addEventListener('click', function() {
-                if (confirm('确定要退出登录吗？')) {
-                    alert('已退出登录，正在跳转到登录页面...');
-                    // 实际应用中这里会跳转到登录页面
                 }
             });
             
@@ -1320,6 +1520,10 @@
                         <td><span class="highlight">${product2Quantity}</span></td>
                         <td><span class="highlight">${product2Total.toLocaleString('ru-RU', {minimumFractionDigits: 2})} RUB</span></td>
                     </tr>
+                    <tr>
+                        <td colspan="5" class="text-right"><strong>Итого</strong></td>
+                        <td><span class="highlight">${totalAmount.toLocaleString('ru-RU', {minimumFractionDigits: 2})} RUB</span></td>
+                    </tr>
                 </table>
                 
                 <table class="contract-table">
@@ -1613,8 +1817,8 @@
                         <td><span class="highlight">${product2Total.toLocaleString('ru-RU', {minimumFractionDigits: 2})} RUB</span></td>
                     </tr>
                     <tr>
-                        <td colspan="5" style="text-align: right;"><strong>Итого</strong></td>
-                        <td><span class="highlight">${totalAmount.toLocaleString('ru-RU', {minimumFractionDigits: 2})}</span></td>
+                        <td colspan="5" class="text-right"><strong>Итого</strong></td>
+                        <td><span class="highlight">${totalAmount.toLocaleString('ru-RU', {minimumFractionDigits: 2})} RUB</span></td>
                     </tr>
                 </table>
                 
@@ -1904,8 +2108,8 @@
                         <td><span class="highlight">${product2Total.toLocaleString('en-US', {minimumFractionDigits: 2})} RUB</span></td>
                     </tr>
                     <tr>
-                        <td colspan="5" style="text-align: right;"><strong>Total</strong></td>
-                        <td><span class="highlight">${totalAmount.toLocaleString('en-US', {minimumFractionDigits: 2})}</span></td>
+                        <td colspan="5" class="text-right"><strong>Total</strong></td>
+                        <td><span class="highlight">${totalAmount.toLocaleString('en-US', {minimumFractionDigits: 2})} RUB</span></td>
                     </tr>
                 </table>
                 
@@ -1930,6 +2134,193 @@
                     "июля", "августа", "сентября", "октября", "ноября", "декабря"
                 ];
                 return months[monthIndex];
+            }
+            
+            // 导出Word文档函数 - 修复表格对齐问题
+            async function exportToWord() {
+                try {
+                    // 显示加载提示
+                    loadingOverlay.style.display = 'flex';
+                    
+                    // 获取合同内容
+                    const contractContent = document.getElementById('contractOutput').innerHTML;
+                    
+                    // 创建优化的Word文档HTML结构
+                    const wordHtml = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <meta charset="UTF-8">
+                        <style>
+                            body {
+                                font-family: 'Times New Roman', Times, serif;
+                                font-size: 12pt;
+                                line-height: 1.5;
+                                margin: 1in;
+                            }
+                            
+                            /* 修复表格对齐的核心样式 */
+                            table {
+                                width: 100%;
+                                border-collapse: collapse;
+                                margin: 10px 0;
+                                table-layout: fixed; /* 确保表格布局固定 */
+                            }
+                            
+                            /* 合同正文表格 */
+                            .contract-table, .contract-table-no-border {
+                                width: 100%;
+                                border: 1px solid black;
+                                border-collapse: collapse;
+                                margin: 8px 0;
+                            }
+                            
+                            .contract-table td, .contract-table-no-border td {
+                                border: 1px solid black;
+                                padding: 8px;
+                                vertical-align: top;
+                                width: 50%; /* 确保两列等宽 */
+                                font-size: 12pt;
+                                text-align: left;
+                            }
+                            
+                            /* 合同标题表格 */
+                            .contract-header-table {
+                                width: 100%;
+                                border: 1px solid black;
+                                border-collapse: collapse;
+                                margin: 15px 0;
+                            }
+                            
+                            .contract-header-table td {
+                                border: 1px solid black;
+                                padding: 10px;
+                                width: 50%; /* 确保两列等宽 */
+                                font-size: 16pt;
+                                font-weight: bold;
+                                text-align: center;
+                            }
+                            
+                            /* 章节标题表格 */
+                            .section-title-table {
+                                width: 100%;
+                                border: 1px solid black;
+                                border-collapse: collapse;
+                                margin: 20px 0 8px 0;
+                                font-weight: bold;
+                            }
+                            
+                            .section-title-table td {
+                                border: 1px solid black;
+                                padding: 8px;
+                                width: 50%; /* 确保两列等宽 */
+                                font-size: 12pt;
+                                font-weight: bold;
+                                text-align: center;
+                            }
+                            
+                            /* 产品表格 */
+                            .product-table {
+                                width: 100%;
+                                border: 1px solid black;
+                                border-collapse: collapse;
+                                margin: 15px 0;
+                                font-size: 12pt;
+                            }
+                            
+                            .product-table th, .product-table td {
+                                border: 1px solid black;
+                                padding: 8px;
+                                text-align: center;
+                            }
+                            
+                            .product-table th {
+                                background-color: #f0f0f0;
+                                font-weight: bold;
+                            }
+                            
+                            /* 通用样式 */
+                            .highlight {
+                                background-color: #fffacd;
+                                font-weight: bold;
+                            }
+                            
+                            .section-title {
+                                font-weight: bold;
+                                margin-top: 20px;
+                                margin-bottom: 10px;
+                            }
+                            
+                            .text-center {
+                                text-align: center !important;
+                            }
+                            
+                            .text-left {
+                                text-align: left !important;
+                            }
+                            
+                            .text-right {
+                                text-align: right !important;
+                            }
+                            
+                            .underline {
+                                border-bottom: 1px solid black;
+                                display: inline-block;
+                                min-width: 200px;
+                                text-align: center;
+                            }
+                            
+                            .page-break {
+                                page-break-after: always;
+                            }
+                            
+                            .appendix-header {
+                                font-weight: bold;
+                                font-size: 14pt;
+                                margin: 15px 0;
+                                text-align: left;
+                            }
+                            
+                            .appendix-text-left {
+                                text-align: left;
+                                margin: 10px 0;
+                            }
+                            
+                            .clause-number {
+                                font-weight: bold;
+                                margin-right: 5px;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        ${contractContent}
+                    </body>
+                    </html>
+                    `;
+                    
+                    // 生成Word文档
+                    const converted = htmlDocx.asBlob(wordHtml, {
+                        orientation: 'portrait',
+                        margins: { top: 1000, right: 1000, bottom: 1000, left: 1000 }
+                    });
+                    
+                    // 获取合同编号用于文件名
+                    const contractNo = document.getElementById('contractNo').value || 'trade_contract';
+                    const fileName = `${contractNo}_${currentLanguage}.docx`;
+                    
+                    // 保存文件
+                    saveAs(converted, fileName);
+                    
+                    // 隐藏加载提示
+                    setTimeout(() => {
+                        loadingOverlay.style.display = 'none';
+                    }, 500);
+                    
+                } catch (error) {
+                    console.error('导出Word文档时出错:', error);
+                    alert('导出Word文档失败，请稍后再试或使用打印功能。');
+                    loadingOverlay.style.display = 'none';
+                }
             }
             
             // 初始化生成合同
@@ -1982,9 +2373,7 @@
                 window.print();
             });
             
-            exportBtn.addEventListener('click', function() {
-                alert('Word导出功能需要后端支持。当前为演示版本，可以打印合同或保存为PDF。');
-            });
+            exportBtn.addEventListener('click', exportToWord);
         });
     </script>
 </body>
