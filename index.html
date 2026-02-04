@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>俄罗斯电商贸易 - 专业俄语区跨境贸易解决方案</title>
+    <title>顺达国际物流 - 专业跨境物流解决方案</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -19,9 +19,9 @@
             background-color: #f8f9fa;
         }
         
-        /* 顶部导航栏 - 俄罗斯国旗配色 */
+        /* 顶部导航栏 */
         .header {
-            background: linear-gradient(to right, #1a365d, #0039A6);
+            background-color: #1a365d;
             color: white;
             padding: 0 5%;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -46,7 +46,7 @@
             font-size: 1.8rem;
             margin-left: 10px;
             font-weight: 700;
-            background: linear-gradient(to right, #ffffff, #D52B1E);
+            background: linear-gradient(to right, #4facfe, #00f2fe);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -54,37 +54,7 @@
         
         .logo-icon {
             font-size: 2.2rem;
-            color: #D52B1E;
-        }
-        
-        .language-selector {
-            display: flex;
-            align-items: center;
-        }
-        
-        .language-selector span {
-            margin-right: 15px;
-            font-size: 0.9rem;
-        }
-        
-        .lang-btn {
-            background-color: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            padding: 6px 12px;
-            border-radius: 4px;
-            margin-left: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .lang-btn:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-        
-        .lang-btn.active {
-            background-color: #D52B1E;
-            border-color: #D52B1E;
+            color: #00b4d8;
         }
         
         .contact-info {
@@ -94,7 +64,7 @@
         }
         
         .contact-info i {
-            color: #D52B1E;
+            color: #00b4d8;
             margin-right: 8px;
         }
         
@@ -105,7 +75,7 @@
         /* 主导航栏 */
         .navbar {
             display: flex;
-            background-color: #0039A6;
+            background-color: #2d4a7c;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
         
@@ -123,7 +93,7 @@
         }
         
         .nav-link:hover {
-            background-color: #D52B1E;
+            background-color: #00b4d8;
         }
         
         /* 下拉菜单 */
@@ -159,20 +129,20 @@
         
         .dropdown-item:hover {
             background-color: #f0f8ff;
-            color: #0039A6;
+            color: #1a365d;
             padding-left: 28px;
         }
         
         .dropdown-item i {
             margin-right: 10px;
-            color: #D52B1E;
+            color: #00b4d8;
             width: 18px;
             text-align: center;
         }
         
         /* 主要内容区域 */
         .hero {
-            background: linear-gradient(rgba(0, 57, 166, 0.85), rgba(213, 43, 30, 0.8)), url('https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80');
+            background: linear-gradient(rgba(26, 54, 93, 0.85), rgba(26, 54, 93, 0.9)), url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80');
             background-size: cover;
             background-position: center;
             color: white;
@@ -195,7 +165,7 @@
         
         .cta-button {
             display: inline-block;
-            background-color: #D52B1E;
+            background-color: #00b4d8;
             color: white;
             padding: 16px 36px;
             font-size: 1.1rem;
@@ -208,7 +178,7 @@
         }
         
         .cta-button:hover {
-            background-color: #b3241a;
+            background-color: #0096c7;
             transform: translateY(-3px);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
@@ -222,7 +192,7 @@
         .section-title {
             text-align: center;
             margin-bottom: 50px;
-            color: #0039A6;
+            color: #1a365d;
         }
         
         .section-title h2 {
@@ -237,7 +207,7 @@
             position: absolute;
             width: 80px;
             height: 4px;
-            background-color: #D52B1E;
+            background-color: #00b4d8;
             bottom: -10px;
             left: 50%;
             transform: translateX(-50%);
@@ -262,53 +232,35 @@
             text-align: center;
             transition: all 0.3s ease;
             border-top: 4px solid transparent;
-            position: relative;
-            overflow: hidden;
         }
         
         .service-card:hover {
             transform: translateY(-10px);
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-            border-top-color: #D52B1E;
-        }
-        
-        .service-card:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(to right, #0039A6, #D52B1E);
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
-        }
-        
-        .service-card:hover:before {
-            transform: scaleX(1);
+            border-top-color: #00b4d8;
         }
         
         .service-icon {
             font-size: 3rem;
-            color: #0039A6;
+            color: #00b4d8;
             margin-bottom: 25px;
         }
         
         .service-card h3 {
             font-size: 1.5rem;
             margin-bottom: 15px;
-            color: #0039A6;
+            color: #1a365d;
         }
         
-        /* 俄罗斯市场特点区域 */
-        .russia-market {
-            background: linear-gradient(to right, #f8f9fa, #fff);
+        /* 全球网络区域 */
+        .global-network {
             padding: 80px 5%;
-            border-top: 1px solid #eee;
-            border-bottom: 1px solid #eee;
+            background-color: #f8f9fa;
+            border-top: 1px solid #eaeaea;
+            border-bottom: 1px solid #eaeaea;
         }
         
-        .market-content {
+        .network-content {
             display: flex;
             align-items: center;
             gap: 50px;
@@ -316,11 +268,17 @@
             margin: 0 auto;
         }
         
-        .market-text {
+        .network-text {
             flex: 1;
         }
         
-        .market-stats {
+        .network-text h3 {
+            font-size: 2rem;
+            color: #1a365d;
+            margin-bottom: 25px;
+        }
+        
+        .network-stats {
             flex: 1;
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -333,22 +291,22 @@
             border-radius: 8px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             text-align: center;
-            border-left: 4px solid #0039A6;
+            border-left: 4px solid #1a365d;
         }
         
         .stat-item:nth-child(even) {
-            border-left-color: #D52B1E;
+            border-left-color: #00b4d8;
         }
         
         .stat-number {
             font-size: 2.5rem;
             font-weight: 700;
-            color: #0039A6;
+            color: #1a365d;
             margin-bottom: 5px;
         }
         
         .stat-item:nth-child(even) .stat-number {
-            color: #D52B1E;
+            color: #00b4d8;
         }
         
         .stat-label {
@@ -358,7 +316,7 @@
         
         /* 页脚 */
         .footer {
-            background: linear-gradient(to right, #0039A6, #1a365d);
+            background-color: #1a365d;
             color: white;
             padding: 60px 5% 30px;
         }
@@ -373,7 +331,7 @@
         .footer-column h3 {
             font-size: 1.4rem;
             margin-bottom: 25px;
-            color: #D52B1E;
+            color: #00b4d8;
             position: relative;
             padding-bottom: 10px;
         }
@@ -383,7 +341,7 @@
             position: absolute;
             width: 40px;
             height: 3px;
-            background-color: #D52B1E;
+            background-color: #00b4d8;
             bottom: 0;
             left: 0;
         }
@@ -403,16 +361,7 @@
         }
         
         .footer-column ul li a:hover {
-            color: #D52B1E;
-        }
-        
-        .russian-flag {
-            display: inline-block;
-            width: 20px;
-            height: 14px;
-            background: linear-gradient(to bottom, #ffffff 33%, #0039A6 33% 66%, #D52B1E 66%);
-            margin-right: 8px;
-            border-radius: 2px;
+            color: #00b4d8;
         }
         
         .copyright {
@@ -428,10 +377,6 @@
             .top-bar {
                 flex-direction: column;
                 text-align: center;
-            }
-            
-            .language-selector {
-                margin: 15px 0;
             }
             
             .contact-info {
@@ -461,7 +406,7 @@
                 font-size: 1.1rem;
             }
             
-            .market-content {
+            .network-content {
                 flex-direction: column;
             }
         }
@@ -503,7 +448,7 @@
                 font-size: 1rem;
             }
             
-            .market-stats {
+            .network-stats {
                 grid-template-columns: 1fr;
             }
         }
@@ -514,21 +459,13 @@
     <header class="header">
         <div class="top-bar">
             <div class="logo">
-                <i class="fas fa-globe-europe logo-icon"></i>
-                <h1>俄罗斯电商贸易</h1>
+                <i class="fas fa-shipping-fast logo-icon"></i>
+                <h1>顺达国际物流</h1>
             </div>
-            
-            <div class="language-selector">
-                <span><i class="fas fa-language"></i> 语言:</span>
-                <button class="lang-btn active">中文</button>
-                <button class="lang-btn">Русский</button>
-                <button class="lang-btn">English</button>
-            </div>
-            
             <div class="contact-info">
-                <span><i class="fas fa-phone-alt"></i> +7 (495) 123-45-67</span>
-                <span><i class="fas fa-envelope"></i> info@russia-trade.com</span>
-                <span><i class="fas fa-clock"></i> 莫斯科时间 9:00-18:00</span>
+                <span><i class="fas fa-phone-alt"></i> 400-123-4567</span>
+                <span><i class="fas fa-envelope"></i> service@shunda-logistics.com</span>
+                <span><i class="fas fa-clock"></i> 周一至周五 9:00-18:00</span>
             </div>
         </div>
         
@@ -539,57 +476,54 @@
             </div>
             
             <div class="nav-item">
-                <a href="#" class="nav-link"><i class="fas fa-warehouse"></i> 俄罗斯仓储</a>
+                <a href="#" class="nav-link"><i class="fas fa-globe-americas"></i> 离岸</a>
                 <div class="dropdown-menu">
-                    <a href="#warehouse-moscow" class="dropdown-item"><i class="fas fa-map-marker-alt"></i> 莫斯科仓库</a>
-                    <a href="#warehouse-spb" class="dropdown-item"><i class="fas fa-map-marker-alt"></i> 圣彼得堡仓库</a>
-                    <a href="#warehouse-fulfillment" class="dropdown-item"><i class="fas fa-boxes"></i> 一件代发</a>
-                    <a href="#warehouse-management" class="dropdown-item"><i class="fas fa-clipboard-check"></i> 库存管理</a>
-                    <a href="#warehouse-pricing" class="dropdown-item"><i class="fas fa-ruble-sign"></i> 仓储价格</a>
+                    <a href="#offshore-contract" class="dropdown-item"><i class="fas fa-file-contract"></i> 合同</a>
+                    <a href="#offshore-agreement" class="dropdown-item"><i class="fas fa-handshake"></i> 协议</a>
+                    <a href="#offshore-registration" class="dropdown-item"><i class="fas fa-registered"></i> 注册</a>
+                    <a href="#offshore-tax" class="dropdown-item"><i class="fas fa-chart-line"></i> 税务规划</a>
+                    <a href="#offshore-banking" class="dropdown-item"><i class="fas fa-university"></i> 银行开户</a>
                 </div>
             </div>
             
             <div class="nav-item">
-                <a href="#" class="nav-link"><i class="fas fa-truck"></i> 俄区物流</a>
+                <a href="#" class="nav-link"><i class="fas fa-money-check-alt"></i> 本票</a>
                 <div class="dropdown-menu">
-                    <a href="#logistics-cdek" class="dropdown-item"><i class="fas fa-shipping-fast"></i> СДЭК合作</a>
-                    <a href="#logistics-post" class="dropdown-item"><i class="fas fa-mail-bulk"></i> 俄罗斯邮政</a>
-                    <a href="#logistics-customs" class="dropdown-item"><i class="fas fa-passport"></i> 海关清关</a>
-                    <a href="#logistics-tracking" class="dropdown-item"><i class="fas fa-map-marked-alt"></i> 实时追踪</a>
-                    <a href="#logistics-lastmile" class="dropdown-item"><i class="fas fa-house-user"></i> 最后一公里</a>
+                    <a href="#promissory-application" class="dropdown-item"><i class="fas fa-edit"></i> 申请流程</a>
+                    <a href="#promissory-sample" class="dropdown-item"><i class="fas fa-file-invoice"></i> 样本下载</a>
+                    <a href="#promissory-verification" class="dropdown-item"><i class="fas fa-check-circle"></i> 验真服务</a>
+                    <a href="#promissory-tracking" class="dropdown-item"><i class="fas fa-search-dollar"></i> 状态查询</a>
                 </div>
             </div>
             
             <div class="nav-item">
-                <a href="#" class="nav-link"><i class="fas fa-store"></i> 平台入驻</a>
+                <a href="#" class="nav-link"><i class="fas fa-border-style"></i> 白关</a>
                 <div class="dropdown-menu">
-                    <a href="#platform-wildberries" class="dropdown-item"><i class="fas fa-shopping-bag"></i> Wildberries入驻</a>
-                    <a href="#platform-ozon" class="dropdown-item"><i class="fas fa-shopping-cart"></i> OZON入驻</a>
-                    <a href="#platform-yandex" class="dropdown-item"><i class="fas fa-search"></i> Яндекс.Маркет</a>
-                    <a href="#platform-sber" class="dropdown-item"><i class="fas fa-mobile-alt"></i> СберМегаМаркет</a>
-                    <a href="#platform-assistance" class="dropdown-item"><i class="fas fa-hands-helping"></i> 入驻协助</a>
+                    <a href="#clearance-process" class="dropdown-item"><i class="fas fa-tasks"></i> 流程说明</a>
+                    <a href="#clearance-documents" class="dropdown-item"><i class="fas fa-folder-open"></i> 所需文件</a>
+                    <a href="#clearance-faq" class="dropdown-item"><i class="fas fa-question-circle"></i> 常见问题</a>
+                    <a href="#clearance-calculator" class="dropdown-item"><i class="fas fa-calculator"></i> 费用估算</a>
                 </div>
             </div>
             
             <div class="nav-item">
-                <a href="#" class="nav-link"><i class="fas fa-file-contract"></i> 合规文件</a>
+                <a href="#" class="nav-link"><i class="fas fa-ad"></i> 广告</a>
                 <div class="dropdown-menu">
-                    <a href="#compliance-certification" class="dropdown-item"><i class="fas fa-certificate"></i> 商品认证</a>
-                    <a href="#compliance-labeling" class="dropdown-item"><i class="fas fa-tag"></i> 数字标签</a>
-                    <a href="#compliance-tax" class="dropdown-item"><i class="fas fa-calculator"></i> 税务申报</a>
-                    <a href="#compliance-contract" class="dropdown-item"><i class="fas fa-handshake"></i> 合同模板</a>
-                    <a href="#compliance-consulting" class="dropdown-item"><i class="fas fa-user-tie"></i> 合规咨询</a>
+                    <a href="#advertisement-cooperation" class="dropdown-item"><i class="fas fa-handshake"></i> 合作推广</a>
+                    <a href="#advertisement-media" class="dropdown-item"><i class="fas fa-photo-video"></i> 媒体资源</a>
+                    <a href="#advertisement-price" class="dropdown-item"><i class="fas fa-tags"></i> 价格方案</a>
+                    <a href="#advertisement-design" class="dropdown-item"><i class="fas fa-palette"></i> 设计服务</a>
                 </div>
             </div>
             
             <div class="nav-item">
-                <a href="#" class="nav-link"><i class="fas fa-chart-line"></i> 营销推广</a>
+                <a href="#" class="nav-link"><i class="fas fa-truck-loading"></i> 物流</a>
                 <div class="dropdown-menu">
-                    <a href="#marketing-yandex" class="dropdown-item"><i class="fas fa-ad"></i> Яндекс.Директ</a>
-                    <a href="#marketing-vk" class="dropdown-item"><i class="fab fa-vk"></i> VK广告</a>
-                    <a href="#marketing-smm" class="dropdown-item"><i class="fas fa-hashtag"></i> 社交媒体营销</a>
-                    <a href="#marketing-seo" class="dropdown-item"><i class="fas fa-search-plus"></i> 俄语SEO</a>
-                    <a href="#marketing-influencer" class="dropdown-item"><i class="fas fa-user-friends"></i> 网红营销</a>
+                    <a href="#logistics-sea" class="dropdown-item"><i class="fas fa-ship"></i> 海运服务</a>
+                    <a href="#logistics-air" class="dropdown-item"><i class="fas fa-plane"></i> 空运服务</a>
+                    <a href="#logistics-land" class="dropdown-item"><i class="fas fa-truck"></i> 陆运服务</a>
+                    <a href="#logistics-warehouse" class="dropdown-item"><i class="fas fa-warehouse"></i> 仓储服务</a>
+                    <a href="#logistics-tracking" class="dropdown-item"><i class="fas fa-map-marked-alt"></i> 货物追踪</a>
                 </div>
             </div>
         </nav>
@@ -599,93 +533,93 @@
     <main>
         <!-- 英雄区域 -->
         <section class="hero" id="home">
-            <h2>专注俄罗斯市场的电商贸易专家</h2>
-            <p>我们提供一站式俄罗斯电商解决方案，包括仓储物流、平台入驻、合规文件、营销推广等服务。深耕俄罗斯市场10年，服务超过500家中国品牌成功进入俄罗斯市场。</p>
-            <a href="#contact" class="cta-button">获取俄罗斯市场方案 <i class="fas fa-arrow-right"></i></a>
+            <h2>专业跨境物流解决方案</h2>
+            <p>顺达国际物流提供一站式离岸、本票、白关、广告及物流服务，助力您的企业拓展全球市场。我们拥有20年行业经验，服务网络覆盖全球150多个国家和地区。</p>
+            <a href="#contact" class="cta-button">立即咨询 <i class="fas fa-arrow-right"></i></a>
         </section>
 
         <!-- 服务特色区域 -->
         <section class="services">
             <div class="section-title">
                 <h2>我们的核心服务</h2>
-                <p>专注俄罗斯电商市场，提供从产品上架到最后一公里交付的全链路解决方案</p>
+                <p>我们提供全方位的国际物流与跨境商务解决方案，满足您不同业务需求</p>
             </div>
             
             <div class="services-grid">
                 <div class="service-card">
-                    <i class="fas fa-warehouse service-icon"></i>
-                    <h3>俄罗斯本土仓储</h3>
-                    <p>在莫斯科、圣彼得堡等核心城市设立仓储中心，提供一件代发、库存管理和快速配送服务。</p>
+                    <i class="fas fa-globe-americas service-icon"></i>
+                    <h3>离岸服务</h3>
+                    <p>专业的离岸公司注册、税务规划、银行开户及合规管理服务，帮助您优化全球资产配置。</p>
                 </div>
                 
                 <div class="service-card">
-                    <i class="fas fa-truck service-icon"></i>
-                    <h3>俄区物流配送</h3>
-                    <p>与СДЭК、俄罗斯邮政等主流物流商深度合作，提供高效清关和全覆盖的配送网络。</p>
+                    <i class="fas fa-money-check-alt service-icon"></i>
+                    <h3>本票服务</h3>
+                    <p>安全高效的本票申请、验真、查询服务，确保您的交易安全可靠。</p>
                 </div>
                 
                 <div class="service-card">
-                    <i class="fas fa-store service-icon"></i>
-                    <h3>电商平台入驻</h3>
-                    <p>协助入驻Wildberries、OZON、Яндекс.Маркет等主流平台，提供店铺运营指导。</p>
+                    <i class="fas fa-border-style service-icon"></i>
+                    <h3>白关服务</h3>
+                    <p>专业的进出口报关、清关服务，简化流程，降低关税成本，加速货物通关。</p>
                 </div>
                 
                 <div class="service-card">
-                    <i class="fas fa-file-contract service-icon"></i>
-                    <h3>合规认证服务</h3>
-                    <p>办理EAC认证、数字标签、税务登记等俄罗斯市场准入必备文件，确保合法经营。</p>
+                    <i class="fas fa-ad service-icon"></i>
+                    <h3>广告服务</h3>
+                    <p>全方位的跨境营销推广，包括媒体采购、创意设计、数据分析及效果优化。</p>
                 </div>
                 
                 <div class="service-card">
-                    <i class="fas fa-chart-line service-icon"></i>
-                    <h3>俄语市场推广</h3>
-                    <p>专业团队提供Яндекс.Директ、VK广告、网红营销等本土化数字营销服务。</p>
+                    <i class="fas fa-truck-loading service-icon"></i>
+                    <h3>物流服务</h3>
+                    <p>覆盖全球的海陆空物流网络，提供端到端的供应链解决方案及实时货物追踪。</p>
                 </div>
                 
                 <div class="service-card">
                     <i class="fas fa-headset service-icon"></i>
-                    <h3>俄语客服支持</h3>
-                    <p>7×24小时俄语客服，处理客户咨询、售后问题，提升本地消费者购物体验。</p>
+                    <h3>客户支持</h3>
+                    <p>7×24小时多语言客户服务，专业团队为您解决各类跨境业务问题。</p>
                 </div>
             </div>
         </section>
         
-        <!-- 俄罗斯市场特点区域 -->
-        <section class="russia-market">
+        <!-- 全球网络区域 -->
+        <section class="global-network">
             <div class="section-title">
-                <h2>俄罗斯电商市场概览</h2>
-                <p>了解俄罗斯电商市场特点，把握跨境贸易机遇</p>
+                <h2>我们的全球网络</h2>
+                <p>凭借广泛的全球网络和本地化团队，我们为客户提供无缝的跨境物流体验</p>
             </div>
             
-            <div class="market-content">
-                <div class="market-text">
-                    <h3>为什么选择俄罗斯市场？</h3>
-                    <p style="margin-top: 20px; margin-bottom: 20px;">俄罗斯是欧洲最大的互联网市场，拥有超过1亿互联网用户，电商市场规模持续快速增长。中国商品在俄罗斯市场具有强大的竞争力。</p>
+            <div class="network-content">
+                <div class="network-text">
+                    <h3>为什么选择顺达国际物流？</h3>
+                    <p style="margin-top: 20px; margin-bottom: 20px;">顺达国际物流拥有20年跨境物流经验，在全球主要贸易枢纽设有分支机构，提供一站式解决方案，确保您的货物安全、准时到达目的地。</p>
                     <ul style="list-style-type: none; margin-left: 20px;">
-                        <li style="margin-bottom: 10px;"><i class="fas fa-check-circle" style="color: #D52B1E; margin-right: 10px;"></i> 欧洲最大的互联网用户基数</li>
-                        <li style="margin-bottom: 10px;"><i class="fas fa-check-circle" style="color: #D52B1E; margin-right: 10px;"></i> 跨境购物习惯成熟，对中国商品接受度高</li>
-                        <li style="margin-bottom: 10px;"><i class="fas fa-check-circle" style="color: #D52B1E; margin-right: 10px;"></i> 支付、物流等基础设施完善</li>
-                        <li style="margin-bottom: 10px;"><i class="fas fa-check-circle" style="color: #D52B1E; margin-right: 10px;"></i> 政府积极推动电商发展，政策支持</li>
-                        <li><i class="fas fa-check-circle" style="color: #D52B1E; margin-right: 10px;"></i> 跨境电商税收优惠政策</li>
+                        <li style="margin-bottom: 10px;"><i class="fas fa-check-circle" style="color: #00b4d8; margin-right: 10px;"></i> 20年跨境物流行业经验</li>
+                        <li style="margin-bottom: 10px;"><i class="fas fa-check-circle" style="color: #00b4d8; margin-right: 10px;"></i> 全球150+国家服务网络</li>
+                        <li style="margin-bottom: 10px;"><i class="fas fa-check-circle" style="color: #00b4d8; margin-right: 10px;"></i> 专业海关和合规团队</li>
+                        <li style="margin-bottom: 10px;"><i class="fas fa-check-circle" style="color: #00b4d8; margin-right: 10px;"></i> 7×24小时多语言客户支持</li>
+                        <li><i class="fas fa-check-circle" style="color: #00b4d8; margin-right: 10px;"></i> 数字化物流追踪系统</li>
                     </ul>
                 </div>
                 
-                <div class="market-stats">
+                <div class="network-stats">
                     <div class="stat-item">
-                        <div class="stat-number">1.2亿</div>
-                        <div class="stat-label">互联网用户</div>
+                        <div class="stat-number">20+</div>
+                        <div class="stat-label">行业经验(年)</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number">₽4.5万亿</div>
-                        <div class="stat-label">电商市场规模</div>
+                        <div class="stat-number">150+</div>
+                        <div class="stat-label">服务国家</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number">65%</div>
-                        <div class="stat-label">跨境购物比例</div>
+                        <div class="stat-number">5000+</div>
+                        <div class="stat-label">合作客户</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number">80%+</div>
-                        <div class="stat-label">来自中国的商品</div>
+                        <div class="stat-number">99.7%</div>
+                        <div class="stat-label">准时到达率</div>
                     </div>
                 </div>
             </div>
@@ -696,9 +630,9 @@
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-column">
-                <h3><span class="russian-flag"></span>俄罗斯电商贸易</h3>
-                <p>我们专注于为中国企业提供俄罗斯电商市场的一站式解决方案。深耕俄罗斯市场10年，拥有本土化团队，助力中国品牌成功进入俄罗斯市场。</p>
-                <p style="margin-top: 15px;"><i class="fas fa-map-marker-alt"></i> 莫斯科市特维尔大街7号</p>
+                <h3>顺达国际物流</h3>
+                <p>我们致力于为全球客户提供专业、高效、安全的跨境物流与商务解决方案。20年行业经验，服务网络覆盖全球150多个国家和地区。</p>
+                <p style="margin-top: 15px;"><i class="fas fa-map-marker-alt"></i> 上海市浦东新区物流大道100号</p>
                 <p style="margin-top: 10px;"><i class="fas fa-map-marker-alt"></i> 北京市朝阳区国际贸易中心</p>
             </div>
             
@@ -706,40 +640,40 @@
                 <h3>服务导航</h3>
                 <ul>
                     <li><a href="#home">首页</a></li>
-                    <li><a href="#warehouse-moscow">莫斯科仓储</a></li>
-                    <li><a href="#logistics-cdek">СДЭК物流</a></li>
-                    <li><a href="#platform-wildberries">Wildberries入驻</a></li>
-                    <li><a href="#compliance-certification">商品认证</a></li>
-                    <li><a href="#marketing-yandex">Яндекс广告</a></li>
+                    <li><a href="#offshore-contract">离岸合同</a></li>
+                    <li><a href="#promissory-application">本票申请</a></li>
+                    <li><a href="#clearance-process">白关流程</a></li>
+                    <li><a href="#advertisement-cooperation">广告合作</a></li>
+                    <li><a href="#logistics-sea">海运服务</a></li>
                 </ul>
             </div>
             
             <div class="footer-column">
                 <h3>联系我们</h3>
                 <ul>
-                    <li><i class="fas fa-phone"></i> 俄罗斯: +7 (495) 123-45-67</li>
-                    <li><i class="fas fa-phone"></i> 中国: 400-123-4567</li>
-                    <li><i class="fas fa-envelope"></i> info@russia-trade.com</li>
-                    <li><i class="fas fa-clock"></i> 莫斯科时间 9:00-18:00</li>
-                    <li><i class="fas fa-clock"></i> 北京时间 14:00-23:00</li>
+                    <li><i class="fas fa-phone"></i> 400-123-4567</li>
+                    <li><i class="fas fa-phone"></i> +86 21 1234 5678</li>
+                    <li><i class="fas fa-envelope"></i> service@shunda-logistics.com</li>
+                    <li><i class="fas fa-clock"></i> 周一至周五 9:00-18:00</li>
+                    <li><i class="fas fa-clock"></i> 紧急热线 24小时</li>
                 </ul>
             </div>
             
             <div class="footer-column">
                 <h3>关注我们</h3>
                 <ul>
-                    <li><a href="#"><i class="fab fa-vk"></i> VKontakte</a></li>
-                    <li><a href="#"><i class="fab fa-telegram"></i> Telegram</a></li>
-                    <li><a href="#"><i class="fab fa-youtube"></i> YouTube</a></li>
                     <li><a href="#"><i class="fab fa-weixin"></i> 微信公众号</a></li>
-                    <li><a href="#"><i class="fas fa-newspaper"></i> 市场资讯订阅</a></li>
+                    <li><a href="#"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
+                    <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
+                    <li><a href="#"><i class="fab fa-facebook"></i> Facebook</a></li>
+                    <li><a href="#"><i class="fas fa-newspaper"></i> 行业资讯订阅</a></li>
                 </ul>
             </div>
         </div>
         
         <div class="copyright">
-            <p>© 2023 俄罗斯电商贸易有限公司 版权所有 | 俄中跨境电商服务专家</p>
-            <p style="margin-top: 10px;">莫斯科注册号: 123456789 | 北京代表处备案号: 京ICP备12345678号</p>
+            <p>© 2023 顺达国际物流有限公司 版权所有 | 沪ICP备12345678号</p>
+            <p style="margin-top: 10px;">国际物流服务专家 | 20年跨境物流经验</p>
         </div>
     </footer>
 
@@ -753,24 +687,6 @@
                         e.preventDefault();
                         dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
                     }
-                }
-            });
-        });
-
-        // 语言切换功能
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                
-                // 这里可以添加实际的语言切换逻辑
-                const lang = this.textContent;
-                if (lang === 'Русский') {
-                    alert('切换到俄语界面');
-                } else if (lang === 'English') {
-                    alert('切换到英语界面');
-                } else {
-                    // 中文，默认
                 }
             });
         });
