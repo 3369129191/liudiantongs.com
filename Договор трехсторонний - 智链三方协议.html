@@ -1,0 +1,1655 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中俄双语三方协议生成器 - Word导出</title>
+    
+    <!-- 添加Font Awesome图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* 新增导航栏样式 - 从付款单复制 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Times New Roman", Times, serif;
+        }
+        
+        .navbar {
+            background-color: #2c3e50;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .navbar-left {
+            display: flex;
+            align-items: center;
+        }
+        
+        .navbar-logo {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            text-decoration: none;
+        }
+        
+        /* Logo图片样式 */
+        .logo-image {
+            height: 40px; /* 控制Logo高度 */
+            width: auto; /* 宽度自适应 */
+            max-width: 200px; /* 最大宽度限制 */
+            object-fit: contain; /* 保持图片比例 */
+            vertical-align: middle;
+        }
+        
+        .navbar-menu {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            margin-left: 30px;
+        }
+        
+        .navbar-menu li {
+            position: relative;
+        }
+        
+        .navbar-menu a {
+            color: white;
+            text-decoration: none;
+            padding: 20px 15px;
+            display: block;
+            transition: background-color 0.3s;
+        }
+        
+        .navbar-menu a:hover {
+            background-color: #34495e;
+        }
+        
+        .navbar-menu .active a {
+            background-color: #1a252f;
+            border-bottom: 3px solid #3498db;
+        }
+        
+        .navbar-right {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+        }
+        
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #3498db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .username {
+            font-size: 14px;
+        }
+        
+        .logout-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 2px;
+            cursor: pointer;
+            margin-left: 15px;
+            font-size: 12px;
+            transition: background-color 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background-color: #c0392b;
+        }
+        
+        /* 原有样式 */
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.5;
+            padding: 0; /* 修改为0，因为导航栏会占用空间 */
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            opacity: 0.8;
+        }
+        
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .editor-section {
+            padding: 25px;
+            border-bottom: 1px solid #e0e0e0;
+            background-color: #f9f9f9;
+        }
+        
+        .preview-section {
+            padding: 25px;
+            background-color: white;
+            min-height: 600px;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+            color: #2c3e50;
+        }
+        
+        .two-column-editor {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .editor-column {
+            flex: 1;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus,
+        textarea:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        .protocol-preview {
+            font-size: 11px;
+            line-height: 1.3;
+            border: 1px solid #ddd;
+            padding: 15px;
+            background: white;
+            min-height: 800px;
+            overflow: auto;
+        }
+        
+        .two-column-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #000;
+            min-height: 1000px;
+        }
+        
+        .two-column-table td {
+            width: 50%;
+            vertical-align: top;
+            padding: 12px 8px;
+            border: 1px solid #000;
+        }
+        
+        .protocol-header {
+            text-align: left;
+            margin-bottom: 15px;
+            padding-left: 8px;
+        }
+        
+        .protocol-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .protocol-info {
+            margin-bottom: 4px;
+            font-size: 11px;
+        }
+        
+        .party-section {
+            margin-bottom: 15px;
+        }
+        
+        .party-title {
+            font-weight: bold;
+            margin-bottom: 6px;
+            font-size: 11px;
+        }
+        
+        .editable-field {
+            background-color: #fffacd;
+            padding: 0 3px;
+            border-radius: 2px;
+            min-height: 14px;
+            display: inline-block;
+            font-size: 11px;
+        }
+        
+        .clause-number {
+            font-weight: bold;
+            margin-top: 10px;
+            margin-bottom: 4px;
+            font-size: 11px;
+        }
+        
+        .clause-subnumber {
+            margin-left: 12px;
+            margin-top: 6px;
+            font-size: 11px;
+        }
+        
+        .bank-info {
+            margin-top: 8px;
+            margin-left: 12px;
+            font-size: 10px;
+        }
+        
+        .signature-area {
+            margin-top: 25px;
+            margin-bottom: 25px;
+        }
+        
+        .signature-line {
+            margin-top: 30px;
+            min-height: 40px;
+        }
+        
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid #ddd;
+        }
+        
+        button {
+            padding: 12px 25px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        .reset-btn {
+            background-color: #95a5a6;
+        }
+        
+        .reset-btn:hover {
+            background-color: #7f8c8d;
+        }
+        
+        .export-btn {
+            background-color: #27ae60;
+        }
+        
+        .export-btn:hover {
+            background-color: #219653;
+        }
+        
+        .note {
+            background-color: #fff8e1;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            font-size: 14px;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .tab-navigation {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tab-button {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 16px;
+            color: #555;
+        }
+        
+        .tab-button.active {
+            border-bottom-color: #3498db;
+            color: #3498db;
+            font-weight: bold;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* 滚动条样式 */
+        .protocol-preview::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .protocol-preview::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        .protocol-preview::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+        
+        .protocol-preview::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                padding: 10px;
+            }
+            
+            .navbar-left {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .navbar-menu {
+                margin-left: 0;
+                width: 100%;
+                justify-content: center;
+                margin-top: 10px;
+            }
+            
+            .navbar-right {
+                width: 100%;
+                justify-content: center;
+                margin-top: 10px;
+            }
+            
+            .two-column-editor {
+                flex-direction: column;
+            }
+            
+            .editor-column {
+                width: 100%;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .editor-section,
+            .preview-section {
+                padding: 15px;
+            }
+        }
+        
+        /* 调整主容器以适应导航栏 */
+        .main-container {
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- 新增导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-left">
+            <a href="#" class="navbar-logo">
+                <!-- 修改为图片Logo，您可以根据需要修改src属性 -->
+                <img src="logo.png" alt="合同生成系统" class="logo-image">
+            </a>
+            <ul class="navbar-menu">
+                <li><a href="deepseek_html_20260128_417ffc.html">合同生成</a></li>
+                <li><a href="付款单-2.html">付款单生成</a></li>
+                <li class="active"><a href="#">三方协议</a></li>
+                <li><a href="#">发票管理</a></li>
+                <li><a href="#">客户管理</a></li>
+                <li><a href="#">设置</a></li>
+            </ul>
+        </div>
+        <div class="navbar-right">
+            <div class="user-info">
+                <div class="user-avatar">U</div>
+                <div class="username">管理员</div>
+            </div>
+            <button class="logout-btn">退出</button>
+        </div>
+    </nav>
+    
+    <div class="main-container">
+        <div class="container">
+            <header>
+                <h1>中俄双语三方协议生成器</h1>
+                <p class="subtitle">上下布局 | 上面编辑区 | 下面预览区 | 导出Word文档</p>
+            </header>
+            
+            <div class="content-wrapper">
+                <!-- 上面编辑区域 -->
+                <section class="editor-section">
+                    <div class="tab-navigation">
+                        <button class="tab-button active" data-tab="basic">基本信息</button>
+                        <button class="tab-button" data-tab="parties">各方信息</button>
+                        <button class="tab-button" data-tab="bank">银行信息</button>
+                        <button class="tab-button" data-tab="details">合同细节</button>
+                    </div>
+                    
+                    <!-- 基本信息标签 -->
+                    <div id="basic-tab" class="tab-content active">
+                        <h3 class="section-title">基本信息</h3>
+                        
+                        <div class="two-column-editor">
+                            <div class="editor-column">
+                                <h4>中文信息</h4>
+                                <div class="form-group">
+                                    <label for="protocol-number-cn">协议号</label>
+                                    <input type="text" id="protocol-number-cn" value="ZLJC 26 - 003">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="sign-date-cn">签订日期</label>
+                                    <input type="text" id="sign-date-cn" value="2026. 01 . 03">
+                                </div>
+                            </div>
+                            
+                            <div class="editor-column">
+                                <h4>俄文信息</h4>
+                                <div class="form-group">
+                                    <label for="protocol-number-ru">Номер договора</label>
+                                    <input type="text" id="protocol-number-ru" value="ZLJC 26 - 003">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="sign-date-ru">Дата подписания</label>
+                                    <input type="text" id="sign-date-ru" value="2026. 01 . 03">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="product-name-cn">产品名称 (中文)</label>
+                            <input type="text" id="product-name-cn" value="空气炸锅">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="product-name-ru">产品名称 (俄文)</label>
+                            <input type="text" id="product-name-ru" value="Air Fryer">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="commission-rate">代理佣金比例 (%)</label>
+                            <input type="text" id="commission-rate" value="1">
+                        </div>
+                    </div>
+                    
+                    <!-- 各方信息标签 -->
+                    <div id="parties-tab" class="tab-content">
+                        <h3 class="section-title">甲方信息 (Сторона А)</h3>
+                        
+                        <div class="two-column-editor">
+                            <div class="editor-column">
+                                <h4>中文信息</h4>
+                                <div class="form-group">
+                                    <label for="party-a-name-cn">甲方名称</label>
+                                    <input type="text" id="party-a-name-cn" value="深圳市晶营光电科技有限公司">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="party-a-address-cn">法定地址</label>
+                                    <input type="text" id="party-a-address-cn" value="深圳市宝安区宝安大道4338号宝穗大厦8601晶荣公司">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="party-a-representative-cn">授权代表</label>
+                                    <input type="text" id="party-a-representative-cn" value="王庆会">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="party-a-phone-cn">联系电话</label>
+                                    <input type="tel" id="party-a-phone-cn" value="13714234679">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="party-a-email-cn">电子邮箱</label>
+                                    <input type="email" id="party-a-email-cn" value="admin@jingrongled.com">
+                                </div>
+                            </div>
+                            
+                            <div class="editor-column">
+                                <h4>俄文信息</h4>
+                                <div class="form-group">
+                                    <label for="party-a-name-ru">Сторона А 名称</label>
+                                    <input type="text" id="party-a-name-ru" value="Шэньчжэньская компания «Цзинъин Оптоэлектроника» CO., LTD">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="party-a-address-ru">Юридический адрес</label>
+                                    <input type="text" id="party-a-address-ru" value="Китай, г. Шэньчжэнь, р-н Баоань, ул. Баоаньдадао, д. 4338, бизнес-центр «Баосуй», оф. 8601">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="party-a-representative-ru">Уполномоченное лицо</label>
+                                    <input type="text" id="party-a-representative-ru" value="Ван Цинхуэй">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="party-a-phone-ru">Контактный телефон</label>
+                                    <input type="tel" id="party-a-phone-ru" value="13714234679">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="party-a-email-ru">Электронная почта</label>
+                                    <input type="email" id="party-a-email-ru" value="admin@jingrongled.com">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3 class="section-title">乙方信息 (Сторона B)</h3>
+                        
+                        <div class="two-column-editor">
+                            <div class="editor-column">
+                                <h4>中文信息</h4>
+                                <div class="form-group">
+                                    <label for="party-b-name-cn">乙方名称</label>
+                                    <input type="text" id="party-b-name-cn" value="TЫCЯЧA BOЛH">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="party-b-address-cn">法定地址</label>
+                                    <input type="text" id="party-b-address-cn" value="117105, город Москва, Новоданиловская наб, д. 12, помещ. 81">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="party-b-representative-cn">授权代表</label>
+                                    <input type="text" id="party-b-representative-cn" value="Шель Ольга Александровна">
+                                </div>
+                            </div>
+                            
+                            <div class="editor-column">
+                                <h4>俄文信息</h4>
+                                <div class="form-group">
+                                    <label for="party-b-name-ru">Сторона В 名称</label>
+                                    <input type="text" id="party-b-name-ru" value="OOO «TЫCЯЧA BOЛH»">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="party-b-address-ru">Юридический адрес</label>
+                                    <input type="text" id="party-b-address-ru" value="117105, город Москва, Новоданиловская наб, д. 12, помещ. 81">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="party-b-representative-ru">Уполномоченное лицо</label>
+                                    <input type="text" id="party-b-representative-ru" value="Шель Ольга Александровна">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3 class="section-title">丙方信息 (Сторона C)</h3>
+                        
+                        <div class="two-column-editor">
+                            <div class="editor-column">
+                                <h4>中文信息</h4>
+                                <div class="form-group">
+                                    <label for="party-c-name-cn">丙方名称</label>
+                                    <input type="text" id="party-c-name-cn" value="智链通达供应链有限公司">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="party-c-address-cn">法定地址</label>
+                                    <input type="text" id="party-c-address-cn" value="香港新蒲崗太子道東 706 號太子工業大廈海德匯24樓 A27 室">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="party-c-representative-cn">授权代表</label>
+                                    <input type="text" id="party-c-representative-cn" value="黎健文">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="party-c-phone-cn">联系电话</label>
+                                    <input type="tel" id="party-c-phone-cn" value="+852-21349717">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="party-c-email-cn">电子邮箱</label>
+                                    <input type="email" id="party-c-email-cn" value="106442819@qq.com">
+                                </div>
+                            </div>
+                            
+                            <div class="editor-column">
+                                <h4>俄文信息</h4>
+                                <div class="form-group">
+                                    <label for="party-c-name-ru">Сторона С 名称</label>
+                                    <input type="text" id="party-c-name-ru" value="СМАРТЧЭЙН НЕКСУС ЛИМИТЕД">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="party-c-address-ru">Юридический адрес</label>
+                                    <input type="text" id="party-c-address-ru" value="ПОМЕЩЕНИЕ/КОМНАТА А27, ЭТАЖ 24, РИДЖЕНТС ПАРК ПРИНС ИНДАСТРИАЛ БИЛДИНГ №706, ПРИНС ЭДВАРД РОАД, ВОСТОЧНЫЙ КОУЛУН, Гонконг, КНР">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="party-c-representative-ru">Уполномоченное лицо</label>
+                                    <input type="text" id="party-c-representative-ru" value="Ли Цзяньвэнь">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="party-c-phone-ru">Контактный телефон</label>
+                                    <input type="tel" id="party-c-phone-ru" value="+852-21349717">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="party-c-email-ru">Электронная почта</label>
+                                    <input type="email" id="party-c-email-ru" value="106442819@qq.com">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 银行信息标签 -->
+                    <div id="bank-tab" class="tab-content">
+                        <h3 class="section-title">甲方银行信息</h3>
+                        
+                        <div class="two-column-editor">
+                            <div class="editor-column">
+                                <h4>中文信息</h4>
+                                <div class="form-group">
+                                    <label for="bank-a-name-cn">开户银行</label>
+                                    <input type="text" id="bank-a-name-cn" value="中国银行">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="bank-a-swift-cn">SWIFT代码</label>
+                                    <input type="text" id="bank-a-swift-cn" value="BKCHCNBJ">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="bank-a-address-cn">银行地址</label>
+                                    <input type="text" id="bank-a-address-cn" value="中国银行深圳留仙洞支行">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="bank-a-receiver-cn">收款人名称</label>
+                                    <input type="text" id="bank-a-receiver-cn" value="深圳市晶荣光电科技有限公司">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="bank-a-account-cn">账户号</label>
+                                    <input type="text" id="bank-a-account-cn" value="744562833942">
+                                </div>
+                            </div>
+                            
+                            <div class="editor-column">
+                                <h4>俄文信息</h4>
+                                <div class="form-group">
+                                    <label for="bank-a-name-ru">Название банка</label>
+                                    <input type="text" id="bank-a-name-ru" value="Банка Китая">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="bank-a-swift-ru">SWIFT Код</label>
+                                    <input type="text" id="bank-a-swift-ru" value="BKCHCNBJ">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="bank-a-address-ru">Адрес банка</label>
+                                    <input type="text" id="bank-a-address-ru" value="Акционерное общество «Банк Китая», Отделение «Люсяньдун» в г. Шэньчжэнь">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="bank-a-receiver-ru">Наименование получателя</label>
+                                    <input type="text" id="bank-a-receiver-ru" value="Шэньчжэньская компания с ограниченной ответственностью «Цзиньжун Оптоэлектроника»">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="bank-a-account-ru">Номер счета</label>
+                                    <input type="text" id="bank-a-account-ru" value="744562833942">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3 class="section-title">丙方银行信息</h3>
+                        
+                        <div class="two-column-editor">
+                            <div class="editor-column">
+                                <h4>中文信息</h4>
+                                <div class="form-group">
+                                    <label for="bank-c-name-cn">开户银行</label>
+                                    <input type="text" id="bank-c-name-cn" value="VTB银行莫斯科中央分行">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="bank-c-swift-cn">SWIFT代码</label>
+                                    <input type="text" id="bank-c-swift-cn" value="VTBRRUMM">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="bank-c-address-cn">银行地址</label>
+                                    <input type="text" id="bank-c-address-cn" value="邮编109147，莫斯科，沃龙佐夫街43号，1栋">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="bank-c-receiver-cn">收款人名称</label>
+                                    <input type="text" id="bank-c-receiver-cn" value="智链通达供应链有限公司">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="bank-c-bic-cn">银行BIC码</label>
+                                    <input type="text" id="bank-c-bic-cn" value="044525187">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="bank-c-account-cn">账户号</label>
+                                    <input type="text" id="bank-c-account-cn" value="40807810826800000051(RUB)">
+                                </div>
+                            </div>
+                            
+                            <div class="editor-column">
+                                <h4>俄文信息</h4>
+                                <div class="form-group">
+                                    <label for="bank-c-name-ru">Название банка</label>
+                                    <input type="text" id="bank-c-name-ru" value="ФИЛИАЛ 'ЦЕНТРАЛЬНЫЙ' БАНКА ВТБ (ПАО)">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="bank-c-swift-ru">SWIFT Код</label>
+                                    <input type="text" id="bank-c-swift-ru" value="VTBRRUMM">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="bank-c-address-ru">Адрес банка</label>
+                                    <input type="text" id="bank-c-address-ru" value="109147, г. Москва, ул. Воронцовская, д. 43, стр. 1">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="bank-c-receiver-ru">Название получателя</label>
+                                    <input type="text" id="bank-c-receiver-ru" value="СМАРТЧЭЙН НЕКСУС ЛИМИТЕД">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="bank-c-bic-ru">БИК</label>
+                                    <input type="text" id="bank-c-bic-ru" value="044525187">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="bank-c-account-ru">Номер Счет</label>
+                                    <input type="text" id="bank-c-account-ru" value="40807810826800000051(RUB)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 合同细节标签 -->
+                    <div id="details-tab" class="tab-content">
+                        <h3 class="section-title">合同细节</h3>
+                        
+                        <div class="two-column-editor">
+                            <div class="editor-column">
+                                <h4>中文信息</h4>
+                                <div class="form-group">
+                                    <label for="contract-number-cn">原合同号 №</label>
+                                    <input type="text" id="contract-number-cn" value="SSSC20251203">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="contract-date-cn">原合同日期</label>
+                                    <input type="text" id="contract-date-cn" value="2025.12.03">
+                                </div>
+                            </div>
+                            
+                            <div class="editor-column">
+                                <h4>俄文信息</h4>
+                                <div class="form-group">
+                                    <label for="contract-number-ru">Номер контракта №</label>
+                                    <input type="text" id="contract-number-ru" value="SSSC20251203">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="contract-date-ru">Дата контракта</label>
+                                    <input type="text" id="contract-date-ru" value="2025.12.03">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="note">
+                            <p><strong>使用说明：</strong></p>
+                            <p>1. 左侧填写中文信息，右侧填写对应的俄文信息</p>
+                            <p>2. 所有可编辑字段在预览中会以黄色背景高亮显示</p>
+                            <p>3. 填写完成后，点击"更新预览"查看效果</p>
+                            <p>4. 最后点击"导出Word文档"下载生成的文件</p>
+                        </div>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button id="update-btn">更新预览</button>
+                        <button id="reset-btn" class="reset-btn">重置表单</button>
+                        <button id="export-btn" class="export-btn">导出Word文档</button>
+                    </div>
+                </section>
+                
+                <!-- 下面预览区域 -->
+                <section class="preview-section">
+                    <h2 class="section-title">协议预览</h2>
+                    <div class="protocol-preview" id="protocol-preview">
+                        <!-- 协议内容将通过JavaScript动态生成 -->
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 协议模板 - 使用表格进行左右对应排版
+        const protocolTemplate = `
+        <table class="two-column-table">
+            <tr>
+                <td colspan="2">
+                    <div class="protocol-header">
+                        <div class="protocol-title"><center>委托代理协议 Агентский договор</center></div>
+                        <div class="protocol-info">协议号Номер договора： <span class="editable-field" id="preview-protocol-number-cn">ZLJC 26 - 003</span></div>
+                        <div class="protocol-info">签订日期Дата подписания：<span class="editable-field" id="preview-sign-date-cn">2026. 01 . 03</span></div>
+                        <div class="protocol-info">中国香港 ГОНКОНГ, КНР</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="party-section">
+                        <div class="party-title">甲方（收款方/委托方）：</div>
+                        <div>"<span class="editable-field" id="preview-party-a-name-cn">深圳市晶营光电科技有限公司</span>"有限公司，根据中华人民共和国法律成立并经营，法定地址：<span class="editable-field" id="preview-party-a-address-cn">深圳市宝安区宝安大道4338号宝穗大厦8601晶荣公司</span>，由董事"<span class="editable-field" id="preview-party-a-representative-cn">王庆会</span>"为代表，根据公司章程行事，作为一方，</div>
+                    </div>
+                    
+                    <div class="party-section">
+                        <div class="party-title">乙方（付款方/合同相对方）：</div>
+                        <div>"<span class="editable-field" id="preview-party-b-name-cn">TЫCЯЧA BOЛH</span>"有限责任公司，根据俄罗斯联邦法律成立并开展业务，法律地址：<span class="editable-field" id="preview-party-b-address-cn">117105, город Москва, Новоданиловская наб, д. 12, помещ. 81</span>，由董事"<span class="editable-field" id="preview-party-b-representative-cn">Шель Ольга Александровна</span>"为代表，根据章程行事，作为第二方，</div>
+                    </div>
+                    
+                    <div class="party-section">
+                        <div class="party-title">丙方（代理方）：</div>
+                        <div><span class="editable-field" id="preview-party-c-name-cn">智链通达供应链有限公司</span>，根据中国香港特别行政区法律成立并开展业务，法律地址：<span class="editable-field" id="preview-party-c-address-cn">香港新蒲崗太子道東 706 號太子工業大廈海德匯24樓 A27 室</span>，由董事<span class="editable-field" id="preview-party-c-representative-cn">黎健文</span>为代表，根据章程行事，作为第三方，</div>
+                    </div>
+                </td>
+                <td>
+                    <div class="party-section">
+                        <div class="party-title">Сторона А (ПОЛУЧАТЕЛЬ / ПРИНЦИПАЛ):</div>
+                        <div>"<span class="editable-field" id="preview-party-a-name-ru">Шэньчжэньская компания «Цзинъин Оптоэлектроника»</span>" CO., LTD, учрежденная и ведущая деятельность в соответствии с законодательством Китайской Народной Республики, юридический адрес: <span class="editable-field" id="preview-party-a-address-ru">Китай, г. Шэньчжэнь, р-н Баоань, ул. Баоаньдадао, д. 4338, бизнес-центр «Баосуй», оф. 8601</span>, Китай в лице директора"<span class="editable-field" id="preview-party-a-representative-ru">Ван Цинхуэй</span>", действующего на основании Устава с одной стороны,</div>
+                    </div>
+                    
+                    <div class="party-section">
+                        <div class="party-title">Сторона B (ПЛАТЕЛЬЩИК/КОНТРАГЕНТ):</div>
+                        <div>"<span class="editable-field" id="preview-party-b-name-ru">TЫCЯЧA BOЛH</span>" учрежденная и ведущая деятельность в соответствии с законодательством Российской Федерации, юридический адрес: <span class="editable-field" id="preview-party-b-address-ru">117105, город Москва, Новоданиловская наб, д. 12, помещ. 81</span>, в лице Директора"<span class="editable-field" id="preview-party-b-representative-ru">Шель Ольга Александровна</span>", действующего на основании Устава, с другой стороны</div>
+                    </div>
+                    
+                    <div class="party-section">
+                        <div class="party-title">Сторона С (АГЕНТ):</div>
+                        <div><span class="editable-field" id="preview-party-c-name-ru">СМАРТЧЭЙН НЕКСУС ЛИМИТЕД</span> учрежденная и ведущая деятельность в соответствии с законодательством Гонконга, юридический адрес: <span class="editable-field" id="preview-party-c-address-ru">ПОМЕЩЕНИЕ/КОМНАТА А27, ЭТАЖ 24, РИДЖЕНТС ПАРК ПРИНС ИНДАСТРИАЛ БИЛДИНГ №706, ПРИНС ЭДВАРд РОАД, ВОСТОЧНЫЙ КОУЛУН, Гонконг, КНР</span> в лице директора <span class="editable-field" id="preview-party-c-representative-ru">Ли Цзяньвэнь</span>, действующего на основании Устава с третьей стороны,</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="party-section">
+                        <div>合称"各方"，签订本《委托代理协议》（下称"本协议"）如下：</div>
+                    </div>
+                </td>
+                <td>
+                    <div class="party-section">
+                        <div>далее вместе именуемые «Стороны», заключили настоящий Агентский договор (далее -- ДОГОВОР) о нижеследующем:</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="clause-number">1. 协议内容</div>
+                    <div class="clause-subnumber">1.1.基于美国对俄罗斯金融制裁的现状，根据合同号№ <span class="editable-field" id="preview-contract-number-cn">SSSC20251203</span>，日期为<span class="editable-field" id="preview-contract-date-cn">2025.12.03</span>，甲方"<span class="editable-field" id="preview-party-a-name-cn2">深圳市晶营光电科技有限公司</span>"与乙方"<span class="editable-field" id="preview-party-b-name-cn2">TЫCЯЧA BOЛH</span>" LLC之间的"<span class="editable-field" id="preview-product-name-cn">空气炸锅</span>"产品贸易收付款遇到问题，乙方无法向甲方付款，丙方<span class="editable-field" id="preview-party-c-name-cn2">智链通达供应链有限公司</span>在俄罗斯银行拥有账户，可合法合规为该笔贸易资金提供代收与汇款操作，经甲乙丙三方友好协商，达成以下协议：</div>
+                    
+                    <div>甲方委托丙方通过其在俄罗斯银行的账户，依据本代理不可分割的组成部分------《付款委托书》接收乙方支付的款项，并按《付款委托书》指定路径将资金划转至甲方账户。本协议支付货币为俄罗斯卢布，支付用途为"<span class="editable-field" id="preview-party-b-name-cn3">TЫCЯЧA BOЛH</span>"有限责任公司向"<span class="editable-field" id="preview-party-a-name-cn3">深圳市晶营光电科技有限公司</span>"采购"<span class="editable-field" id="preview-product-name-cn2">空气炸锅</span>"的贸易货款，具体支付要素以《付款委托书》列明为准。</div>
+                    
+                    <div>最终实际合同金额以丙方在俄罗斯联邦账户实际收到的《付款委托书》载明金额为准。</div>
+                </td>
+                <td>
+                    <div class="clause-number">1. ПРЕДМЕТ ДОГОВОРА</div>
+                    <div class="clause-subnumber">1.1. На основе текущей ситуации с финансовыми санкциями США против России, между Стороной А, компанией "<span class="editable-field" id="preview-party-a-name-ru2">Шэньчжэньская компания «Цзинъин Оптоэлектроника»</span>" CO.,LTD, и Стороной В "<span class="editable-field" id="preview-party-b-name-ru2">TЫCЯЧA BOЛH</span>" LLC, возникли проблемы с расчетами по контракту № <span class="editable-field" id="preview-contract-number-ru">SSSC20251203</span> от <span class="editable-field" id="preview-contract-date-ru">2025.12.03</span> за товар "<span class="editable-field" id="preview-product-name-ru">Air Fryer</span>". Сторона В не может произвести платеж в адрес Стороны А. Сторона C <span class="editable-field" id="preview-party-c-name-ru2">СМАРТЧЭЙН НЕКСУС ЛИМИТЕД</span> имеет счет в российском банке и может законным и соответствующим образом предоставить услуги по приему и переводу денежных средств для этой сделки. После дружественных переговоров между сторонами А, В и C, достигнуто следующее соглашение:</div>
+                    
+                    <div>Сторона А поручает Стороне С принять на свой расчетный счет в российском банке денежные средства от Стороны В по Заявкам на перевод, которые являются неотъемлемой частью ДОГОВОРА, для перевода средств на счет Стороны А, указанным в Заявке на перевод. Валюта платежа данного ДОГОВОРА - российский рубль. Целью является торговый платеж от "<span class="editable-field" id="preview-party-b-name-ru3">TЫCЯЧA BOЛH</span>" к "<span class="editable-field" id="preview-party-a-name-ru3">Шэньчжэньская компания «Цзинъин Оптоэлектроника»</span>" CO.,LTD за покупку "<span class="editable-field" id="preview-product-name-ru2">AIR FRYER</span>", по реквизитам указанным в Заявках на перевод.</div>
+                    
+                    <div>Окончательная фактическая сумма ДОГОВОРА определяется на основании сумм, исполненных Заявок на перевод.</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="clause-number">2. 代理报酬支付</div>
+                    <div class="clause-subnumber">2.1.代理方（丙方）的报酬为乙方转账至丙方账户的<span class="editable-field" id="preview-commission-rate-cn">1</span>%，具体金额在《付款委托书》中列明。</div>
+                    <div class="clause-subnumber">2.2.丙方代收的乙方根据贸易合同支付的款项属甲方所有，丙方须按《付款委托书》中指定的币种、金额及账户信息，将款项全额划转至甲方账户。</div>
+                </td>
+                <td>
+                    <div class="clause-number">2. ВЫПЛАТА АГЕНТСКОГО ВОЗНАГРАЖДЕНИЯ</div>
+                    <div class="clause-subnumber">2.1 Вознаграждение Агента (Сторона С) составит <span class="editable-field" id="preview-commission-rate-ru">1</span>% от суммы перевода Стороны В на счет Стороны С и указывается в заявке.</div>
+                    <div class="clause-subnumber">2.2 Денежные средства, поступающие Стороне С в качестве оплаты от Стороны В по Контракту, являются собственностью Стороны А и подлежат перечислению Стороной С на счет Стороны А в валюте, сумме и по реквизитам, указанным в Заявке.</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="clause-number">3. 文件流程</div>
+                    <div class="clause-subnumber">3.1.甲方应通过电子邮件向代理方（丙方）发送符合本协议附件1格式的《付款委托书》，内容包括：</div>
+                    <div>- 注明付款人、收款人、支付金额、汇率及收款人银行信息的支付指令；</div>
+                    
+                    <div class="clause-subnumber">3.2. 为确保丙方顺利完成代收代付，甲乙方应向丙方提供银行支付、外汇兑换和结算以及应对外汇监管所需的必要文件，包括：</div>
+                    <div>- 贸易合同、发票、装箱单等交易证明文件；</div>
+                    <div>- 铁路运单、海运提单或其他运输单据；</div>
+                    <div>- 出口报关单、进口报关单等海关文件；</div>
+                    <div>- 商品采购合同或其他证明货物来源的文件；</div>
+                    <div>- 俄罗斯相关监管部门可能检查的其他相关文件。</div>
+                    
+                    <div class="clause-subnumber">3.3. 丙方须在收到《付款委托书》后的次日莫斯科时间12:00前通过电子邮件向甲方作出以下响应：</div>
+                    <div>• 对接受的委托：发送已签署的《付款委托书》，其中须注明丙方执行委托应收取的佣金比例；</div>
+                    <div>• 对拒绝的委托：发送拒绝受理的通知及理由。</div>
+                    
+                    <div class="clause-subnumber">3.4. 对于已接受的《付款委托书》，丙方须在收到乙方付款入账后的次日莫斯科时间12:00前，通过电子邮件向甲方发送符合本协议附件2格式的《付款到账通知书》，并附上乙方付款至丙方账户的银行回单或其他有效入账凭证。</div>
+                    
+                    <div class="clause-subnumber">3.5.丙方须按本协议第4条约定的期限及方式，将已收款项的等值金额划转至甲方指定账户。</div>
+                    
+                    <div class="clause-subnumber">3.6.丙方须在向甲方划转款项后的5（五）个工作日内，通过电子邮件或微信向甲方发送符合本协议附件3格式的《代理服务报告》，并同步提供丙方账户向甲方账户划款的银行回单副本。</div>
+                    
+                    <div class="clause-subnumber">3.7. 甲方应在收到《代理服务报告》后的3（三）个工作日内审核、签署报告并回传至丙方。若逾期未反馈签署意见或异议，则视为甲方默认报告内容无误。若甲方对报告存在异议，须在收到报告后1（一）个工作日内向丙方提交书面异议说明，丙方须在2（两）个工作日内完成整改。</div>
+                    
+                    <div class="clause-subnumber">3.8.本协议项下的文件传递可通过电子邮件、微信或电话沟通进行，但一方要求提供原件时，相关方须在文件签署后的5（五）个工作日内将原件邮寄至对方注册地址。</div>
+                </td>
+                <td>
+                    <div class="clause-number">3. ПОРЯДОК ДОКУМЕНТООБОРОТА</div>
+                    <div class="clause-subnumber">3.1 Сторона А направляет на электронную почту Стороны С Заявку по форме Приложения №1 к ДОГОВОРУ со следующей информацией:</div>
+                    <div>- Поручения платежей с указанием плательщиков, получателей, сумм платежа, курса валюты и банковских реквизитов получателей.</div>
+                    
+                    <div class="clause-subnumber">3.2 Для обеспечения успешного завершения платежа Стороной С, Стороны А и В должны предоставлять Стороне С необходимые документы для банковских платежей, конвертации и валютных расчетов, также и для выполнения требований валютного контроля такие, как:</div>
+                    <div>- Контракт, инвойс, упаковочный лист и другие документы по торговле;</div>
+                    <div>- Ж/Д накладная, CMR, коносамент или другие документы по перевозке;</div>
+                    <div>- Таможенная декларация по экспорту из Китая, ГТД по импорту в Россию и другие таможенные документы;</div>
+                    <div>- Договор закупки товара или другие документы по источникам товара;</div>
+                    <div>- Другие документы, которые могут проверить контролирующие учреждения РФ.</div>
+                    
+                    <div class="clause-subnumber">3.3 Сторона С обязуется принять или отказать в принятии Заявки от Стороны А не позднее 12.00 (по московскому времени) рабочего дня, следующего за днем получения Заявки, путем направления на электронную почту Стороны А:</div>
+                    <div>• При приеме Заявок - подписанной формы Заявки, с указанием в Заявке процента Вознаграждения, причитающегося Стороне С за исполнение Заявки:</div>
+                    <div>• При отказе от Заявок -сообщение об отказе в приеме Заявки и причина отказа.</div>
+                    
+                    <div class="clause-subnumber">3.4. При приеме Заявок Сторона С не позднее 12.00 (по московскому времени) рабочего дня, следующего за днем зачисления на свой счет Платежа от Стороны В обязуется направить на электронную почту Стороны А Уведомление о зачислении Платежа от Стороны В платёжного поручения о приходе Платежа или иной документ, подтверждающий зачисление Платежа на счет Стороны С от Стороны В.</div>
+                    
+                    <div class="clause-subnumber">3.5. Сторона С обязан перечислить на счет Стороны А эквивалент, зачисленного на счет Стороны С Платежа в сроки и в порядке, определенном в п. 4 Договора.</div>
+                    
+                    <div class="clause-subnumber">3.6. Не позднее 5 (пяти) рабочих дней со дня перечисления на счет Стороны А денежных средств Сторона С направляет на электронную почту или WeChat Стороны А Отчет Агента по форме Приложения № 2 к ДОГОВОРУ, одновременно и копию платежного поручения, подтверждающего перечисление эквивалента Платежа со счета Стороны С.</div>
+                    
+                    <div class="clause-subnumber">3.7. В течение 3 (трех) рабочих дней с даты получения Отчета Агента Сторона А его рассматривает и подписывает, а подписанный Отчет направляет на электронную почту Стороны С. Если в течение трех рабочих дней Сторона А не пришлет подписанный Отчет или отказ, то Отчет считается подписанным. При наличии замечаний к Отчету Агента Сторона А в срок не позднее 1 (одного) рабочего дня со дня получения Отчета от Агента, направляет Стороне С замечания в письменном виде. Сторона С обязуется устранить замечания Стороны А в течение 2 (двух) рабочих дней.</div>
+                    
+                    <div class="clause-subnumber">3.8.Обмен документами в рамках Договора производится посредством электронной почты, WeChat, или телефона с последующим направлением оригиналов в течение 5 рабочих дней после подписания документов, по требованию одной из Сторон, на почтовые адреса Сторон. Электронная почта для целей обмена документами, телефон указаны в реквизитах.</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="clause-number">4. 代理方向委托人划付款项规则</div>
+                    <div class="clause-subnumber">4.1. 丙方须根据《付款委托书》向甲方划付与俄罗斯卢布等值的款项。在将俄罗斯卢布等值金额划转至甲方账户前，乙方须按《付款委托书》中指定的账户信息，将等额款项支付至丙方或丙方子代理账户（子代理信息见本合同第4.2条）。</div>
+                    
+                    <div class="clause-subnumber">4.2. 账户信息</div>
+                    <div>甲方（委托人）：<span class="editable-field" id="preview-party-a-name-cn4">深圳市晶营光电科技有限公司</span></div>
+                    <div class="bank-info">- 开户银行：<span class="editable-field" id="preview-bank-a-name-cn">中国银行</span></div>
+                    <div class="bank-info">- SWIFT代码：<span class="editable-field" id="preview-bank-a-swift-cn">BKCHCNBJ</span></div>
+                    <div class="bank-info">- 银行地址：<span class="editable-field" id="preview-bank-a-address-cn">中国银行深圳留仙洞支行</span></div>
+                    <div class="bank-info">- 收款人名称：<span class="editable-field" id="preview-bank-a-receiver-cn">深圳市晶荣光电科技有限公司</span></div>
+                    <div class="bank-info">- 账户号：<span class="editable-field" id="preview-bank-a-account-cn">744562833942</span></div>
+                    
+                    <div>丙方（代理方）：<span class="editable-field" id="preview-party-c-name-cn3">智链通达供应链有限公司</span></div>
+                    <div class="bank-info">- 开户银行：<span class="editable-field" id="preview-bank-c-name-cn">VTB银行莫斯科中央分行</span></div>
+                    <div class="bank-info">- SWIFT代码：<span class="editable-field" id="preview-bank-c-swift-cn">VTBRRUMM</span></div>
+                    <div class="bank-info">- 银行地址：<span class="editable-field" id="preview-bank-c-address-cn">邮编109147，莫斯科，沃龙佐夫街43号，1栋</span></div>
+                    <div class="bank-info">- 收款人名称：<span class="editable-field" id="preview-bank-c-receiver-cn">智链通达供应链有限公司</span></div>
+                    <div class="bank-info">- 银行BIC码：<span class="editable-field" id="preview-bank-c-bic-cn">044525187</span></div>
+                    <div class="bank-info">- 账户号：<span class="editable-field" id="preview-bank-c-account-cn">40807810826800000051(RUB)</span></div>
+                    
+                    <div class="clause-subnumber">4.3. 乙方与丙方约定资金到账确认方式如下：乙方完成付款后，须向丙方提供加盖银行印章的付款回单；丙方收到款项后，应通过微信、电子邮件或电话向乙方发送资金到账确认函。</div>
+                    
+                    <div class="clause-subnumber">4.4. 甲方与丙方约定资金到账确认方式如下：丙方完成划款后，须向甲方提供加盖银行印章的划款回单；甲方收到款项后，应通过微信、电子邮件或电话向丙方发送收款确认通知。</div>
+                    
+                    <div class="clause-subnumber">4.5. 三方一致同意，本协议项下允许以非合同约定货币向第三方支付款项，但需经三方协商一致并符合相关法律法规。</div>
+                    
+                    <div class="clause-subnumber">4.6. 托收完成以甲方书面确认收到款项为准。若甲方最终未收到托收资金，丙方须将全部代收款项、代理佣金及银行手续费按原路径退还至乙方账户。</div>
+                </td>
+                <td>
+                    <div class="clause-number">4. ПОРЯДОК ПЕРЕЧИСЛЕНИЯ ПЛАТЕЖА АГЕНТОМ ПРИНИЦПАЛУ</div>
+                    <div class="clause-subnumber">4.1. Сторона С обязана выплатить Стороне А эквивалент Платежа в рублях. До отправки эквивалента Платежа в рублях на расчетный счет Стороны А, Сторона В перечисляет денежные средства в размере равном Платежу по реквизитам, указанным в Заявке, на счет Стороны С или Субагентов, указанных в п. 4.2 Договора.</div>
+                    
+                    <div class="clause-subnumber">4.2. Информация по счетам, следующая:</div>
+                    <div>Сторона А Принципал: <span class="editable-field" id="preview-party-a-name-ru4">Шэньчжэньская компания «Цзинъин Оптоэлектроника» Co., Ltd</span></div>
+                    <div class="bank-info">Название банка: <span class="editable-field" id="preview-bank-a-name-ru">Банка Китая</span></div>
+                    <div class="bank-info">SWIFT Код: <span class="editable-field" id="preview-bank-a-swift-ru">BKCHCNBJ</span></div>
+                    <div class="bank-info">Адрес банка: Полное наименование: <span class="editable-field" id="preview-bank-a-address-ru">Акционерное общество «Банк Китая», Отделение «Люсяньдун» в г. Шэньчжэнь</span></div>
+                    <div class="bank-info">Наименование получателя: <span class="editable-field" id="preview-bank-a-receiver-ru">Шэньчжэньская компания с ограниченной ответственностью «Цзиньжун Оптоэлектроника»</span></div>
+                    <div class="bank-info">Номер счета: <span class="editable-field" id="preview-bank-a-account-ru">744562833942</span></div>
+                    
+                    <div>Сторона С Агент: <span class="editable-field" id="preview-party-c-name-ru3">СМАРТЧЭЙН НЕКСУС ЛИМИТЕД</span></div>
+                    <div class="bank-info">Название банка: <span class="editable-field" id="preview-bank-c-name-ru">ФИЛИАЛ "ЦЕНТРАЛЬНЫЙ" БАНКА ВТБ (ПАО)</span></div>
+                    <div class="bank-info">SWIFT Код: <span class="editable-field" id="preview-bank-c-swift-ru">VTBRRUMM</span></div>
+                    <div class="bank-info">Адрес банка: <span class="editable-field" id="preview-bank-c-address-ru">109147, г. Москва, ул. Воронцовская, д. 43, стр. 1</span></div>
+                    <div class="bank-info">Название получателя: <span class="editable-field" id="preview-bank-c-receiver-ru">СМАРТЧЭЙН НЕКСУС ЛИМИТЕД</span></div>
+                    <div class="bank-info">БИК: <span class="editable-field" id="preview-bank-c-bic-ru">044525187</span></div>
+                    <div class="bank-info">Номер Счет: <span class="editable-field" id="preview-bank-c-account-ru">40807810826800000051(RUB)</span></div>
+                    
+                    <div class="clause-subnumber">4.3. Сторона В и Сторона С соглашаются, что способ подтверждения получения денежных средств, следующий: Сторона В после завершения перевода должна предоставить Стороне С платежное поручение с отметкой банка об исполнении платежа, а Сторона С после получения средств должна подтвердить получение через WeChat, электронную почту или по телефону.</div>
+                    
+                    <div class="clause-subnumber">4.4. Сторона А и Сторона С соглашаются, что способ подтверждения получения денежных средств, следующий: Сторона С после завершения перевода должна предоставить Стороне А платежное поручение, с отметкой банка об исполнении платежа, а Сторона А после получения средств должна подтвердить получение через WeChat, электронную почту или по телефону.</div>
+                    
+                    <div class="clause-subnumber">4.5. Стороны А, В и С пришли к соглашению, что в рамках данного Договора возможна оплата в пользу третьих лиц в валюте отличной от валюты контракта, если это согласовано Сторонами и соответствует с требованиями законов.</div>
+                    
+                    <div class="clause-subnumber">4.6. Агентский платеж будет считаться выполненным, когда Сторона А письменно подтвердит получение средств. Если Сторона А не получит средств платежа, Сторона С обязана вернуть всю сумму агентского платежа, агентское вознаграждение и банковскую комиссию на расчетный счет Стороны В по исходному маршруту.</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="clause-number">5.通用条款</div>
+                    <div class="clause-subnumber">5.1.甲方保证：托收所涉资金来源合法，交易内容真实有效。因资金合法性或交易真实性引发的争议或法律风险，由甲方独立承担，与丙方无关。若托收导致丙方与乙方之间产生法律纠纷或损失，甲方须负责解决并承担全部责任。</div>
+                    
+                    <div class="clause-subnumber">5.2. 本代理合同项下争议适用中华人民共和国法律解决。</div>
+                    
+                    <div class="clause-subnumber">5.3.合同签署与效力：本合同一式三份，甲乙丙三方各执一份，自签字盖章后生效；合同扫描件与原件具有同等法律效力。</div>
+                    
+                    <div class="clause-subnumber">5.4. 本合同未尽事宜，由三方通过友好协商解决。</div>
+                    
+                    <div class="clause-subnumber">5.5. 甲乙间或乙丙间的资金到账凭证仅用于银行结算，不作为实际贸易关系证明。</div>
+                    
+                    <div class="clause-subnumber">5.6. 丙方不承担甲乙双方贸易条款争议或违约责任的连带责任。</div>
+                    
+                    <div class="clause-subnumber">5.7. 合同版本冲突规则：若俄语与中文版本存在歧义，以中文版本为准。</div>
+                    
+                    <div class="clause-number">5.8. 合同有效期与续约：</div>
+                    <div>本合同自签署日起生效，有效期1（一）年，或至各方义务履行完毕止；合同到期前30（三十）日，若三方未提出终止，则自动续期1（一）年，条款不变。</div>
+                </td>
+                <td>
+                    <div class="clause-number">5. ОБЩИЕ ПОЛОЖЕНИЯ</div>
+                    <div class="clause-subnumber">5.1. Сторона А гарантирует, что средства, участвующие в Агентском платеже, получены законным путем, а содержание сделки является достоверным. Любые споры или юридические риски, возникающие в связи с этим, несет исключительно Сторона А и не касаются Стороны С. Если Агентский платеж вызовет юридические споры или убытки между Сторонами С и В, Сторона А обязуется их решить и нести всю ответственность за последствия.</div>
+                    
+                    <div class="clause-subnumber">5.2. Любые споры по данному ДОГОВОРУ решаются в соответствии с законодательством КНР.</div>
+                    
+                    <div class="clause-subnumber">5.3. Настоящий ДОГОВОР составлен в трех экземплярах, по одному для Стороны А, Стороны В и Стороны С и вступает в силу после подписания и скрепления печатями. Отсканированная копия ДОГОВОРА имеет ту же юридическую силу, что и оригинал.</div>
+                    
+                    <div class="clause-subnumber">5.4. Вопросы, не урегулированные данным ДОГОВОРОМ, решаются путем дружеских переговоров между Сторонами А, В и С.</div>
+                    
+                    <div class="clause-subnumber">5.5. Документы о зачислении средств между Сторонами А и С, а также между Сторонами С и В, используются только для банковских расчетов и не являются доказательством фактических торговых отношений.</div>
+                    
+                    <div class="clause-subnumber">5.6. Сторона C не несет солидарной ответственности за любой спор по торговым условиям или нарушение контракта между Стороной A и Стороной B.</div>
+                    
+                    <div class="clause-subnumber">5.7. В случае расхождения русской и китайской версий ДОГОВОРА, преимущество имеет версия на китайском языке.</div>
+                    
+                    <div class="clause-number">5.8. Срок действия договора и его пролонгация:</div>
+                    <div>Настоящий ДОГОВОР вступает в силу с даты подписания и действует в течение 1 (одного) года или до полного исполнения Сторонами своих обязательств по ДОГОВОРЕ. Если за 30 (тридцать) календарных дней до окончания срока ДОГОВОРА, определенного настоящим пунктом, Стороны не выразили намерения о расторжении ДОГОВОРА, ДОГОВОР каждый раз пролонгируется на 1 (один) год на условиях, согласованных Сторонами в ДОГОВОРЕ.</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="clause-number">6.各方信息</div>
+                    <div>甲方（收款方/委托人）：<span class="editable-field" id="preview-party-a-name-cn5">深圳市晶营光电科技有限公司</span></div>
+                    <div>法律地址：<span class="editable-field" id="preview-party-a-address-cn2">深圳市宝安区宝安大道4338号宝穗大厦8601晶荣公司</span></div>
+                    <div>授权代表：<span class="editable-field" id="preview-party-a-representative-cn2">王庆会</span></div>
+                    <div>联系电话：<span class="editable-field" id="preview-party-a-phone-cn">13714234679</span></div>
+                    <div>电子邮箱：<span class="editable-field" id="preview-party-a-email-cn">admin@jingrongled.com</span></div>
+                    
+                    <div>乙方（付款方/合同相对方）：<span class="editable-field" id="preview-party-b-name-cn4">ООО «TЫCЯЧA BOЛH»</span></div>
+                    <div>法律地址：<span class="editable-field" id="preview-party-b-address-cn2">117105, город Москва, Новоданиловская наб, д. 12, помещ. 81</span></div>
+                    <div>授权代表：<span class="editable-field" id="preview-party-b-representative-cn2">Шель Ольга Александровна</span></div>
+                    
+                    <div>丙方（代理方）：<span class="editable-field" id="preview-party-c-name-cn4">智链通达供应链有限公司</span></div>
+                    <div>法律地址：<span class="editable-field" id="preview-party-c-address-cn2">香港新蒲崗太子道東 706 號太子工業大廈海德匯24樓 A27 室</span></div>
+                    <div>授权代表：<span class="editable-field" id="preview-party-c-representative-cn2">黎健文</span></div>
+                    <div>联系电话：<span class="editable-field" id="preview-party-c-phone-cn">+852-21349717</span></div>
+                    <div>电子邮箱：<span class="editable-field" id="preview-party-c-email-cn">106442819@qq.com</span></div>
+                </td>
+                <td>
+                    <div class="clause-number">6. РЕКВИЗИТЫ СТОРОН</div>
+                    <div>Сторона А (ПОЛУЧАТЕЛЬ/ПРИНЦИПАЛ): <span class="editable-field" id="preview-party-a-name-ru5">Шэньчжэньская компания «Цзинъин Оптоэлектроника» Co., Ltd</span></div>
+                    <div>Юридический адрес: <span class="editable-field" id="preview-party-a-address-ru2">Китай, г. Шэньчжэнь, р-н Баоань, ул. Баоаньдадао, д. 4338, бизнес-центр «Баосуй», оф. 8601</span></div>
+                    <div>Уполномоченное лицо: <span class="editable-field" id="preview-party-a-representative-ru2">Ван Цинхуэй</span></div>
+                    <div>Контактный телефон: <span class="editable-field" id="preview-party-a-phone-ru">13714234679</span></div>
+                    <div>Электронная почта: <span class="editable-field" id="preview-party-a-email-ru">admin@jingrongled.com</span></div>
+                    
+                    <div>Сторона B (ПЛАТЕЛЬЩИК/КОНТРАГЕНТ): <span class="editable-field" id="preview-party-b-name-ru4">ООО «TЫCЯЧA BOЛH»</span></div>
+                    <div>Юридический адрес: <span class="editable-field" id="preview-party-b-address-ru2">117105, город Москва, Новоданиловская наб, д. 12, помещ. 81</span></div>
+                    <div>Уполномоченное лицо: <span class="editable-field" id="preview-party-b-representative-ru2">Шель Ольга Александровна</span></div>
+                    
+                    <div>Сторона С (АГЕНТ): <span class="editable-field" id="preview-party-c-name-ru4">СМАРТЧЭЙН НЕКСУС ЛИМИТЕД</span></div>
+                    <div>Юридический адрес: <span class="editable-field" id="preview-party-c-address-ru2">ПОМЕЩЕНИЕ/КОМНАТА А27, ЭТАЖ 24, РИДЖЕНТС ПАРК ПРИНС ИНДАСТРИАЛ БИЛДИНГ №706, ПРИНС ЭДВАРД РОАД, ВОСТОЧНЫЙ КОУЛУН, Гонконг, КНР</div>
+                    <div>Уполномоченное лицо: <span class="editable-field" id="preview-party-c-representative-ru2">Ли Цзяньвэнь</span></div>
+                    <div>Контактный телефон: <span class="editable-field" id="preview-party-c-phone-ru">+852-21349717</span></div>
+                    <div>Электронная почта: <span class="editable-field" id="preview-party-c-email-ru">106442819@qq.com</span></div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="signature-area">
+                        <div class="clause-number">各方签署ПОДПИСИ СТОРОН</div>
+                        
+                        <div class="signature-line">
+                            <div>甲方（盖章）Сторона А(Печать)</div>
+                            <div style="margin-top: 30px;">代表人（签字）Представитель(Подпись)</div>
+                        </div>
+                        
+                        <div class="signature-line">
+                            <div>乙方（盖章）Сторона В(Печать)</div>
+                            <div style="margin-top: 30px;">代表人（签字）Представитель(Подпись)</div>
+                        </div>
+                        
+                        <div class="signature-line">
+                            <div>丙方（盖章）Сторона С(Печать)</div>
+                            <div style="margin-top: 30px;">代表人（签字）Представитель(Подпись)</div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        `;
+
+        // 初始化预览
+        document.getElementById('protocol-preview').innerHTML = protocolTemplate;
+        
+        // 导航栏交互功能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 添加导航菜单点击事件
+            const navLinks = document.querySelectorAll('.navbar-menu a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    // 如果是当前页面链接，阻止默认行为
+                    if (this.getAttribute('href') === '#') {
+                        e.preventDefault();
+                    }
+                    
+                    // 移除所有active类
+                    navLinks.forEach(l => l.parentElement.classList.remove('active'));
+                    // 为当前点击的菜单项添加active类
+                    this.parentElement.classList.add('active');
+                });
+            });
+            
+            // 退出按钮事件
+            const logoutBtn = document.querySelector('.logout-btn');
+            logoutBtn.addEventListener('click', function() {
+                if (confirm('确定要退出登录吗？')) {
+                    alert('已退出登录，正在跳转到登录页面...');
+                    // 实际应用中这里会跳转到登录页面
+                }
+            });
+        });
+        
+        // 更新所有预览字段
+        function updatePreview() {
+            // 获取所有输入字段的值
+            const protocolNumberCn = document.getElementById('protocol-number-cn').value;
+            const protocolNumberRu = document.getElementById('protocol-number-ru').value;
+            const signDateCn = document.getElementById('sign-date-cn').value;
+            const signDateRu = document.getElementById('sign-date-ru').value;
+            
+            const partyANameCn = document.getElementById('party-a-name-cn').value;
+            const partyANameRu = document.getElementById('party-a-name-ru').value;
+            const partyAAddressCn = document.getElementById('party-a-address-cn').value;
+            const partyAAddressRu = document.getElementById('party-a-address-ru').value;
+            const partyARepresentativeCn = document.getElementById('party-a-representative-cn').value;
+            const partyARepresentativeRu = document.getElementById('party-a-representative-ru').value;
+            const partyAPhoneCn = document.getElementById('party-a-phone-cn').value;
+            const partyAPhoneRu = document.getElementById('party-a-phone-ru').value;
+            const partyAEmailCn = document.getElementById('party-a-email-cn').value;
+            const partyAEmailRu = document.getElementById('party-a-email-ru').value;
+            
+            const partyBNameCn = document.getElementById('party-b-name-cn').value;
+            const partyBNameRu = document.getElementById('party-b-name-ru').value;
+            const partyBAddressCn = document.getElementById('party-b-address-cn').value;
+            const partyBAddressRu = document.getElementById('party-b-address-ru').value;
+            const partyBRepresentativeCn = document.getElementById('party-b-representative-cn').value;
+            const partyBRepresentativeRu = document.getElementById('party-b-representative-ru').value;
+            
+            const partyCNameCn = document.getElementById('party-c-name-cn').value;
+            const partyCNameRu = document.getElementById('party-c-name-ru').value;
+            const partyCAddressCn = document.getElementById('party-c-address-cn').value;
+            const partyCAddressRu = document.getElementById('party-c-address-ru').value;
+            const partyCRepresentativeCn = document.getElementById('party-c-representative-cn').value;
+            const partyCRepresentativeRu = document.getElementById('party-c-representative-ru').value;
+            const partyCPhoneCn = document.getElementById('party-c-phone-cn').value;
+            const partyCPhoneRu = document.getElementById('party-c-phone-ru').value;
+            const partyCEmailCn = document.getElementById('party-c-email-cn').value;
+            const partyCEmailRu = document.getElementById('party-c-email-ru').value;
+            
+            const contractNumberCn = document.getElementById('contract-number-cn').value;
+            const contractNumberRu = document.getElementById('contract-number-ru').value;
+            const contractDateCn = document.getElementById('contract-date-cn').value;
+            const contractDateRu = document.getElementById('contract-date-ru').value;
+            
+            const productNameCn = document.getElementById('product-name-cn').value;
+            const productNameRu = document.getElementById('product-name-ru').value;
+            const commissionRate = document.getElementById('commission-rate').value;
+            
+            // 银行信息
+            const bankANameCn = document.getElementById('bank-a-name-cn').value;
+            const bankANameRu = document.getElementById('bank-a-name-ru').value;
+            const bankASwiftCn = document.getElementById('bank-a-swift-cn').value;
+            const bankASwiftRu = document.getElementById('bank-a-swift-ru').value;
+            const bankAAddressCn = document.getElementById('bank-a-address-cn').value;
+            const bankAAddressRu = document.getElementById('bank-a-address-ru').value;
+            const bankAReceiverCn = document.getElementById('bank-a-receiver-cn').value;
+            const bankAReceiverRu = document.getElementById('bank-a-receiver-ru').value;
+            const bankAAccountCn = document.getElementById('bank-a-account-cn').value;
+            const bankAAccountRu = document.getElementById('bank-a-account-ru').value;
+            
+            const bankCNameCn = document.getElementById('bank-c-name-cn').value;
+            const bankCNameRu = document.getElementById('bank-c-name-ru').value;
+            const bankCSwiftCn = document.getElementById('bank-c-swift-cn').value;
+            const bankCSwiftRu = document.getElementById('bank-c-swift-ru').value;
+            const bankCAddressCn = document.getElementById('bank-c-address-cn').value;
+            const bankCAddressRu = document.getElementById('bank-c-address-ru').value;
+            const bankCReceiverCn = document.getElementById('bank-c-receiver-cn').value;
+            const bankCReceiverRu = document.getElementById('bank-c-receiver-ru').value;
+            const bankCBicCn = document.getElementById('bank-c-bic-cn').value;
+            const bankCBicRu = document.getElementById('bank-c-bic-ru').value;
+            const bankCAccountCn = document.getElementById('bank-c-account-cn').value;
+            const bankCAccountRu = document.getElementById('bank-c-account-ru').value;
+            
+            // 更新所有预览字段
+            const previewFields = [
+                // 中文字段
+                {id: 'preview-protocol-number-cn', value: protocolNumberCn},
+                {id: 'preview-sign-date-cn', value: signDateCn},
+                {id: 'preview-party-a-name-cn', value: partyANameCn},
+                {id: 'preview-party-a-name-cn2', value: partyANameCn},
+                {id: 'preview-party-a-name-cn3', value: partyANameCn},
+                {id: 'preview-party-a-name-cn4', value: partyANameCn},
+                {id: 'preview-party-a-name-cn5', value: partyANameCn},
+                {id: 'preview-party-a-address-cn', value: partyAAddressCn},
+                {id: 'preview-party-a-address-cn2', value: partyAAddressCn},
+                {id: 'preview-party-a-representative-cn', value: partyARepresentativeCn},
+                {id: 'preview-party-a-representative-cn2', value: partyARepresentativeCn},
+                {id: 'preview-party-a-phone-cn', value: partyAPhoneCn},
+                {id: 'preview-party-a-email-cn', value: partyAEmailCn},
+                {id: 'preview-party-b-name-cn', value: partyBNameCn},
+                {id: 'preview-party-b-name-cn2', value: partyBNameCn},
+                {id: 'preview-party-b-name-cn3', value: partyBNameCn},
+                {id: 'preview-party-b-name-cn4', value: `ООО «${partyBNameCn}»`},
+                {id: 'preview-party-b-address-cn', value: partyBAddressCn},
+                {id: 'preview-party-b-address-cn2', value: partyBAddressCn},
+                {id: 'preview-party-b-representative-cn', value: partyBRepresentativeCn},
+                {id: 'preview-party-b-representative-cn2', value: partyBRepresentativeCn},
+                {id: 'preview-party-c-name-cn', value: partyCNameCn},
+                {id: 'preview-party-c-name-cn2', value: partyCNameCn},
+                {id: 'preview-party-c-name-cn3', value: partyCNameCn},
+                {id: 'preview-party-c-name-cn4', value: partyCNameCn},
+                {id: 'preview-party-c-address-cn', value: partyCAddressCn},
+                {id: 'preview-party-c-address-cn2', value: partyCAddressCn},
+                {id: 'preview-party-c-representative-cn', value: partyCRepresentativeCn},
+                {id: 'preview-party-c-representative-cn2', value: partyCRepresentativeCn},
+                {id: 'preview-party-c-phone-cn', value: partyCPhoneCn},
+                {id: 'preview-party-c-email-cn', value: partyCEmailCn},
+                {id: 'preview-contract-number-cn', value: contractNumberCn},
+                {id: 'preview-contract-date-cn', value: contractDateCn},
+                {id: 'preview-product-name-cn', value: productNameCn},
+                {id: 'preview-product-name-cn2', value: productNameCn},
+                {id: 'preview-commission-rate-cn', value: `${commissionRate}`},
+                
+                // 俄语字段
+                {id: 'preview-protocol-number-ru', value: protocolNumberRu},
+                {id: 'preview-sign-date-ru', value: signDateRu},
+                {id: 'preview-party-a-name-ru', value: partyANameRu},
+                {id: 'preview-party-a-name-ru2', value: partyANameRu},
+                {id: 'preview-party-a-name-ru3', value: partyANameRu},
+                {id: 'preview-party-a-name-ru4', value: partyANameRu},
+                {id: 'preview-party-a-name-ru5', value: partyANameRu},
+                {id: 'preview-party-a-address-ru', value: partyAAddressRu},
+                {id: 'preview-party-a-address-ru2', value: partyAAddressRu},
+                {id: 'preview-party-a-representative-ru', value: partyARepresentativeRu},
+                {id: 'preview-party-a-representative-ru2', value: partyARepresentativeRu},
+                {id: 'preview-party-a-phone-ru', value: partyAPhoneRu},
+                {id: 'preview-party-a-email-ru', value: partyAEmailRu},
+                {id: 'preview-party-b-name-ru', value: partyBNameRu},
+                {id: 'preview-party-b-name-ru2', value: partyBNameRu},
+                {id: 'preview-party-b-name-ru3', value: partyBNameRu},
+                {id: 'preview-party-b-name-ru4', value: partyBNameRu},
+                {id: 'preview-party-b-address-ru', value: partyBAddressRu},
+                {id: 'preview-party-b-address-ru2', value: partyBAddressRu},
+                {id: 'preview-party-b-representative-ru', value: partyBRepresentativeRu},
+                {id: 'preview-party-b-representative-ru2', value: partyBRepresentativeRu},
+                {id: 'preview-party-c-name-ru', value: partyCNameRu},
+                {id: 'preview-party-c-name-ru2', value: partyCNameRu},
+                {id: 'preview-party-c-name-ru3', value: partyCNameRu},
+                {id: 'preview-party-c-name-ru4', value: partyCNameRu},
+                {id: 'preview-party-c-address-ru', value: partyCAddressRu},
+                {id: 'preview-party-c-address-ru2', value: partyCAddressRu},
+                {id: 'preview-party-c-representative-ru', value: partyCRepresentativeRu},
+                {id: 'preview-party-c-representative-ru2', value: partyCRepresentativeRu},
+                {id: 'preview-party-c-phone-ru', value: partyCPhoneRu},
+                {id: 'preview-party-c-email-ru', value: partyCEmailRu},
+                {id: 'preview-contract-number-ru', value: contractNumberRu},
+                {id: 'preview-contract-date-ru', value: contractDateRu},
+                {id: 'preview-product-name-ru', value: productNameRu},
+                {id: 'preview-product-name-ru2', value: productNameRu},
+                {id: 'preview-commission-rate-ru', value: `${commissionRate}`},
+                
+                // 银行信息 - 中文
+                {id: 'preview-bank-a-name-cn', value: bankANameCn},
+                {id: 'preview-bank-a-swift-cn', value: bankASwiftCn},
+                {id: 'preview-bank-a-address-cn', value: bankAAddressCn},
+                {id: 'preview-bank-a-receiver-cn', value: bankAReceiverCn},
+                {id: 'preview-bank-a-account-cn', value: bankAAccountCn},
+                {id: 'preview-bank-c-name-cn', value: bankCNameCn},
+                {id: 'preview-bank-c-swift-cn', value: bankCSwiftCn},
+                {id: 'preview-bank-c-address-cn', value: bankCAddressCn},
+                {id: 'preview-bank-c-receiver-cn', value: bankCReceiverCn},
+                {id: 'preview-bank-c-bic-cn', value: bankCBicCn},
+                {id: 'preview-bank-c-account-cn', value: bankCAccountCn},
+                
+                // 银行信息 - 俄文
+                {id: 'preview-bank-a-name-ru', value: bankANameRu},
+                {id: 'preview-bank-a-swift-ru', value: bankASwiftRu},
+                {id: 'preview-bank-a-address-ru', value: bankAAddressRu},
+                {id: 'preview-bank-a-receiver-ru', value: bankAReceiverRu},
+                {id: 'preview-bank-a-account-ru', value: bankAAccountRu},
+                {id: 'preview-bank-c-name-ru', value: bankCNameRu},
+                {id: 'preview-bank-c-swift-ru', value: bankCSwiftRu},
+                {id: 'preview-bank-c-address-ru', value: bankCAddressRu},
+                {id: 'preview-bank-c-receiver-ru', value: bankCReceiverRu},
+                {id: 'preview-bank-c-bic-ru', value: bankCBicRu},
+                {id: 'preview-bank-c-account-ru', value: bankCAccountRu}
+            ];
+            
+            // 更新所有字段
+            previewFields.forEach(field => {
+                const element = document.getElementById(field.id);
+                if (element) {
+                    element.textContent = field.value;
+                }
+            });
+        }
+        
+        // 初始更新
+        updatePreview();
+        
+        // 标签页切换功能
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                
+                // 移除所有标签的激活状态
+                document.querySelectorAll('.tab-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // 隐藏所有标签内容
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // 激活当前标签
+                this.classList.add('active');
+                document.getElementById(`${tabId}-tab`).classList.add('active');
+            });
+        });
+        
+        // 绑定更新按钮事件
+        document.getElementById('update-btn').addEventListener('click', updatePreview);
+        
+        // 绑定重置按钮事件
+        document.getElementById('reset-btn').addEventListener('click', function() {
+            if (confirm('确定要重置所有字段到默认值吗？')) {
+                // 重置所有输入字段
+                document.getElementById('protocol-number-cn').value = 'ZLJC 26 - 003';
+                document.getElementById('protocol-number-ru').value = 'ZLJC 26 - 003';
+                document.getElementById('sign-date-cn').value = '2026. 01 . 03';
+                document.getElementById('sign-date-ru').value = '2026. 01 . 03';
+                
+                document.getElementById('party-a-name-cn').value = '深圳市晶营光电科技有限公司';
+                document.getElementById('party-a-name-ru').value = 'Шэньчжэньская компания «Цзинъин Оптоэлектроника» CO., LTD';
+                document.getElementById('party-a-address-cn').value = '深圳市宝安区宝安大道4338号宝穗大厦8601晶荣公司';
+                document.getElementById('party-a-address-ru').value = 'Китай, г. Шэньчжэнь, р-н Баоань, ул. Баоаньдадао, д. 4338, бизнес-центр «Баосуй», оф. 8601';
+                document.getElementById('party-a-representative-cn').value = '王庆会';
+                document.getElementById('party-a-representative-ru').value = 'Ван Цинхуэй';
+                document.getElementById('party-a-phone-cn').value = '13714234679';
+                document.getElementById('party-a-phone-ru').value = '13714234679';
+                document.getElementById('party-a-email-cn').value = 'admin@jingrongled.com';
+                document.getElementById('party-a-email-ru').value = 'admin@jingrongled.com';
+                
+                document.getElementById('party-b-name-cn').value = 'TЫCЯЧA BOЛH';
+                document.getElementById('party-b-name-ru').value = 'OOO «TЫCЯЧA BOЛH»';
+                document.getElementById('party-b-address-cn').value = '117105, город Москва, Новоданиловская наб, д. 12, помещ. 81';
+                document.getElementById('party-b-address-ru').value = '117105, город Москва, Новоданиловская наб, д. 12, помещ. 81';
+                document.getElementById('party-b-representative-cn').value = 'Шель Ольга Александровна';
+                document.getElementById('party-b-representative-ru').value = 'Шель Ольга Александровна';
+                
+                document.getElementById('party-c-name-cn').value = '智链通达供应链有限公司';
+                document.getElementById('party-c-name-ru').value = 'СМАРТЧЭЙН НЕКСУС ЛИМИТЕД';
+                document.getElementById('party-c-address-cn').value = '香港新蒲崗太子道東 706 號太子工業大廈海德匯24樓 A27 室';
+                document.getElementById('party-c-address-ru').value = 'ПОМЕЩЕНИЕ/КОМНАТА А27, ЭТАЖ 24, РИДЖЕНТС ПАРК ПРИНС ИНДАСТРИАЛ БИЛДИНГ №706, ПРИНС ЭДВАРД РОАД, ВОСТОЧНЫЙ КОУЛУН, Гонконг, КНР';
+                document.getElementById('party-c-representative-cn').value = '黎健文';
+                document.getElementById('party-c-representative-ru').value = 'Ли Цзяньвэнь';
+                document.getElementById('party-c-phone-cn').value = '+852-21349717';
+                document.getElementById('party-c-phone-ru').value = '+852-21349717';
+                document.getElementById('party-c-email-cn').value = '106442819@qq.com';
+                document.getElementById('party-c-email-ru').value = '106442819@qq.com';
+                
+                document.getElementById('contract-number-cn').value = 'SSSC20251203';
+                document.getElementById('contract-number-ru').value = 'SSSC20251203';
+                document.getElementById('contract-date-cn').value = '2025.12.03';
+                document.getElementById('contract-date-ru').value = '2025.12.03';
+                
+                document.getElementById('product-name-cn').value = '空气炸锅';
+                document.getElementById('product-name-ru').value = 'Air Fryer';
+                document.getElementById('commission-rate').value = '1';
+                
+                // 银行信息
+                document.getElementById('bank-a-name-cn').value = '中国银行';
+                document.getElementById('bank-a-name-ru').value = 'Банка Китая';
+                document.getElementById('bank-a-swift-cn').value = 'BKCHCNBJ';
+                document.getElementById('bank-a-swift-ru').value = 'BKCHCNBJ';
+                document.getElementById('bank-a-address-cn').value = '中国银行深圳留仙洞支行';
+                document.getElementById('bank-a-address-ru').value = 'Акционерное общество «Банк Китая», Отделение «Люсяньдун» в г. Шэньчжэнь';
+                document.getElementById('bank-a-receiver-cn').value = '深圳市晶荣光电科技有限公司';
+                document.getElementById('bank-a-receiver-ru').value = 'Шэньчжэньская компания с ограниченной ответственностью «Цзиньжун Оптоэлектроника»';
+                document.getElementById('bank-a-account-cn').value = '744562833942';
+                document.getElementById('bank-a-account-ru').value = '744562833942';
+                
+                document.getElementById('bank-c-name-cn').value = 'VTB银行莫斯科中央分行';
+                document.getElementById('bank-c-name-ru').value = 'ФИЛИАЛ "ЦЕНТРАЛЬНЫЙ" БАНКА ВТБ (ПАО)';
+                document.getElementById('bank-c-swift-cn').value = 'VTBRRUMM';
+                document.getElementById('bank-c-swift-ru').value = 'VTBRRUMM';
+                document.getElementById('bank-c-address-cn').value = '邮编109147，莫斯科，沃龙佐夫街43号，1栋';
+                document.getElementById('bank-c-address-ru').value = '109147, г. Москва, ул. Воронцовская, д. 43, стр. 1';
+                document.getElementById('bank-c-receiver-cn').value = '智链通达供应链有限公司';
+                document.getElementById('bank-c-receiver-ru').value = 'СМАРТЧЭЙН НЕКСУС ЛИМИТЕД';
+                document.getElementById('bank-c-bic-cn').value = '044525187';
+                document.getElementById('bank-c-bic-ru').value = '044525187';
+                document.getElementById('bank-c-account-cn').value = '40807810826800000051(RUB)';
+                document.getElementById('bank-c-account-ru').value = '40807810826800000051(RUB)';
+                
+                // 更新预览
+                updatePreview();
+            }
+        });
+        
+        // 绑定导出Word文档按钮事件
+        document.getElementById('export-btn').addEventListener('click', function() {
+            exportToWord();
+        });
+        
+        // 输入字段变化时实时更新预览
+        const inputFields = document.querySelectorAll('.editor-section input');
+        inputFields.forEach(input => {
+            input.addEventListener('input', updatePreview);
+        });
+        
+        // 导出为Word文档功能
+        function exportToWord() {
+            // 获取预览内容
+            const previewContent = document.getElementById('protocol-preview').innerHTML;
+            
+            // 创建Word文档内容
+            const wordContent = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <style>
+                    body {
+                        font-family: "Times New Roman", Times, serif;
+                        font-size: 12pt;
+                        line-height: 1.5;
+                        margin: 0;
+                        padding: 0;
+                    }
+                    .two-column-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        border: 1px solid #000;
+                        min-height: 29.7cm;
+                    }
+                    .two-column-table td {
+                        width: 50%;
+                        vertical-align: top;
+                        padding: 0.5cm;
+                        border: 1px solid #000;
+                    }
+                    .protocol-header {
+                        text-align: left;
+                        margin-bottom: 20px;
+                        padding-left: 0.5cm;
+                    }
+                    .protocol-title {
+                        font-size: 16pt;
+                        font-weight: bold;
+                        margin-bottom: 10px;
+                    }
+                    .protocol-info {
+                        margin-bottom: 5px;
+                        font-size: 11pt;
+                    }
+                    .party-section {
+                        margin-bottom: 15px;
+                    }
+                    .party-title {
+                        font-weight: bold;
+                        margin-bottom: 5px;
+                        font-size: 11pt;
+                    }
+                    .clause-number {
+                        font-weight: bold;
+                        margin-top: 12px;
+                        margin-bottom: 5px;
+                        font-size: 11pt;
+                    }
+                    .clause-subnumber {
+                        margin-left: 15px;
+                        margin-top: 8px;
+                        font-size: 11pt;
+                    }
+                    .bank-info {
+                        margin-top: 8px;
+                        margin-left: 15px;
+                        font-size: 10pt;
+                    }
+                    .signature-area {
+                        margin-top: 30px;
+                        margin-bottom: 30px;
+                    }
+                    .signature-line {
+                        margin-top: 40px;
+                        min-height: 50px;
+                    }
+                    @media print {
+                        .two-column-table {
+                            page-break-inside: avoid;
+                        }
+                    }
+                </style>
+            </head>
+            <body>
+                ${previewContent}
+            </body>
+            </html>
+            `;
+            
+            // 创建Blob对象
+            const blob = new Blob([wordContent], { type: 'application/msword' });
+            
+            // 创建下载链接
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = '三方协议_委托代理协议_Агентский_договор.doc';
+            
+            // 触发下载
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            alert('Word文档已生成，开始下载！');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1869 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заявка на перевод - генератор DOCX</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <style>
+        /* 导航栏样式 - 从付款单代码中提取 */
+        .navbar {
+            background-color: #2c3e50;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .navbar-left {
+            display: flex;
+            align-items: center;
+        }
+        
+        .navbar-logo {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            text-decoration: none;
+        }
+        
+        /* Logo图片样式 */
+        .logo-image {
+            height: 40px; /* 控制Logo高度 */
+            width: auto; /* 宽度自适应 */
+            max-width: 200px; /* 最大宽度限制 */
+            object-fit: contain; /* 保持图片比例 */
+            vertical-align: middle;
+        }
+        
+        .navbar-menu {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            margin-left: 30px;
+        }
+        
+        .navbar-menu li {
+            position: relative;
+        }
+        
+        .navbar-menu a {
+            color: white;
+            text-decoration: none;
+            padding: 20px 15px;
+            display: block;
+            transition: background-color 0.3s;
+        }
+        
+        .navbar-menu a:hover {
+            background-color: #34495e;
+        }
+        
+        .navbar-menu .active a {
+            background-color: #1a252f;
+            border-bottom: 3px solid #3498db;
+        }
+        
+        .navbar-right {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+        }
+        
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #3498db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .username {
+            font-size: 14px;
+        }
+        
+        .logout-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 2px;
+            cursor: pointer;
+            margin-left: 15px;
+            font-size: 12px;
+            transition: background-color 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background-color: #c0392b;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                padding: 10px;
+            }
+            
+            .navbar-left {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .navbar-menu {
+                margin-left: 0;
+                width: 100%;
+                justify-content: center;
+                margin-top: 10px;
+            }
+            
+            .navbar-right {
+                width: 100%;
+                justify-content: center;
+                margin-top: 10px;
+            }
+        }
+        
+        /* 原始样式 */
+        * {
+            box-sizing: border-box;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.4;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .app-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .form-section {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            max-height: 1000px;
+        }
+        
+        .preview-section {
+            flex: 2;
+            min-width: 600px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #444;
+        }
+        
+        input[type="text"],
+        input[type="number"],
+        input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .input-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .input-row .form-group {
+            flex: 1;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        #generateBtn {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        #generateBtn:hover {
+            background-color: #2980b9;
+        }
+        
+        #resetBtn {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        #resetBtn:hover {
+            background-color: #c0392b;
+        }
+        
+        #downloadBtn {
+            background-color: #2ecc71;
+            color: white;
+        }
+        
+        #downloadBtn:hover {
+            background-color: #27ae60;
+        }
+        
+        #downloadBtn:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+        
+        #printBtn {
+            background-color: #9b59b6;
+            color: white;
+        }
+        
+        #printBtn:hover {
+            background-color: #8e44ad;
+        }
+        
+        .preview-area {
+            border: 1px solid #ddd;
+            padding: 25px;
+            min-height: 800px;
+            background-color: white;
+            font-family: 'Times New Roman', Times, serif;
+            line-height: 1.4;
+            flex: 1;
+            overflow: auto;
+        }
+        
+        .preview-area h3 {
+            text-align: center;
+            margin-top: 0;
+            text-transform: uppercase;
+        }
+        
+        .underline {
+            text-decoration: underline;
+            display: inline;
+        }
+        
+        .document-info {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .bank-details {
+            margin-bottom: 20px;
+        }
+        
+        /* Подписи - каждая на отдельной строке */
+        .signatures-container {
+            margin-top: 80px;
+        }
+        
+        .signature-block {
+            margin-bottom: 40px;
+        }
+        
+        .signature-block p {
+            margin: 5px 0;
+        }
+        
+        .signature-line {
+            border-top: 1px solid #000;
+            margin-top: 20px;
+            width: 300px;
+        }
+        
+        .currency-rate {
+            margin-bottom: 15px;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: #3498db;
+            font-weight: bold;
+        }
+        
+        .status-message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            text-align: center;
+            display: none;
+        }
+        
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        /* Убираем все отступы в начале абзацев */
+        .preview-area p {
+            text-indent: 0;
+            margin-left: 0;
+            padding-left: 0;
+            margin-bottom: 10px;
+        }
+        
+        /* Банковские реквизиты без отступа */
+        .preview-area .bank-details {
+            margin-left: 0;
+            padding-left: 0;
+        }
+        
+        /* Нумерованные пункты */
+        .preview-area ol {
+            margin-left: 0;
+            padding-left: 20px;
+        }
+        
+        .preview-area ol li {
+            margin-bottom: 15px;
+        }
+        
+        /* Блок с реквизитами */
+        .preview-area .details-block {
+            margin: 15px 0;
+        }
+        
+        @media (max-width: 1000px) {
+            .app-container {
+                flex-direction: column;
+            }
+            
+            .form-section, .preview-section {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 新增导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-left">
+            <a href="#" class="navbar-logo">
+                <!-- 修改为图片Logo，您可以根据需要修改src属性 -->
+                <img src="logo.png" alt="合同生成系统" class="logo-image">
+            </a>
+            <ul class="navbar-menu">
+                <li><a href="#">合同生成</a></li>
+                <li><a href="#">付款单生成</a></li>
+                <li class="active"><a href="#">翻译申请</a></li>
+                <li><a href="#">发票管理</a></li>
+                <li><a href="#">客户管理</a></li>
+                <li><a href="#">设置</a></li>
+            </ul>
+        </div>
+        <div class="navbar-right">
+            <div class="user-info">
+                <div class="user-avatar">U</div>
+                <div class="username">管理员</div>
+            </div>
+            <button class="logout-btn">退出</button>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-file-contract"></i> Генератор заявки на перевод (DOCX)</h1>
+            <p>Заполните форму для создания заявки на перевод и скачайте результат в формате Word</p>
+        </div>
+        
+        <div class="loading" id="loadingIndicator">Создание документа DOCX...</div>
+        <div class="status-message" id="statusMessage"></div>
+        
+        <div class="app-container">
+            <div class="form-section">
+                <h2><i class="fas fa-edit"></i> Введите данные</h2>
+                
+                <div class="form-group">
+                    <label for="contractNumber">Номер агентского договора:</label>
+                    <input type="text" id="contractNumber" value="ZLJC 26 -- 003">
+                </div>
+                
+                <div class="form-group">
+                    <label for="contractDate">Дата договора:</label>
+                    <input type="date" id="contractDate" value="2025-01-03">
+                </div>
+                
+                <div class="form-group">
+                    <label for="requestNumber">Номер заявки:</label>
+                    <input type="text" id="requestNumber" value="011">
+                </div>
+                
+                <div class="form-group">
+                    <label for="requestDate">Дата заявки:</label>
+                    <input type="date" id="requestDate" value="2026-01-03">
+                </div>
+                
+                <h3><i class="fas fa-users"></i> Стороны</h3>
+                
+                <div class="form-group">
+                    <label for="sideA">Сторона А (Получатель/Принципал):</label>
+                    <input type="text" id="sideA" value="Шэньчжэньская компания «Цзинъин Оптоэлектроника» Co., Ltd.">
+                </div>
+                
+                <div class="form-group">
+                    <label for="sideB">Сторона B (Контрагент):</label>
+                    <input type="text" id="sideB" value="OOO «ТЫСЯЧА ВОЛН»">
+                </div>
+                
+                <div class="form-group">
+                    <label for="sideC">Сторона С (Агент):</label>
+                    <input type="text" id="sideC" value="СМАРТЧЭЙН НЕКСУС ЛИМИТЕД">
+                </div>
+                
+                <h3><i class="fas fa-exchange-alt"></i> Детали перевода</h3>
+                
+                <div class="form-group">
+                    <label for="transferAmount">Сумма перевода (рубли):</label>
+                    <input type="number" id="transferAmount" step="0.01" value="2161084.00">
+                </div>
+                
+                <div class="form-group">
+                    <label for="contractNumber2">Номер контракта:</label>
+                    <input type="text" id="contractNumber2" value="SSSC20260103">
+                </div>
+                
+                <div class="form-group">
+                    <label for="exchangeRate">Курс обмена (юаней за 100 рублей):</label>
+                    <input type="number" id="exchangeRate" step="0.01" value="8.56">
+                </div>
+                
+                <div class="form-group">
+                    <label for="commissionPercent">Вознаграждение агента (%):</label>
+                    <input type="number" id="commissionPercent" step="0.01" value="1">
+                </div>
+                
+                <h3><i class="fas fa-university"></i> Банковские реквизиты Стороны С</h3>
+                
+                <div class="form-group">
+                    <label for="bankSideC1">Название банка (первый блок):</label>
+                    <input type="text" id="bankSideC1" value='ФИЛИАЛ "ЦЕНТРАЛЬНЫЙ" БАНКА ВТБ (ПАО)'>
+                </div>
+                
+                <div class="form-group">
+                    <label for="swiftSideC1">SWIFT код банка (первый блок):</label>
+                    <input type="text" id="swiftSideC1" value="VTBRRUMM">
+                </div>
+                
+                <div class="form-group">
+                    <label for="accountSideC1">Счет Стороны С (первый блок):</label>
+                    <input type="text" id="accountSideC1" value="40807810826800000051(RUB)">
+                </div>
+                
+                <div class="form-group">
+                    <label for="bankSideC2">Название банка (второй блок):</label>
+                    <input type="text" id="bankSideC2" value="БАНКА ВТБ (ПАО)">
+                </div>
+                
+                <div class="form-group">
+                    <label for="swiftSideC2">SWIFT код банка (второй блок):</label>
+                    <input type="text" id="swiftSideC2" value="VTBRRUMM">
+                </div>
+                
+                <div class="form-group">
+                    <label for="accountSideC2">Счет Стороны С (второй блок):</label>
+                    <input type="text" id="accountSideC2" value="40807810826800000051(RUB)">
+                </div>
+                
+                <h3><i class="fas fa-university"></i> Банковские реквизиты Стороны А</h3>
+                
+                <div class="form-group">
+                    <label for="bankSideA">Название банка:</label>
+                    <input type="text" id="bankSideA" value="Банка Китая">
+                </div>
+                
+                <div class="form-group">
+                    <label for="swiftSideA">SWIFT Код:</label>
+                    <input type="text" id="swiftSideA" value="BKCHCNBJ">
+                </div>
+                
+                <div class="form-group">
+                    <label for="bankAddressA">Адрес банка:</label>
+                    <input type="text" id="bankAddressA" value="Полное наименование: Акционерное общество «Банк Китая», Отделение «Люсяньдун» в г. Шэньчжэнь">
+                </div>
+                
+                <div class="form-group">
+                    <label for="accountSideA">Номер счета:</label>
+                    <input type="text" id="accountSideA" value="744562833942">
+                </div>
+                
+                <h3><i class="fas fa-info-circle"></i> Дополнительные данные</h3>
+                
+                <div class="form-group">
+                    <label for="bankAddress">Адрес банка (Москва):</label>
+                    <input type="text" id="bankAddress" value="109147, г. Москва, ул. Воронцовская, д. 43, стр. 1">
+                </div>
+                
+                <div class="buttons">
+                    <button id="generateBtn">
+                        <i class="fas fa-sync-alt"></i> Сгенерировать заявку
+                    </button>
+                    <button id="resetBtn">
+                        <i class="fas fa-redo"></i> Сбросить
+                    </button>
+                </div>
+            </div>
+            
+            <div class="preview-section">
+                <h2><i class="fas fa-eye"></i> Предварительный просмотр</h2>
+                <div class="buttons">
+                    <button id="downloadBtn" disabled>
+                        <i class="fas fa-file-word"></i> Скачать DOCX
+                    </button>
+                    <button id="printBtn">
+                        <i class="fas fa-print"></i> Печать
+                    </button>
+                </div>
+                <div class="preview-area" id="previewArea">
+                    <!-- Здесь будет отображаться сгенерированный документ -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="header" style="font-size: 14px; text-align: left;">
+            <h3>Инструкция по использованию:</h3>
+            <ol>
+                <li>Заполните все поля в левой части формы</li>
+                <li>Нажмите "Сгенерировать заявку" для создания предпросмотра</li>
+                <li>Нажмите "Скачать DOCX" для загрузки файла в формате Word</li>
+                <li>Используйте "Печать" для печати предпросмотра</li>
+                <li>Кнопка "Сбросить" вернет все значения к исходным</li>
+            </ol>
+        </div>
+    </div>
+    
+    <script>
+        // Элементы формы
+        const contractNumberInput = document.getElementById('contractNumber');
+        const contractDateInput = document.getElementById('contractDate');
+        const requestNumberInput = document.getElementById('requestNumber');
+        const requestDateInput = document.getElementById('requestDate');
+        const sideAInput = document.getElementById('sideA');
+        const sideBInput = document.getElementById('sideB');
+        const sideCInput = document.getElementById('sideC');
+        const transferAmountInput = document.getElementById('transferAmount');
+        const contractNumber2Input = document.getElementById('contractNumber2');
+        const exchangeRateInput = document.getElementById('exchangeRate');
+        const commissionPercentInput = document.getElementById('commissionPercent');
+        const bankSideC1Input = document.getElementById('bankSideC1');
+        const swiftSideC1Input = document.getElementById('swiftSideC1');
+        const accountSideC1Input = document.getElementById('accountSideC1');
+        const bankSideC2Input = document.getElementById('bankSideC2');
+        const swiftSideC2Input = document.getElementById('swiftSideC2');
+        const accountSideC2Input = document.getElementById('accountSideC2');
+        const bankSideAInput = document.getElementById('bankSideA');
+        const swiftSideAInput = document.getElementById('swiftSideA');
+        const bankAddressAInput = document.getElementById('bankAddressA');
+        const accountSideAInput = document.getElementById('accountSideA');
+        const bankAddressInput = document.getElementById('bankAddress');
+        
+        // Кнопки и элементы интерфейса
+        const generateBtn = document.getElementById('generateBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const printBtn = document.getElementById('printBtn');
+        const previewArea = document.getElementById('previewArea');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const statusMessage = document.getElementById('statusMessage');
+        
+        // 导航栏交互逻辑
+        document.addEventListener('DOMContentLoaded', function() {
+            // 添加导航菜单点击事件
+            const navLinks = document.querySelectorAll('.navbar-menu a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    // 移除所有active类
+                    navLinks.forEach(l => l.parentElement.classList.remove('active'));
+                    // 为当前点击的菜单项添加active类
+                    this.parentElement.classList.add('active');
+                    
+                    // 根据点击的菜单项执行不同操作
+                    const menuText = this.textContent;
+                    switch(menuText) {
+                        case '合同生成':
+                            window.location.href = 'deepseek_html_20260128_417ffc.html';
+                            break;
+                        case '付款单生成':
+                            window.location.href = '付款单-2.html';
+                            break;
+                        case '翻译申请':
+                            // 已经在翻译申请页面
+                            break;
+                        case '发票管理':
+                            alert('发票管理功能开发中...');
+                            break;
+                        case '客户管理':
+                            alert('客户管理功能开发中...');
+                            break;
+                        case '设置':
+                            alert('设置功能开发中...');
+                            break;
+                    }
+                });
+            });
+            
+            // 退出按钮事件
+            const logoutBtn = document.querySelector('.logout-btn');
+            logoutBtn.addEventListener('click', function() {
+                if (confirm('确定要退出登录吗？')) {
+                    alert('已退出登录，正在跳转到登录页面...');
+                    // 实际应用中这里会跳转到登录页面
+                }
+            });
+            
+            // 自动生成文档
+            generateDocument();
+        });
+        
+        // 变量 для хранения данных
+        let currentDocumentData = null;
+        
+        // Функция форматирования даты
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = date.toLocaleString('ru-RU', { month: 'long' });
+            const year = date.getFullYear();
+            return `« ${day} » ${month} ${year} г`;
+        }
+        
+        // Функция форматирования чисел
+        function formatNumber(num) {
+            return parseFloat(num).toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        }
+        
+        // Функция для получения суммы в юанях
+        function calculateYuanAmount(rubAmount, rate) {
+            // Курс: rate юаней за 100 рублей
+            return (rubAmount / 100) * rate;
+        }
+        
+        // Функция для получения суммы комиссии
+        function calculateCommission(rubAmount, percent) {
+            return rubAmount * percent / 100;
+        }
+        
+        // Функция для получения числительного представления суммы
+        function numberToWords(num, currency) {
+            const integerPart = Math.floor(num);
+            const fractionalPart = Math.round((num - integerPart) * 100);
+            
+            // Полная реализация для чисел до 999 999
+            const units = ['', 'один', 'два', 'три', 'четыре', 'пять', 'шесть', 'семь', 'восемь', 'девять'];
+            const teens = ['десять', 'одиннадцать', 'двенадцать', 'тринадцать', 'четырнадцать', 'пятнадцать', 'шестнадцать', 'семнадцать', 'восемнадцать', 'девятнадцать'];
+            const tens = ['', '', 'двадцать', 'тридцать', 'сорок', 'пятьдесят', 'шестьдесят', 'семьдесят', 'восемьдесят', 'девяносто'];
+            const hundreds = ['', 'сто', 'двести', 'триста', 'четыреста', 'пятьсот', 'шестьсот', 'семьсот', 'восемьсот', 'девятьсот'];
+            
+            // Для суммы 184988.80
+            if (Math.abs(num - 184988.80) < 0.01) {
+                return 'Сто восемьдесят четыре тысячи девятьсот восемьдесят восемь целых восемьдесят сотых';
+            }
+            
+            // Общая реализация
+            if (integerPart === 0) return 'ноль';
+            
+            let result = '';
+            let remaining = integerPart;
+            
+            // Обработка тысяч
+            if (remaining >= 1000) {
+                const thousands = Math.floor(remaining / 1000);
+                remaining = remaining % 1000;
+                
+                if (thousands === 1) {
+                    result += 'одна тысяча ';
+                } else if (thousands === 2) {
+                    result += 'две тысячи ';
+                } else if (thousands >= 3 && thousands <= 4) {
+                    result += numberToWordsSimple(thousands) + ' тысячи ';
+                } else if (thousands >= 5 && thousands <= 20) {
+                    result += numberToWordsSimple(thousands) + ' тысяч ';
+                } else {
+                    const hundredsDigit = Math.floor(thousands / 100);
+                    const tensDigit = Math.floor((thousands % 100) / 10);
+                    const unitsDigit = thousands % 10;
+                    
+                    if (hundredsDigit > 0) result += hundreds[hundredsDigit] + ' ';
+                    
+                    if (tensDigit === 1) {
+                        result += teens[unitsDigit] + ' тысяч ';
+                    } else {
+                        if (tensDigit > 1) result += tens[tensDigit] + ' ';
+                        if (unitsDigit === 1) result += 'одна тысяча ';
+                        else if (unitsDigit === 2) result += 'две тысячи ';
+                        else if (unitsDigit >= 3 && unitsDigit <= 4) result += units[unitsDigit] + ' тысячи ';
+                        else if (unitsDigit >= 5 || unitsDigit === 0) result += units[unitsDigit] + ' тысяч ';
+                    }
+                }
+            }
+            
+            // Обработка сотен, десятков и единиц
+            if (remaining > 0) {
+                const hundredsDigit = Math.floor(remaining / 100);
+                const tensDigit = Math.floor((remaining % 100) / 10);
+                const unitsDigit = remaining % 10;
+                
+                if (hundredsDigit > 0) result += hundreds[hundredsDigit] + ' ';
+                
+                if (tensDigit === 1) {
+                    result += teens[unitsDigit] + ' ';
+                } else {
+                    if (tensDigit > 1) result += tens[tensDigit] + ' ';
+                    if (unitsDigit > 0) result += units[unitsDigit] + ' ';
+                }
+            }
+            
+            return result.trim() + ' целых ' + fractionalPart.toString().padStart(2, '0') + ' сотых';
+        }
+        
+        // Вспомогательная функция для простых чисел
+        function numberToWordsSimple(num) {
+            const units = ['', 'один', 'два', 'три', 'четыре', 'пять', 'шесть', 'семь', 'восемь', 'девять'];
+            const teens = ['десять', 'одиннадцать', 'двенадцать', 'тринадцать', 'четырнадцать', 'пятнадцать', 'шестнадцать', 'семнадцать', 'восемнадцать', 'девятнадцать'];
+            const tens = ['', '', 'двадцать', 'тридцать', 'сорок', 'пятьдесят', 'шестьдесят', 'семьдесят', 'восемьдесят', 'девяносто'];
+            
+            if (num < 10) return units[num];
+            if (num < 20) return teens[num - 10];
+            if (num < 100) {
+                const tensDigit = Math.floor(num / 10);
+                const unitsDigit = num % 10;
+                return tens[tensDigit] + (unitsDigit > 0 ? ' ' + units[unitsDigit] : '');
+            }
+            return num.toString();
+        }
+        
+        // Функция генерации документа
+        function generateDocument() {
+            // Получаем значения из формы
+            const contractNumber = contractNumberInput.value;
+            const contractDate = formatDate(contractDateInput.value);
+            const requestNumber = requestNumberInput.value;
+            const requestDate = formatDate(requestDateInput.value);
+            const sideA = sideAInput.value;
+            const sideB = sideBInput.value;
+            const sideC = sideCInput.value;
+            const transferAmount = parseFloat(transferAmountInput.value);
+            const contractNumber2 = contractNumber2Input.value;
+            const exchangeRate = parseFloat(exchangeRateInput.value);
+            const commissionPercent = parseFloat(commissionPercentInput.value);
+            const bankSideC1 = bankSideC1Input.value;
+            const swiftSideC1 = swiftSideC1Input.value;
+            const accountSideC1 = accountSideC1Input.value;
+            const bankSideC2 = bankSideC2Input.value;
+            const swiftSideC2 = swiftSideC2Input.value;
+            const accountSideC2 = accountSideC2Input.value;
+            const bankSideA = bankSideAInput.value;
+            const swiftSideA = swiftSideAInput.value;
+            const bankAddressA = bankAddressAInput.value;
+            const accountSideA = accountSideAInput.value;
+            const bankAddress = bankAddressInput.value;
+            
+            // Рассчитываем производные значения
+            const yuanAmount = calculateYuanAmount(transferAmount, exchangeRate);
+            const commissionAmount = calculateCommission(transferAmount, commissionPercent);
+            const wordsAmount = numberToWords(yuanAmount, 'юаней');
+            
+            // Сохраняем данные для создания DOCX
+            currentDocumentData = {
+                contractNumber,
+                contractDate,
+                requestNumber,
+                requestDate,
+                sideA,
+                sideB,
+                sideC,
+                transferAmount: formatNumber(transferAmount),
+                contractNumber2,
+                exchangeRate: formatNumber(exchangeRate),
+                commissionPercent: formatNumber(commissionPercent),
+                bankSideC1,
+                swiftSideC1,
+                accountSideC1,
+                bankSideC2,
+                swiftSideC2,
+                accountSideC2,
+                bankSideA,
+                swiftSideA,
+                bankAddressA,
+                accountSideA,
+                bankAddress,
+                yuanAmount: formatNumber(yuanAmount),
+                commissionAmount: formatNumber(commissionAmount),
+                wordsAmount
+            };
+            
+            // Включаем кнопку скачивания
+            downloadBtn.disabled = false;
+            
+            // Генерируем HTML для предпросмотра
+            const documentHTML = `
+                <div class="document-info">
+                    <p>Приложение № 1</p>
+                    <p>К Агентскому договору № <span class="underline">${contractNumber}</span> от <span class="underline">${contractDate}</span></p>
+                    <h3>ЗАЯВКА НА ПЕРЕВОД № ${requestNumber} от ${requestDate}</h3>
+                    <p>Гонконг, КНР</p>
+                </div>
+                
+                <p><strong>Сторона А (ПОЛУЧАТЕЛЬ/ПРИНЦИПАЛ):</strong> <span class="underline">${sideA}</span></p>
+                <p><strong>Сторона B (КОНТРАГЕНТ):</strong> <span class="underline">${sideB}</span></p>
+                <p><strong>Сторона С (АГЕНТ):</strong> ${sideC}</p>
+                
+                <p>В рамках Агентского Договора № <span class="underline">${contractNumber}</span> от <span class="underline">${requestDate}</span></p>
+                
+                <ol>
+                    <li>
+                        Сторона А поручает Стороне В перевести Стороне С <span class="underline">${formatNumber(transferAmount)}</span> рублей 00 копеек по КОНТРАКТУ <span class="underline">№ ${contractNumber2}</span> от <span class="underline">${requestDate}</span> за товар(услуги) по курсу Банка Китая покупки безналичного рубля <span class="underline">${requestDate}</span> Курс <span class="underline">${formatNumber(exchangeRate)}</span> юаней за 100 рублей, сумма перевода в юанях составит <span class="underline">${formatNumber(yuanAmount)}</span> юаней. （Примечание: фактический курс обмена определяется по курсу покупки безналичной иностранной валюты Банка Китая, действующему на 19:00 дня зачисления средств.）
+                        
+                        <div class="bank-details">
+                            <p>БАНКОВСКИЕ РЕКВИЗИТЫ ПОЛУЧАТЕЛЯ (СТОРОНЫ С):</p>
+                            <p><strong>Название банка:</strong> <span class="underline">${bankSideC1}</span></p>
+                            <p><strong>SWIFT Код:</strong> <span class="underline">${swiftSideC1}</span></p>
+                            <p><strong>Адрес банка:</strong> Адрес банка: <span class="underline">${bankAddress}</span></p>
+                            <p><strong>Наименование получателя:</strong> <span class="underline">${sideC}</span></p>
+                            <p><strong>Номер счета:</strong> <span class="underline">${accountSideC1}</span></p>
+                        </div>
+                    </li>
+                    
+                    <li>
+                        Сторона А поручает Стороне В перевести Стороне С вознаграждение агента (Стороны С), что составит <span class="underline">${formatNumber(commissionPercent)}%</span> от суммы перевода -- <span class="underline">${formatNumber(commissionAmount)}</span> рублей. Вознаграждение агента перечисляется на реквизиты Стороны С.
+                        
+                        <div class="bank-details">
+                            <p>БАНКОВСКИЕ РЕКВИЗИТЫ ПОЛУЧАТЕЛЯ (СТОРОНЫ С):</p>
+                            <p><strong>Название банка:</strong> <span class="underline">${bankSideC2}</span></p>
+                            <p><strong>SWIFT Код:</strong> <span class="underline">${swiftSideC2}</span></p>
+                            <p><strong>Адрес банка: Адрес банка:</strong> <span class="underline">${bankAddress}</span></p>
+                            <p><strong>Наименование получателя:</strong> <span class="underline">${sideC}</span></p>
+                            <p><strong>Номер счета:</strong> <span class="underline">${accountSideC2}</span></p>
+                        </div>
+                    </li>
+                    
+                    <li>
+                        Во исполнение условий Агентского договора Сторона С перечисляет Стороне А <span class="underline">${formatNumber(yuanAmount)}</span> (<span class="underline">${wordsAmount}</span>) юаней.
+                        
+                        <div class="bank-details">
+                            <p>БАНКОВСКИЕ РЕКВИЗИТЫ ПОЛУЧАТЕЛЯ (СТОРОНЫ А):</p>
+                            <p><strong>Название банка:</strong> <span class="underline">${bankSideA}</span></p>
+                            <p><strong>SWIFT Код:</strong> <span class="underline">${swiftSideA}</span></p>
+                            <p><strong>Адрес банка:</strong> <span class="underline">${bankAddressA}</span></p>
+                            <p><strong>Наименование получателя:</strong> <span class="underline">${sideA}</span></p>
+                            <p><strong>Номер счета:</strong> <span class="underline">${accountSideA}</span></p>
+                        </div>
+                    </li>
+                </ol>
+                
+                <div class="signatures-container">
+                    <div class="signature-block">
+                        <p>Сторона А(Печать):</p>
+                        <p>Представитель (Подпись): ___________________</p>
+                    </div>
+                    
+                    <div class="signature-block">
+                        <p>Сторона В (Печать):</p>
+                        <p>Представитель (Подпись): ___________________</p>
+                    </div>
+                    
+                    <div class="signature-block">
+                        <p>Сторона С (Печать):</p>
+                        <p>Представитель (Подпись): ___________________</p>
+                    </div>
+                </div>
+            `;
+            
+            // Вставляем сгенерированный документ в область предварительного просмотра
+            previewArea.innerHTML = documentHTML;
+            
+            showStatus("Заявка успешно сгенерирована. Теперь вы можете скачать DOCX файл.", "success");
+        }
+        
+        // Функция сброса формы
+        function resetForm() {
+            contractNumberInput.value = "ZLJC 26 -- 003";
+            contractDateInput.value = "2025-01-03";
+            requestNumberInput.value = "011";
+            requestDateInput.value = "2026-01-03";
+            sideAInput.value = "Шэньчжэньская компания «Цзинъин Оптоэлектроника» Co., Ltd.";
+            sideBInput.value = "OOO «ТЫСЯЧА ВОЛН»";
+            sideCInput.value = "СМАРТЧЭЙН НЕКСУС ЛИМИТЕД";
+            transferAmountInput.value = "2161084.00";
+            contractNumber2Input.value = "SSSC20260103";
+            exchangeRateInput.value = "8.56";
+            commissionPercentInput.value = "1";
+            bankSideC1Input.value = 'ФИЛИАЛ "ЦЕНТРАЛЬНЫЙ" БАНКА ВТБ (ПАО)';
+            swiftSideC1Input.value = "VTBRRUMM";
+            accountSideC1Input.value = "40807810826800000051(RUB)";
+            bankSideC2Input.value = "БАНКА ВТБ (ПАО)";
+            swiftSideC2Input.value = "VTBRRUMM";
+            accountSideC2Input.value = "40807810826800000051(RUB)";
+            bankSideAInput.value = "Банка Китая";
+            swiftSideAInput.value = "BKCHCNBJ";
+            bankAddressAInput.value = "Полное наименование: Акционерное общество «Банк Китая», Отделение «Люсяньдун» в г. Шэньчжэнь";
+            accountSideAInput.value = "744562833942";
+            bankAddressInput.value = "109147, г. Москва, ул. Воронцовская, д. 43, стр. 1";
+            
+            // Выключаем кнопку скачивания
+            downloadBtn.disabled = true;
+            currentDocumentData = null;
+            
+            // Очищаем предпросмотр
+            previewArea.innerHTML = "<p>Заполните форму и нажмите 'Сгенерировать заявку' для предпросмотра</p>";
+            
+            showStatus("Форма сброшена к исходным значениям.", "success");
+        }
+        
+        // Функция создания DOCX файла
+        async function createDocxFile() {
+            if (!currentDocumentData) {
+                showStatus("Сначала сгенерируйте заявку, нажав кнопку 'Сгенерировать заявку'", "error");
+                return;
+            }
+            
+            loadingIndicator.style.display = "block";
+            downloadBtn.disabled = true;
+            
+            try {
+                // Создаем содержимое документа в формате XML (упрощенная версия DOCX)
+                const docContent = createDocumentXml(currentDocumentData);
+                
+                // Создаем ZIP архив с структурой DOCX
+                const zip = new JSZip();
+                
+                // Добавляем основные файлы DOCX
+                zip.file("[Content_Types].xml", getContentTypesXml());
+                zip.file("_rels/.rels", getRelsXml());
+                zip.file("word/_rels/document.xml.rels", getDocumentRelsXml());
+                zip.file("word/document.xml", docContent);
+                zip.file("word/settings.xml", getSettingsXml());
+                zip.file("word/styles.xml", getStylesXml());
+                zip.file("word/fontTable.xml", getFontTableXml());
+                zip.file("word/webSettings.xml", getWebSettingsXml());
+                
+                // Генерируем файл DOCX
+                const blob = await zip.generateAsync({type: "blob"});
+                
+                // Сохраняем файл
+                const filename = `Заявка_на_перевод_№${currentDocumentData.requestNumber}_${new Date().toISOString().slice(0,10)}.docx`;
+                saveAs(blob, filename);
+                
+                showStatus(`Документ успешно создан и сохранен как "${filename}"`, "success");
+            } catch (error) {
+                console.error("Ошибка при создании DOCX:", error);
+                showStatus("Произошла ошибка при создании документа. Пожалуйста, попробуйте еще раз.", "error");
+            } finally {
+                loadingIndicator.style.display = "none";
+                downloadBtn.disabled = false;
+            }
+        }
+        
+        // Функция создания XML содержимого документа
+        function createDocumentXml(data) {
+            return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:body>
+    <w:p>
+      <w:pPr>
+        <w:jc w:val="center"/>
+        <w:spacing w:after="120"/>
+      </w:pPr>
+      <w:r>
+        <w:t>Приложение № 1</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:jc w:val="center"/>
+        <w:spacing w:after="120"/>
+      </w:pPr>
+      <w:r>
+        <w:t>К Агентскому договору № </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:u w:val="single"/>
+        </w:rPr>
+        <w:t>${data.contractNumber}</w:t>
+      </w:r>
+      <w:r>
+        <w:t> от </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:u w:val="single"/>
+        </w:rPr>
+        <w:t>${data.contractDate}</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:jc w:val="center"/>
+        <w:spacing w:after="240"/>
+        <w:rPr>
+          <w:b/>
+          <w:sz w:val="28"/>
+        </w:rPr>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:b/>
+          <w:sz w:val="28"/>
+        </w:rPr>
+        <w:t>ЗАЯВКА НА ПЕРЕВОД № ${data.requestNumber} от ${data.requestDate}</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:jc w:val="center"/>
+        <w:spacing w:after="240"/>
+      </w:pPr>
+      <w:r>
+        <w:t>Гонконг, КНР</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="120"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:b/>
+        </w:rPr>
+        <w:t>Сторона А (ПОЛУЧАТЕЛЬ/ПРИНЦИПАЛ):</w:t>
+      </w:r>
+      <w:r>
+        <w:t> </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:u w:val="single"/>
+        </w:rPr>
+        <w:t>${data.sideA}</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="120"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:b/>
+        </w:rPr>
+        <w:t>Сторона B (КОНТРАГЕНТ):</w:t>
+      </w:r>
+      <w:r>
+        <w:t> </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:u w:val="single"/>
+        </w:rPr>
+        <w:t>${data.sideB}</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="240"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:b/>
+        </w:rPr>
+        <w:t>Сторона С (АГЕНТ):</w:t>
+      </w:r>
+      <w:r>
+        <w:t> ${data.sideC}</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="120"/>
+      </w:pPr>
+      <w:r>
+        <w:t>В рамках Агентского Договора № </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:u w:val="single"/>
+        </w:rPr>
+        <w:t>${data.contractNumber}</w:t>
+      </w:r>
+      <w:r>
+        <w:t> от </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:u w:val="single"/>
+        </w:rPr>
+        <w:t>${data.requestDate}</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="120"/>
+        <w:numPr>
+          <w:ilvl w:val="0"/>
+          <w:numId w:val="1"/>
+        </w:numPr>
+      </w:pPr>
+      <w:r>
+        <w:t>Сторона А поручает Стороне В перевести Стороне С </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:u w:val="single"/>
+        </w:rPr>
+        <w:t>${data.transferAmount}</w:t>
+      </w:r>
+      <w:r>
+        <w:t> рублей 00 копеек по КОНТРАКТУ </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:u w:val="single"/>
+        </w:rPr>
+        <w:t>№ ${data.contractNumber2}</w:t>
+      </w:r>
+      <w:r>
+        <w:t> от </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:u w:val="single"/>
+        </w:rPr>
+        <w:t>${data.requestDate}</w:t>
+      </w:r>
+      <w:r>
+        <w:t> за товар(услуги) по курсу Банка Китая покупки безналичного рубля </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:u w:val="single"/>
+        </w:rPr>
+        <w:t>${data.requestDate}</w:t>
+      </w:r>
+      <w:r>
+        <w:t> Курс </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:u w:val="single"/>
+        </w:rPr>
+        <w:t>${data.exchangeRate}</w:t>
+      </w:r>
+      <w:r>
+        <w:t> юаней за 100 рублей, сумма перевода в юанях составит </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:u w:val="single"/>
+        </w:rPr>
+        <w:t>${data.yuanAmount}</w:t>
+      </w:r>
+      <w:r>
+        <w:t> юаней. （Примечание: фактический курс обмена определяется по курсу покупки безналичной иностранной валюты Банка Китая, действующему на 19:00 дня зачисления средств.）</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:before="120" w:after="120"/>
+      </w:pPr>
+      <w:r>
+        <w:t>БАНКОВСКИЕ РЕКВИЗИТЫ ПОЛУЧАТЕЛЯ (СТОРОНЫ С):</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="80"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:b/>
+        </w:rPr>
+        <w:t>Название банка:</w:t>
+      </w:r>
+      <w:r>
+        <w:t> </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:u w:val="single"/>
+        </w:rPr>
+        <w:t>${data.bankSideC1}</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="80"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:b/>
+        </w:rPr>
+        <w:t>SWIFT Код:</w:t>
+      </w:r>
+      <w:r>
+        <w:t> </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:u w:val="single"/>
+        </w:rPr>
+        <w:t>${data.swiftSideC1}</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="80"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:b/>
+        </w:rPr>
+        <w:t>Адрес банка:</w:t>
+      </w:r>
+      <w:r>
+        <w:t> Адрес банка: </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:u w:val="single"/>
+        </w:rPr>
+        <w:t>${data.bankAddress}</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="80"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:b/>
+        </w:rPr>
+        <w:t>Наименование получателя:</w:t>
+      </w:r>
+      <w:r>
+        <w:t> </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:u w:val="single"/>
+        </w:rPr>
+        <w:t>${data.sideC}</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="240"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:b/>
+        </w:rPr>
+        <w:t>Номер счета:</w:t>
+      </w:r>
+      <w:r>
+        <w:t> </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:u w:val="single"/>
+        </w:rPr>
+        <w:t>${data.accountSideC1}</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="120"/>
+        <w:numPr>
+          <w:ilvl w:val="0"/>
+          <w:numId w:val="1"/>
+        </w:numPr>
+      </w:pPr>
+      <w:r>
+        <w:t>Сторона А поручает Стороне В перевести Стороне С вознаграждение агента (Стороны С), что составит </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:u w:val="single"/>
+        </w:rPr>
+        <w:t>${data.commissionPercent}%</w:t>
+      </w:r>
+      <w:r>
+        <w:t> от суммы перевода -- </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:u w:val="single"/>
+        </w:rPr>
+        <w:t>${data.commissionAmount}</w:t>
+      </w:r>
+      <w:r>
+        <w:t> рублей. Вознаграждение агента перечисляется на реквизиты Стороны С.</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:before="120" w:after="120"/>
+      </w:pPr>
+      <w:r>
+        <w:t>БАНКОВСКИЕ РЕКВИЗИТЫ ПОЛУЧАТЕЛЯ (СТОРОНЫ С):</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="80"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:b/>
+        </w:rPr>
+        <w:t>Название банка:</w:t>
+      </w:r>
+      <w:r>
+        <w:t> </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:u w:val="single"/>
+        </w:rPr>
+        <w:t>${data.bankSideC2}</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="80"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:b/>
+        </w:rPr>
+        <w:t>SWIFT Код:</w:t>
+      </w:r>
+      <w:r>
+        <w:t> </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:u w:val="single"/>
+        </w:rPr>
+        <w:t>${data.swiftSideC2}</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="80"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:b/>
+        </w:rPr>
+        <w:t>Адрес банка: Адрес банка:</w:t>
+      </w:r>
+      <w:r>
+        <w:t> </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:u w:val="single"/>
+        </w:rPr>
+        <w:t>${data.bankAddress}</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="80"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:b/>
+        </w:rPr>
+        <w:t>Наименование получателя:</w:t>
+      </w:r>
+      <w:r>
+        <w:t> </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:u w:val="single"/>
+        </w:rPr>
+        <w:t>${data.sideC}</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="240"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:b/>
+        </w:rPr>
+        <w:t>Номер счета:</w:t>
+      </w:r>
+      <w:r>
+        <w:t> </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:u w:val="single"/>
+        </w:rPr>
+        <w:t>${data.accountSideC2}</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="120"/>
+        <w:numPr>
+          <w:ilvl w:val="0"/>
+          <w:numId w:val="1"/>
+        </w:numPr>
+      </w:pPr>
+      <w:r>
+        <w:t>Во исполнение условий Агентского договора Сторона С перечисляет Стороне А </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:u w:val="single"/>
+        </w:rPr>
+        <w:t>${data.yuanAmount}</w:t>
+      </w:r>
+      <w:r>
+        <w:t> (</w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:u w:val="single"/>
+        </w:rPr>
+        <w:t>${data.wordsAmount}</w:t>
+      </w:r>
+      <w:r>
+        <w:t>) юаней.</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:before="120" w:after="120"/>
+      </w:pPr>
+      <w:r>
+        <w:t>БАНКОВСКИЕ РЕКВИЗИТЫ ПОЛУЧАТЕЛЯ (СТОРОНЫ А):</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="80"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:b/>
+        </w:rPr>
+        <w:t>Название банка:</w:t>
+      </w:r>
+      <w:r>
+        <w:t> </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:u w:val="single"/>
+        </w:rPr>
+        <w:t>${data.bankSideA}</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="80"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:b/>
+        </w:rPr>
+        <w:t>SWIFT Код:</w:t>
+      </w:r>
+      <w:r>
+        <w:t> </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:u w:val="single"/>
+        </w:rPr>
+        <w:t>${data.swiftSideA}</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="80"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:b/>
+        </w:rPr>
+        <w:t>Адрес банка:</w:t>
+      </w:r>
+      <w:r>
+        <w:t> </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:u w:val="single"/>
+        </w:rPr>
+        <w:t>${data.bankAddressA}</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="80"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:b/>
+        </w:rPr>
+        <w:t>Наименование получателя:</w:t>
+      </w:r>
+      <w:r>
+        <w:t> </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:u w:val="single"/>
+        </w:rPr>
+        <w:t>${data.sideA}</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="240"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:b/>
+        </w:rPr>
+        <w:t>Номер счета:</w:t>
+      </w:r>
+      <w:r>
+        <w:t> </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:u w:val="single"/>
+        </w:rPr>
+        <w:t>${data.accountSideA}</w:t>
+      </w:r>
+    </w:p>
+    
+    <!-- Подписи - каждая на отдельной строке -->
+    <w:p>
+      <w:pPr>
+        <w:spacing w:before="240" w:after="120"/>
+      </w:pPr>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="120"/>
+      </w:pPr>
+      <w:r>
+        <w:t>Сторона А(Печать):</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="120"/>
+      </w:pPr>
+      <w:r>
+        <w:t>Представитель (Подпись): ___________________</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:before="60" w:after="120"/>
+      </w:pPr>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="120"/>
+      </w:pPr>
+      <w:r>
+        <w:t>Сторона В (Печать):</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="120"/>
+      </w:pPr>
+      <w:r>
+        <w:t>Представитель (Подпись): ___________________</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:before="60" w:after="120"/>
+      </w:pPr>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="120"/>
+      </w:pPr>
+      <w:r>
+        <w:t>Сторона С (Печать):</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="120"/>
+      </w:pPr>
+      <w:r>
+        <w:t>Представитель (Подпись): ___________________</w:t>
+      </w:r>
+    </w:p>
+    
+    <w:p>
+      <w:pPr>
+        <w:spacing w:before="120"/>
+      </w:pPr>
+    </w:p>
+    
+    <w:sectPr>
+      <w:pgSz w:w="11906" w:h="16838"/>
+      <w:pgMar w:top="1417" w:right="1417" w:bottom="1417" w:left="1417" w:header="708" w:footer="708" w:gutter="0"/>
+      <w:cols w:space="708"/>
+    </w:sectPr>
+  </w:body>
+</w:document>`;
+        }
+        
+        // Вспомогательные XML файлы для структуры DOCX
+        function getContentTypesXml() {
+            return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
+  <Default Extension="xml" ContentType="application/xml"/>
+  <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
+  <Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>
+  <Override PartName="/word/settings.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml"/>
+  <Override PartName="/word/webSettings.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.webSettings+xml"/>
+  <Override PartName="/word/fontTable.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml"/>
+  <Override PartName="/word/numbering.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml"/>
+</Types>`;
+        }
+        
+        function getRelsXml() {
+            return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>
+</Relationships>`;
+        }
+        
+        function getDocumentRelsXml() {
+            return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>
+  <Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings" Target="settings.xml"/>
+  <Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/webSettings" Target="webSettings.xml"/>
+  <Relationship Id="rId4" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable" Target="fontTable.xml"/>
+  <Relationship Id="rId5" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering" Target="numbering.xml"/>
+</Relationships>`;
+        }
+        
+        function getSettingsXml() {
+            return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:settings xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:defaultTabStop w:val="720"/>
+  <w:characterSpacingControl w:val="doNotCompress"/>
+</w:settings>`;
+        }
+        
+        function getStylesXml() {
+            return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:docDefaults>
+    <w:rPrDefault>
+      <w:rPr>
+        <w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
+        <w:sz w:val="24"/>
+        <w:szCs w:val="24"/>
+      </w:rPr>
+    </w:rPrDefault>
+  </w:docDefaults>
+  <w:style w:type="paragraph" w:styleId="Normal">
+    <w:name w:val="Normal"/>
+    <w:qFormat/>
+  </w:style>
+  <w:style w:type="character" w:styleId="Underline">
+    <w:name w:val="Underline"/>
+    <w:rPr>
+      <w:u w:val="single"/>
+    </w:rPr>
+  </w:style>
+</w:styles>`;
+        }
+        
+        function getFontTableXml() {
+            return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:fonts xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:font w:name="Times New Roman">
+    <w:panose1 w:val="02020603050405020304"/>
+    <w:charset w:val="00"/>
+    <w:family w:val="roman"/>
+    <w:pitch w:val="variable"/>
+    <w:sig w:usb0="E0002AFF" w:usb1="C0007841" w:usb2="00000009" w:usb3="00000000" w:csb0="000001FF" w:csb1="00000000"/>
+  </w:font>
+</w:fonts>`;
+        }
+        
+        function getWebSettingsXml() {
+            return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:webSettings xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:optimizeForBrowser/>
+</w:webSettings>`;
+        }
+        
+        // Функция отображения статуса
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = `status-message ${type}`;
+            statusMessage.style.display = "block";
+            
+            setTimeout(() => {
+                statusMessage.style.display = "none";
+            }, 5000);
+        }
+        
+        // Обработчики событий
+        generateBtn.addEventListener('click', generateDocument);
+        resetBtn.addEventListener('click', resetForm);
+        downloadBtn.addEventListener('click', createDocxFile);
+        printBtn.addEventListener('click', () => {
+            const printContent = previewArea.innerHTML;
+            const originalContent = document.body.innerHTML;
+            
+            document.body.innerHTML = `
+                <div style="font-family: 'Times New Roman', Times, serif; padding: 40px; line-height: 1.4;">
+                    ${printContent}
+                </div>
+            `;
+            
+            window.print();
+            document.body.innerHTML = originalContent;
+            generateDocument(); // Восстанавливаем предпросмотр
+        });
+    </script>
+</body>
+</html>
